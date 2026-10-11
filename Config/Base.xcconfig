@@ -11,10 +11,8 @@ IPHONEOS_DEPLOYMENT_TARGET = 17.0
 MACOSX_DEPLOYMENT_TARGET = 15.0
 TARGETED_DEVICE_FAMILY = 1,2
 
-GENERATE_INFOPLIST_FILE = YES
-INFOPLIST_KEY_CFBundleDisplayName = Bible Study
-INFOPLIST_KEY_LSApplicationCategoryType = public.app-category.reference
+GENERATE_INFOPLIST_FILE = NO
+INFOPLIST_FILE = BibleStudy/Resources/Info.plist
 
 YVP_APP_KEY =
 #include? "Secrets.xcconfig"
-INFOPLIST_KEY_YVPAppKey = $(YVP_APP_KEY)

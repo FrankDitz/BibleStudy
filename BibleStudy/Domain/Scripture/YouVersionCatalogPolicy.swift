@@ -17,7 +17,7 @@ enum YouVersionCatalogPolicy {
 
     static let developmentStart = try! ScriptureReference(
         versionID: developmentDefaultVersionID,
-        bookID: "JHN",
+        bookID: "JOHN",
         chapter: 1
     )
 }

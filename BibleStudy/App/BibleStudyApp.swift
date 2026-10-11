@@ -3,12 +3,12 @@ import SwiftData
 
 @main
 struct BibleStudyApp: App {
-    private let configuration: AppConfiguration
+    private let dependencies: AppDependencies
     private let modelContainer: ModelContainer
 
     init() {
         let configuration = AppConfiguration.current
-        self.configuration = configuration
+        dependencies = .production(configuration: configuration)
         do {
             modelContainer = try BibleStudyModelContainer.make()
         } catch {
@@ -19,7 +19,7 @@ struct BibleStudyApp: App {
 
     var body: some Scene {
         WindowGroup {
-            BibleStudyRootView(configuration: configuration)
+            BibleStudyRootView(dependencies: dependencies)
                 .modelContainer(modelContainer)
         }
 

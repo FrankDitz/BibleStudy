@@ -14,7 +14,7 @@ final class PersistenceSchemaTests: XCTestCase {
             BibleStudySchemaV1.ReadingPosition(
                 editionProviderID: ScriptureProviderIdentifier.fixture.rawValue,
                 editionValue: "catholic-complete",
-                canonicalBookID: "JHN",
+                canonicalBookID: "JOHN",
                 chapter: 1,
                 verse: 1
             )
@@ -42,7 +42,7 @@ final class PersistenceSchemaTests: XCTestCase {
         XCTAssertEqual(try verificationContext.fetch(FetchDescriptor<BibleStudySchemaV1.Profile>()).count, 1)
         XCTAssertEqual(
             try verificationContext.fetch(FetchDescriptor<BibleStudySchemaV1.ReadingPosition>()).first?.canonicalBookID,
-            "JHN"
+            "JOHN"
         )
         XCTAssertEqual(
             try verificationContext.fetch(FetchDescriptor<BibleStudySchemaV1.ReadingPlan>()).first?.status,

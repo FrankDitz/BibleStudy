@@ -13,7 +13,7 @@ struct ReadingPlanTemplate: Identifiable, Hashable, Sendable {
             title: "New Testament in 90 Days",
             durationDays: 90,
             summary: "A focused daily path through the life of Christ and the early Church.",
-            firstReading: try! ScriptureReference(versionID: 55, bookID: "MAT", chapter: 1)
+            firstReading: try! ScriptureReference(versionID: 55, bookID: "MATT", chapter: 1)
         ),
         ReadingPlanTemplate(
             id: "old-testament-90",

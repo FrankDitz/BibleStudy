@@ -1,6 +1,6 @@
 import SwiftUI
 
-enum AppDestination: String, CaseIterable, Identifiable, Hashable {
+enum AppDestination: String, CaseIterable, Codable, Identifiable, Hashable, Sendable {
     case home
     case bible
     case plans

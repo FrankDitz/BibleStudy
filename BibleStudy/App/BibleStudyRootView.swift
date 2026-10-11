@@ -1,35 +1,52 @@
 import SwiftUI
 
 struct BibleStudyRootView: View {
-    let configuration: AppConfiguration
+    let dependencies: AppDependencies
 
     @State private var selection: AppDestination = .home
     @State private var scriptureNavigation = ScriptureNavigationController()
+    @State private var didApplyLaunchRoute = false
 
     var body: some View {
-        #if os(macOS)
-        NavigationSplitView {
-            List(AppDestination.allCases, selection: $selection) { destination in
-                Label(destination.title, systemImage: destination.systemImage)
-                    .tag(destination)
+        Group {
+            #if os(macOS)
+            NavigationSplitView {
+                List(AppDestination.allCases, selection: $selection) { destination in
+                    Label(destination.title, systemImage: destination.systemImage)
+                        .tag(destination)
+                }
+                .navigationTitle("Bible Study")
+                .navigationSplitViewColumnWidth(min: 190, ideal: 220)
+            } detail: {
+                destinationView(selection)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .navigationTitle("Bible Study")
-            .navigationSplitViewColumnWidth(min: 190, ideal: 220)
-        } detail: {
-            destinationView(selection)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            #else
+            TabView(selection: $selection) {
+                ForEach(AppDestination.allCases) { destination in
+                    destinationView(destination)
+                        .tabItem {
+                            Label(destination.title, systemImage: destination.systemImage)
+                        }
+                        .tag(destination)
+                }
+            }
+            #endif
         }
-        #else
-        TabView(selection: $selection) {
-            ForEach(AppDestination.allCases) { destination in
-                destinationView(destination)
-                    .tabItem {
-                        Label(destination.title, systemImage: destination.systemImage)
-                    }
-                    .tag(destination)
+        .task {
+            guard !didApplyLaunchRoute else { return }
+            didApplyLaunchRoute = true
+            if let route = dependencies.launchContext.initialRoute {
+                handle(route)
             }
         }
-        #endif
+        .onOpenURL { url in
+            guard let route = BibleStudyDeepLink.parse(url) else {
+                AppLog.integration.warning("Ignored invalid Bible Study deep link")
+                return
+            }
+            handle(route)
+        }
     }
 
     @ViewBuilder
@@ -41,7 +58,7 @@ struct BibleStudyRootView: View {
             }
         case .bible:
             BibleTabView(
-                isPlatformConfigured: configuration.isYouVersionConfigured,
+                isPlatformConfigured: dependencies.configuration.isYouVersionConfigured,
                 navigation: scriptureNavigation
             )
         case .plans:
@@ -51,12 +68,23 @@ struct BibleStudyRootView: View {
         case .learning:
             LearningView()
         case .you:
-            ProfileView(isYouVersionConfigured: configuration.isYouVersionConfigured)
+            ProfileView(
+                isYouVersionConfigured: dependencies.configuration.isYouVersionConfigured
+            )
         }
     }
 
     private func openScripture(_ reference: ScriptureReference) {
         scriptureNavigation.open(reference)
         selection = .bible
+    }
+
+    private func handle(_ route: BibleStudyRoute) {
+        switch route {
+        case let .destination(destination):
+            selection = destination
+        case let .scripture(reference):
+            openScripture(reference)
+        }
     }
 }

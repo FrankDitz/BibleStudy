@@ -36,6 +36,19 @@ enum YouVersionCatholicBookMapping {
         let normalized = providerID.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         return providerIDsByCanonicalID.first { $0.value.contains(normalized) }?.key
     }
+
+    /// Returns the normal reading resource. Catholic Esther additions remain a
+    /// separate `ESG` resource and are handled by the Catholic navigator.
+    static func primaryProviderID(forCanonicalID canonicalID: String) -> String? {
+        let normalized = canonicalID.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        if normalized == "ESTH" {
+            return "EST"
+        }
+        guard let identifiers = providerIDsByCanonicalID[normalized], identifiers.count == 1 else {
+            return nil
+        }
+        return identifiers.first
+    }
 }
 
 struct YouVersionEditionSnapshot: Equatable, Sendable {

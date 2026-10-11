@@ -26,7 +26,9 @@ struct ScriptureReference: Codable, Hashable, Identifiable, Sendable {
         let normalizedBook = bookID
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .uppercased()
-        guard normalizedBook.count >= 3 else { throw ValidationError.invalidBook }
+        guard CatholicCanon.contains(osisID: normalizedBook) else {
+            throw ValidationError.invalidBook
+        }
         guard chapter > 0 else { throw ValidationError.invalidChapter }
 
         if let verseStart {

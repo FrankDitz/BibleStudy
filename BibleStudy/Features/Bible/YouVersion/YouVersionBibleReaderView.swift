@@ -60,10 +60,13 @@ private struct VerseActionsView: View {
 
 private extension ScriptureReference {
     var youVersionReference: BibleReference {
+        let providerBookID = YouVersionCatholicBookMapping
+            .primaryProviderID(forCanonicalID: bookID) ?? bookID
+
         if let verseStart, let verseEnd, verseStart != verseEnd {
             return BibleReference(
                 versionId: versionID,
-                bookId: bookID,
+                bookId: providerBookID,
                 chapter: chapter,
                 verseStart: verseStart,
                 verseEnd: verseEnd
@@ -72,7 +75,7 @@ private extension ScriptureReference {
 
         return BibleReference(
             versionId: versionID,
-            bookId: bookID,
+            bookId: providerBookID,
             chapter: chapter,
             verse: verseStart
         )

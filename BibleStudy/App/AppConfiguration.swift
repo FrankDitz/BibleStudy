@@ -6,7 +6,11 @@ struct AppConfiguration: Sendable {
     let youVersionAppKey: String?
 
     init(bundle: Bundle) {
-        let rawValue = bundle.object(forInfoDictionaryKey: "YVPAppKey") as? String
+        self.init(infoDictionary: bundle.infoDictionary ?? [:])
+    }
+
+    init(infoDictionary: [String: Any]) {
+        let rawValue = infoDictionary["YVPAppKey"] as? String
         let candidate = rawValue?.trimmingCharacters(in: .whitespacesAndNewlines)
 
         if let candidate,
