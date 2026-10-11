@@ -60,7 +60,7 @@ For a native-only personal app, the current FUMS guide says the web-app section 
 
 STREETLIGHTS says its resources are freely given and allows listening/download through its own channels, while its site also states “all rights reserved.” That is not permission to embed, stream, cache, synchronize, or redistribute its recordings in Bible Study.
 
-The app therefore treats STREETLIGHTS as an optional partnership. No implementation, schedule, or Phase 1–3 acceptance criterion depends on a positive response. A request should ask about private in-app playback, source URLs/API, offline storage, verse/chapter timecodes, NLT publisher rights, Catholic-canon coverage, attribution, analytics, and revocation.
+The app therefore treats STREETLIGHTS as an optional partnership. No implementation, schedule, or Phase 1–3 acceptance criterion depends on a positive response. A ready-to-send request covering private in-app playback, source URLs/API, offline storage, verse/chapter timecodes, NLT publisher rights, Catholic-canon coverage, attribution, analytics, and revocation is maintained in [`STREETLIGHTS_PARTNERSHIP_INQUIRY.md`](STREETLIGHTS_PARTNERSHIP_INQUIRY.md). It remains pending until the owner supplies the sending identity and submits it.
 
 ## Attribution templates
 
