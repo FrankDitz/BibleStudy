@@ -1,5 +1,6 @@
 import SwiftData
 import XCTest
+
 @testable import BibleStudy
 
 @MainActor

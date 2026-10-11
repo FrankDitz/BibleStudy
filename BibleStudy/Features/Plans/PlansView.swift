@@ -13,8 +13,10 @@ struct PlansView: View {
                                 .font(.headline)
                             Text("No active plan yet")
                                 .font(.title2.bold())
-                            Text("Choose a plan below or create a custom schedule. Progress, streaks, grace days, and completion history will live here.")
-                                .foregroundStyle(.secondary)
+                            Text(
+                                "Choose a plan below or create a custom schedule. Progress, streaks, grace days, and completion history will live here."
+                            )
+                            .foregroundStyle(AppTheme.supportingText)
                         }
                     }
 
@@ -31,7 +33,7 @@ struct PlansView: View {
                                     .font(.subheadline.weight(.semibold))
                                     .foregroundStyle(AppTheme.accent)
                                 Text(plan.summary)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(AppTheme.supportingText)
                                 Button("Preview first reading") {
                                     openReading(plan.firstReading)
                                 }

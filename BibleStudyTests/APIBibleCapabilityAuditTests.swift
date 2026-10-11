@@ -1,4 +1,5 @@
 import XCTest
+
 @testable import BibleStudy
 
 final class APIBibleCapabilityAuditTests: XCTestCase {
@@ -71,21 +72,21 @@ final class APIBibleCapabilityAuditTests: XCTestCase {
     }
 
     private let audioChapterFixture = #"""
-    {
-      "data": {
-        "id": "JHN.3",
-        "bibleId": "audio-id",
-        "number": "3",
-        "bookId": "JHN",
-        "resourceUrl": "https://cdn.example.com/JHN.3.mp3",
-        "timecodes": [
-          { "start": "00:00:01.5", "end": "12.25", "verseId": "JHN.3.1" }
-        ],
-        "expiresAt": 2000003600,
-        "reference": "John 3",
-        "copyright": "Fixture attribution"
-      },
-      "meta": { "fums": "fixture", "fumsId": "fixture-id" }
-    }
-    """#
+        {
+          "data": {
+            "id": "JHN.3",
+            "bibleId": "audio-id",
+            "number": "3",
+            "bookId": "JHN",
+            "resourceUrl": "https://cdn.example.com/JHN.3.mp3",
+            "timecodes": [
+              { "start": "00:00:01.5", "end": "12.25", "verseId": "JHN.3.1" }
+            ],
+            "expiresAt": 2000003600,
+            "reference": "John 3",
+            "copyright": "Fixture attribution"
+          },
+          "meta": { "fums": "fixture", "fumsId": "fixture-id" }
+        }
+        """#
 }

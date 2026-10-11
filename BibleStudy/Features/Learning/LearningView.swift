@@ -2,11 +2,14 @@ import SwiftUI
 
 struct LearningView: View {
     private let topics = [
-        LearningTopic(title: "The Mass", subtitle: "Parts of the liturgy, posture, and responses", icon: "building.columns"),
-        LearningTopic(title: "The Rosary", subtitle: "Prayers, mysteries, and how to begin", icon: "circle.hexagongrid"),
+        LearningTopic(
+            title: "The Mass", subtitle: "Parts of the liturgy, posture, and responses", icon: "building.columns"),
+        LearningTopic(
+            title: "The Rosary", subtitle: "Prayers, mysteries, and how to begin", icon: "circle.hexagongrid"),
         LearningTopic(title: "The Sacraments", subtitle: "Signs of grace in Catholic life", icon: "drop"),
         LearningTopic(title: "The Liturgical Year", subtitle: "Seasons, solemnities, and holy days", icon: "calendar"),
-        LearningTopic(title: "Prayer & Devotions", subtitle: "Practices inside and outside the church", icon: "hands.sparkles"),
+        LearningTopic(
+            title: "Prayer & Devotions", subtitle: "Practices inside and outside the church", icon: "hands.sparkles"),
     ]
 
     var body: some View {
@@ -22,19 +25,21 @@ struct LearningView: View {
                             .font(.headline)
                         Text(topic.subtitle)
                             .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(AppTheme.supportingText)
                     }
                 }
                 .padding(.vertical, 6)
             }
             .navigationTitle("Learning")
             .safeAreaInset(edge: .bottom) {
-                Text("Initial editorial scope: Roman Catholic practice in the United States. Sources and review status will be displayed on every lesson.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(.regularMaterial)
+                Text(
+                    "Initial editorial scope: Roman Catholic practice in the United States. Sources and review status will be displayed on every lesson."
+                )
+                .font(.footnote)
+                .foregroundStyle(AppTheme.supportingText)
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(.regularMaterial)
             }
         }
     }

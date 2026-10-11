@@ -9,7 +9,7 @@ struct HomeView: View {
                 VStack(alignment: .leading, spacing: 18) {
                     Text("A quiet place to read, learn, and grow.")
                         .font(AppTypography.screenIntroduction)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(AppTheme.supportingText)
 
                     FeatureCard {
                         VStack(alignment: .leading, spacing: 14) {
@@ -18,7 +18,7 @@ struct HomeView: View {
                             Text("John 1")
                                 .font(.largeTitle.bold())
                             Text("Begin with the Word and carry one truth into the rest of your day.")
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(AppTheme.supportingText)
                             Button("Open Bible", action: continueReading)
                                 .buttonStyle(.borderedProminent)
                                 .tint(AppTheme.accent)
@@ -42,7 +42,7 @@ struct HomeView: View {
                                 .font(.title3)
                             Text("Reflection capture will connect to Echo in a later hub-integration phase.")
                                 .font(.footnote)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(AppTheme.supportingText)
                         }
                     }
                 }
@@ -74,7 +74,7 @@ struct HomeView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Label(title, systemImage: icon)
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(AppTheme.supportingText)
                 Text(value)
                     .font(.headline)
             }

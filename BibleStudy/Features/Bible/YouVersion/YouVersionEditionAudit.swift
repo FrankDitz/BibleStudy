@@ -72,9 +72,10 @@ struct YouVersionEditionSnapshot: Equatable, Sendable {
         self.abbreviation = abbreviation
         self.attribution = attribution
         self.providerBookIDs = Set(providerBookIDs.map { $0.uppercased() })
-        self.chapterIDsByBook = Dictionary(uniqueKeysWithValues: chapterIDsByBook.map {
-            ($0.key.uppercased(), Set($0.value.map { $0.uppercased() }))
-        })
+        self.chapterIDsByBook = Dictionary(
+            uniqueKeysWithValues: chapterIDsByBook.map {
+                ($0.key.uppercased(), Set($0.value.map { $0.uppercased() }))
+            })
     }
 
     init(version: BibleVersion) {
@@ -123,9 +124,10 @@ enum YouVersionEditionAuditor {
         let expectedProviderIDs = YouVersionCatholicBookMapping.expectedProviderBookIDs
         let missingProviderIDs = expectedProviderIDs.subtracting(snapshot.providerBookIDs).sorted()
 
-        let coveredCanonicalIDs = Set(snapshot.providerBookIDs.compactMap {
-            YouVersionCatholicBookMapping.canonicalID(forProviderID: $0)
-        })
+        let coveredCanonicalIDs = Set(
+            snapshot.providerBookIDs.compactMap {
+                YouVersionCatholicBookMapping.canonicalID(forProviderID: $0)
+            })
         let canonicalIDs = Set(CatholicCanon.books.map(\.osisID))
         let missingCanonicalIDs = canonicalIDs.subtracting(coveredCanonicalIDs).sorted()
         let danielChapterIDs = snapshot.chapterIDsByBook["DAN"] ?? []

@@ -14,9 +14,10 @@ struct AppConfiguration: Sendable {
         let candidate = rawValue?.trimmingCharacters(in: .whitespacesAndNewlines)
 
         if let candidate,
-           !candidate.isEmpty,
-           !candidate.contains("replace-with"),
-           !candidate.hasPrefix("$(") {
+            !candidate.isEmpty,
+            !candidate.contains("replace-with"),
+            !candidate.hasPrefix("$(")
+        {
             youVersionAppKey = candidate
         } else {
             youVersionAppKey = nil

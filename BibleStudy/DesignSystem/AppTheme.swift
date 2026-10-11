@@ -3,6 +3,7 @@ import SwiftUI
 enum AppTheme {
     static let accent = Color(red: 0.48, green: 0.20, blue: 0.16)
     static let warmSurface = Color(red: 0.96, green: 0.93, blue: 0.87)
+    static let supportingText = Color.primary.opacity(0.78)
     static let success = Color(red: 0.20, green: 0.46, blue: 0.30)
     static let warning = Color(red: 0.65, green: 0.38, blue: 0.08)
     static let danger = Color(red: 0.70, green: 0.16, blue: 0.14)

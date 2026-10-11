@@ -14,11 +14,11 @@ enum APIBibleEndpoint: Equatable, Sendable {
             components = ["bibles"]
         case .audioBibles:
             components = ["audio-bibles"]
-        case let .textBooks(bibleID):
+        case .textBooks(let bibleID):
             components = ["bibles", bibleID, "books"]
-        case let .audioBooks(bibleID):
+        case .audioBooks(let bibleID):
             components = ["audio-bibles", bibleID, "books"]
-        case let .audioChapter(bibleID, chapterID):
+        case .audioChapter(let bibleID, let chapterID):
             components = ["audio-bibles", bibleID, "chapters", chapterID]
         }
 

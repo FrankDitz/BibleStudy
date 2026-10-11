@@ -31,8 +31,12 @@ struct ProfileView: View {
                 }
 
                 Section("Privacy") {
-                    Text("Your plans, completion history, notes, highlights, bookmarks, and reflections are designed to remain private app data.")
-                    Text("This build is scoped for one-person use. Any public release requires a new content-license, privacy, attribution, and distribution review.")
+                    Text(
+                        "Your plans, completion history, notes, highlights, bookmarks, and reflections are designed to remain private app data."
+                    )
+                    Text(
+                        "This build is scoped for one-person use. Any public release requires a new content-license, privacy, attribution, and distribution review."
+                    )
                 }
             }
             .navigationTitle("You")

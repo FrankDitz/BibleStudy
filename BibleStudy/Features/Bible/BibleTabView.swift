@@ -14,7 +14,8 @@ struct BibleTabView: View {
                         AppStateDescriptor(
                             kind: .rightsLocked,
                             title: "Bible provider setup required",
-                            message: "Add your private YouVersion Platform App Key to Config/Secrets.xcconfig to enable the licensed reader.",
+                            message:
+                                "Add your private YouVersion Platform App Key to Config/Secrets.xcconfig to enable the licensed reader.",
                             icon: "book.closed"
                         )
                     )

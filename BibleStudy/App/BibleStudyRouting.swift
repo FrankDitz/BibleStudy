@@ -34,13 +34,15 @@ enum BibleStudyDeepLink {
 
             let verseStart = components.integerQueryValue(named: "verse")
             let verseEnd = components.integerQueryValue(named: "end")
-            guard let reference = try? ScriptureReference(
-                versionID: versionID,
-                bookID: pathComponents[0],
-                chapter: chapter,
-                verseStart: verseStart,
-                verseEnd: verseEnd
-            ) else {
+            guard
+                let reference = try? ScriptureReference(
+                    versionID: versionID,
+                    bookID: pathComponents[0],
+                    chapter: chapter,
+                    verseStart: verseStart,
+                    verseEnd: verseEnd
+                )
+            else {
                 return nil
             }
             return .scripture(reference)
@@ -55,10 +57,10 @@ enum BibleStudyDeepLink {
         components.scheme = scheme
 
         switch route {
-        case let .destination(destination):
+        case .destination(let destination):
             components.host = "destination"
             components.path = "/\(destination.rawValue)"
-        case let .scripture(reference):
+        case .scripture(let reference):
             components.host = "scripture"
             components.path = "/\(reference.bookID)/\(reference.chapter)"
             var queryItems = [URLQueryItem(name: "version", value: String(reference.versionID))]
@@ -75,8 +77,8 @@ enum BibleStudyDeepLink {
     }
 }
 
-private extension URLComponents {
-    func integerQueryValue(named name: String) -> Int? {
+extension URLComponents {
+    fileprivate func integerQueryValue(named name: String) -> Int? {
         guard let value = queryItems?.first(where: { $0.name == name })?.value else {
             return nil
         }

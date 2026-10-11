@@ -8,7 +8,7 @@ enum BibleStudyLaunchContext: Equatable, Sendable {
         switch self {
         case .standalone:
             nil
-        case let .hub(request):
+        case .hub(let request):
             request.initialRoute
         }
     }

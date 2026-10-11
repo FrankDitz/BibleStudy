@@ -23,7 +23,8 @@ struct CanonicalScriptureReference: Codable, Equatable, Hashable, Sendable {
         verseStart: Int? = nil,
         verseEnd: Int? = nil
     ) throws {
-        let normalizedBookID = bookID
+        let normalizedBookID =
+            bookID
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .uppercased()
 

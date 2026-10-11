@@ -1,4 +1,4 @@
-name: Apple build
+name: Apple quality gates
 
 on:
   pull_request:
@@ -7,9 +7,30 @@ on:
       - main
 
 jobs:
-  macos:
+  quality:
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
-      - name: Build and test
-        run: xcodebuild test -project BibleStudy.xcodeproj -scheme BibleStudy -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO
+      - uses: actions/checkout@v5
+      - name: Validate branch name
+        if: github.event_name == 'pull_request'
+        run: scripts/check-branch-name.sh "${{ github.head_ref }}"
+      - name: Check provider boundaries
+        run: scripts/check-provider-boundaries.sh
+      - name: Scan tracked files for secrets
+        run: scripts/check-secrets.sh
+      - name: Lint Swift formatting
+        run: xcrun swift-format lint --recursive BibleStudy BibleStudyTests BibleStudyUITests
+
+  macos-tests:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v5
+      - name: Run macOS tests
+        run: xcodebuild test -project BibleStudy.xcodeproj -scheme BibleStudy -destination 'platform=macOS' -only-testing:BibleStudyTests CODE_SIGNING_ALLOWED=NO
+
+  ios-build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build app and UI-test bundle
+        run: xcodebuild build-for-testing -project BibleStudy.xcodeproj -scheme BibleStudy -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO

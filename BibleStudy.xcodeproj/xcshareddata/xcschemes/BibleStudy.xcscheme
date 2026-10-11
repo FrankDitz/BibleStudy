@@ -35,6 +35,20 @@
                ReferencedContainer = "container:BibleStudy.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B10000000000000000000008"
+               BuildableName = "BibleStudyUITests.xctest"
+               BlueprintName = "BibleStudyUITests"
+               ReferencedContainer = "container:BibleStudy.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -52,6 +66,17 @@
                BlueprintIdentifier = "A10000000000000000000016"
                BuildableName = "BibleStudyTests.xctest"
                BlueprintName = "BibleStudyTests"
+               ReferencedContainer = "container:BibleStudy.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B10000000000000000000008"
+               BuildableName = "BibleStudyUITests.xctest"
+               BlueprintName = "BibleStudyUITests"
                ReferencedContainer = "container:BibleStudy.xcodeproj">
             </BuildableReference>
          </TestableReference>

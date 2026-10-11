@@ -32,12 +32,14 @@ struct YouVersionScriptureAdapter: ScriptureProvider {
             .filter { permittedVersionIDs.contains($0.id) }
             .map(Self.map)
             .sorted { left, right in
-                let leftIndex = YouVersionCatalogPolicy.preferredVersionIDs.firstIndex {
-                    String($0) == left.id.value
-                } ?? .max
-                let rightIndex = YouVersionCatalogPolicy.preferredVersionIDs.firstIndex {
-                    String($0) == right.id.value
-                } ?? .max
+                let leftIndex =
+                    YouVersionCatalogPolicy.preferredVersionIDs.firstIndex {
+                        String($0) == left.id.value
+                    } ?? .max
+                let rightIndex =
+                    YouVersionCatalogPolicy.preferredVersionIDs.firstIndex {
+                        String($0) == right.id.value
+                    } ?? .max
                 return leftIndex < rightIndex
             }
     }

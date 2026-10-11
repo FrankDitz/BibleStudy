@@ -1,0 +1,64 @@
+import XCTest
+
+final class BibleStudyUITests: XCTestCase {
+    override func setUpWithError() throws {
+        continueAfterFailure = false
+    }
+
+    @MainActor
+    func testFiveDestinationsAreReachable() {
+        let app = launchApplication()
+        for destination in ["Home", "Bible", "Plans", "Learning", "You"] {
+            XCTAssertTrue(navigationElement(destination, in: app).waitForExistence(timeout: 3))
+        }
+    }
+
+    @MainActor
+    func testMissingProviderShowsRightsLockedState() {
+        let app = launchApplication()
+        navigationElement("Bible", in: app).tap()
+        XCTAssertTrue(app.staticTexts["Bible provider setup required"].waitForExistence(timeout: 3))
+    }
+
+    @MainActor
+    func testNavigationAtLargestAccessibilityTextSize() {
+        let app = launchApplication(
+            additionalArguments: [
+                "-UIPreferredContentSizeCategoryName",
+                "UICTContentSizeCategoryAccessibilityExtraExtraExtraLarge",
+            ])
+
+        for destination in ["Home", "Bible", "Plans", "Learning", "You"] {
+            let element = navigationElement(destination, in: app)
+            XCTAssertTrue(element.waitForExistence(timeout: 3))
+            element.tap()
+        }
+    }
+
+    @MainActor
+    func testNavigationDestinationsExposeLabelsAndHitTargets() {
+        let app = launchApplication()
+        for destination in ["Home", "Bible", "Plans", "Learning", "You"] {
+            let element = navigationElement(destination, in: app)
+            XCTAssertEqual(element.label, destination)
+            XCTAssertTrue(element.isHittable)
+        }
+    }
+
+    @MainActor
+    private func launchApplication(additionalArguments: [String] = []) -> XCUIApplication {
+        let app = XCUIApplication()
+        app.launchArguments = ["-ui-testing"] + additionalArguments
+        app.launch()
+        return app
+    }
+
+    @MainActor
+    private func navigationElement(_ title: String, in app: XCUIApplication) -> XCUIElement {
+        #if os(macOS)
+            app.staticTexts[title]
+        #else
+            app.tabBars.buttons[title]
+        #endif
+    }
+}

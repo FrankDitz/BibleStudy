@@ -23,7 +23,8 @@ struct ScriptureReference: Codable, Hashable, Identifiable, Sendable {
     ) throws {
         guard versionID > 0 else { throw ValidationError.invalidVersion }
 
-        let normalizedBook = bookID
+        let normalizedBook =
+            bookID
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .uppercased()
         guard CatholicCanon.contains(osisID: normalizedBook) else {

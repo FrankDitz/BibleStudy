@@ -10,27 +10,27 @@ struct BibleStudyRootView: View {
     var body: some View {
         Group {
             #if os(macOS)
-            NavigationSplitView {
-                List(AppDestination.allCases, selection: $selection) { destination in
-                    Label(destination.title, systemImage: destination.systemImage)
-                        .tag(destination)
+                NavigationSplitView {
+                    List(AppDestination.allCases, selection: $selection) { destination in
+                        Label(destination.title, systemImage: destination.systemImage)
+                            .tag(destination)
+                    }
+                    .navigationTitle("Bible Study")
+                    .navigationSplitViewColumnWidth(min: 190, ideal: 220)
+                } detail: {
+                    destinationView(selection)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-                .navigationTitle("Bible Study")
-                .navigationSplitViewColumnWidth(min: 190, ideal: 220)
-            } detail: {
-                destinationView(selection)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
             #else
-            TabView(selection: $selection) {
-                ForEach(AppDestination.allCases) { destination in
-                    destinationView(destination)
-                        .tabItem {
-                            Label(destination.title, systemImage: destination.systemImage)
-                        }
-                        .tag(destination)
+                TabView(selection: $selection) {
+                    ForEach(AppDestination.allCases) { destination in
+                        destinationView(destination)
+                            .tabItem {
+                                Label(destination.title, systemImage: destination.systemImage)
+                            }
+                            .tag(destination)
+                    }
                 }
-            }
             #endif
         }
         .task {
@@ -81,9 +81,9 @@ struct BibleStudyRootView: View {
 
     private func handle(_ route: BibleStudyRoute) {
         switch route {
-        case let .destination(destination):
+        case .destination(let destination):
             selection = destination
-        case let .scripture(reference):
+        case .scripture(let reference):
             openScripture(reference)
         }
     }

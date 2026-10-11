@@ -1,5 +1,6 @@
 import XCTest
 import YouVersionPlatform
+
 @testable import BibleStudy
 
 final class ScriptureProviderTests: XCTestCase {
