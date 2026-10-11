@@ -7,7 +7,7 @@ final class BibleStudyHubContractTests: XCTestCase {
         let entityID = UUID(uuidString: "22222222-2222-2222-2222-222222222222")!
         let occurredAt = Date(timeIntervalSince1970: 1_700_000_000)
         let reference = try CanonicalScriptureReference(
-            bookID: "mat",
+            bookID: "matt",
             chapter: 5,
             verseStart: 3,
             verseEnd: 10
@@ -33,7 +33,7 @@ final class BibleStudyHubContractTests: XCTestCase {
         XCTAssertEqual(decoded, event)
         XCTAssertEqual(decoded.schemaVersion, 1)
         XCTAssertEqual(decoded.sourceApp, "bible-study")
-        XCTAssertEqual(decoded.payload.scriptureReference?.osis, "MAT.5.3-10")
+        XCTAssertEqual(decoded.payload.scriptureReference?.osis, "MATT.5.3-10")
         XCTAssertEqual(
             decoded.payload.virtueIDs.map(\.rawValue),
             ["christian.diligence", "christian.humility"]

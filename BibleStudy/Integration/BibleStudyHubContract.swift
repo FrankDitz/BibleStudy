@@ -27,7 +27,9 @@ struct CanonicalScriptureReference: Codable, Equatable, Hashable, Sendable {
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .uppercased()
 
-        guard normalizedBookID.count >= 3 else { throw ValidationError.invalidBook }
+        guard CatholicCanon.contains(osisID: normalizedBookID) else {
+            throw ValidationError.invalidBook
+        }
         guard chapter > 0 else { throw ValidationError.invalidChapter }
 
         if let verseStart {
