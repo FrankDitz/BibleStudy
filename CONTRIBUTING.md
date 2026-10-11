@@ -2,17 +2,27 @@
 
 ## Branches
 
-Use the enterprise branch pattern `<type>.<short-kebab-description>`.
+Use the automation-friendly branch pattern `<type>/<work-item>-<short-description>` when an issue or ticket exists, and `<type>/<short-description>` when this repository has no work-item tracker.
 
 Examples:
 
-- `feature.plan-scheduler`
-- `feature.audio-player`
-- `fix.reader-restoration`
-- `chore.sdk-upgrade`
-- `docs.learning-sources`
+- `feature/BS-123-plan-scheduler`
+- `feature/audio-player`
+- `fix/BS-456-reader-restoration`
+- `chore/sdk-upgrade`
+- `docs/learning-sources`
 
 Allowed types are `feature`, `fix`, `hotfix`, `chore`, `docs`, `refactor`, `test`, and `release`.
+
+Rules:
+
+- Use a lowercase type prefix, a forward slash, and a concise lowercase hyphenated description; preserve the tracker’s canonical work-item casing when present.
+- Include a real work-item identifier when one exists; never invent one.
+- Name the capability or correction being delivered, not its roadmap phase, sprint, date, author, or implementation agent.
+- Keep the full name under 80 characters and use only ASCII letters, digits, `/`, and `-`.
+- Reserve `main` for integrated, verified work and `release/<version>` for actual release stabilization.
+
+Valid names include `feature/scripture-provider-adapter`, `fix/plan-timezone-rollover`, and `docs/provider-rights`. Names such as `feature.phase-zero-reader`, `feature/phase-one-reader`, `frank/reader`, and `feature/october-work` are invalid because they encode workflow context or ownership rather than a durable change purpose.
 
 ## Commits
 
