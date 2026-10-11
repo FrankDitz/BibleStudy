@@ -2,7 +2,10 @@ import YouVersionPlatform
 
 enum YouVersionBootstrap {
     @MainActor
-    static func configureIfAvailable(using configuration: AppConfiguration) {
+    static func configureIfAvailable(
+        using configuration: AppConfiguration,
+        permittedVersionIDs: Set<Int> = YouVersionCatalogPolicy.permittedVersionIDs
+    ) {
         guard let appKey = configuration.youVersionAppKey else { return }
 
         YouVersionPlatformConfiguration.configure(
@@ -10,7 +13,7 @@ enum YouVersionBootstrap {
             appName: "Bible Study",
             isSignInEnabled: false,
             permittedLanguageTags: YouVersionCatalogPolicy.permittedLanguageTags,
-            permittedVersionIds: YouVersionCatalogPolicy.permittedVersionIDs
+            permittedVersionIds: permittedVersionIDs
         )
     }
 }

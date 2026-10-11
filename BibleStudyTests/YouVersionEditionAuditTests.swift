@@ -3,6 +3,73 @@ import XCTest
 @testable import BibleStudy
 
 final class YouVersionEditionAuditTests: XCTestCase {
+    func testCatalogGateApprovesOnlyStructurallyApprovedEditions() {
+        let approved = YouVersionEditionAuditReport(
+            versionID: 55,
+            title: "Approved",
+            abbreviation: "OK",
+            providerBookCount: 74,
+            missingProviderBookIDs: [],
+            missingCanonicalBookIDs: [],
+            hasEstherAdditions: true,
+            hasDanielAdditions: true,
+            hasAttribution: true
+        )
+        let rejected = YouVersionEditionAuditReport(
+            versionID: 463,
+            title: "Incomplete",
+            abbreviation: "NO",
+            providerBookCount: 66,
+            missingProviderBookIDs: ["TOB"],
+            missingCanonicalBookIDs: ["TOB"],
+            hasEstherAdditions: false,
+            hasDanielAdditions: false,
+            hasAttribution: true
+        )
+        let result = YouVersionCapabilityProbe.Result(
+            reports: [approved, rejected],
+            failures: []
+        )
+
+        XCTAssertEqual(
+            YouVersionCatalogGateDecision.evaluate(result),
+            .approved([55])
+        )
+    }
+
+    func testCatalogGateRejectsReachableCatalogWithoutApprovedEdition() {
+        let report = YouVersionEditionAuditReport(
+            versionID: 55,
+            title: "Incomplete",
+            abbreviation: "NO",
+            providerBookCount: 66,
+            missingProviderBookIDs: ["ESG"],
+            missingCanonicalBookIDs: [],
+            hasEstherAdditions: false,
+            hasDanielAdditions: true,
+            hasAttribution: true
+        )
+
+        XCTAssertEqual(
+            YouVersionCatalogGateDecision.evaluate(
+                .init(reports: [report], failures: [])
+            ),
+            .rejected
+        )
+    }
+
+    func testCatalogGateTreatsTotalProbeFailureAsUnavailable() {
+        XCTAssertEqual(
+            YouVersionCatalogGateDecision.evaluate(
+                .init(
+                    reports: [],
+                    failures: [.init(versionID: 55, message: "Offline")]
+                )
+            ),
+            .unavailable
+        )
+    }
+
     func testMappingCoversEveryCatholicBookAcrossSeventyFourProviderResources() {
         XCTAssertEqual(YouVersionCatholicBookMapping.providerIDsByCanonicalID.count, 73)
         XCTAssertEqual(YouVersionCatholicBookMapping.expectedProviderBookIDs.count, 74)

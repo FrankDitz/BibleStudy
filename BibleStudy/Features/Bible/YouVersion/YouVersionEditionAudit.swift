@@ -177,3 +177,25 @@ enum YouVersionCapabilityProbe {
         return Result(reports: reports, failures: failures)
     }
 }
+
+enum YouVersionCatalogGateDecision: Equatable, Sendable {
+    case approved(Set<Int>)
+    case rejected
+    case unavailable
+
+    static func evaluate(_ result: YouVersionCapabilityProbe.Result) -> Self {
+        let approvedVersionIDs = Set(
+            result.reports
+                .filter(\.isApprovedStructure)
+                .map(\.versionID)
+        )
+
+        if !approvedVersionIDs.isEmpty {
+            return .approved(approvedVersionIDs)
+        }
+        if !result.reports.isEmpty {
+            return .rejected
+        }
+        return .unavailable
+    }
+}

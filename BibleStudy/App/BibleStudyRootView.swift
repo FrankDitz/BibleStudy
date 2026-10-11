@@ -5,6 +5,7 @@ struct BibleStudyRootView: View {
 
     @State private var selection: AppDestination = .home
     @State private var scriptureNavigation = ScriptureNavigationController()
+    @State private var catalogApproval = YouVersionCatalogApproval()
     @State private var didApplyLaunchRoute = false
 
     var body: some View {
@@ -58,8 +59,9 @@ struct BibleStudyRootView: View {
             }
         case .bible:
             BibleTabView(
-                isPlatformConfigured: dependencies.configuration.isYouVersionConfigured,
-                navigation: scriptureNavigation
+                configuration: dependencies.configuration,
+                navigation: scriptureNavigation,
+                catalogApproval: catalogApproval
             )
         case .plans:
             PlansView { reference in
