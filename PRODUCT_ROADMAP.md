@@ -659,7 +659,7 @@ Do not generate text-to-speech from a copyrighted translation unless its license
 - Catholic canon manifest and naming/order policy.
 - Registered YouVersion personal-use application, App Key setup, and accepted licenses for the chosen Catholic editions.
 - Translation/audio rights matrix, exact provider Bible IDs, attribution templates, and provider contacts.
-- YouVersion Swift spike: filter to approved Catholic editions, verify all 73 books, render/navigate chapters, open a plan reference, test local verse actions, search, attribution, Mac, accessibility, caching, offline behavior, and provider error states.
+- YouVersion Swift spike: filter to approved Catholic editions, map all 73 conceptual books across provider resources (including `ESG`), render/navigate chapters, open a plan reference, test local verse actions, search, attribution, Mac, accessibility, caching, offline behavior, and provider error states.
 - API.Bible audio/fallback spike: inspect licensed Catholic text availability, chapter audio, timecodes, and caching/download rules.
 - STREETLIGHTS partnership inquiry; no dependency on a positive answer.
 - Learning editorial guide, source hierarchy, jurisdiction model, and reviewer role.
@@ -669,7 +669,7 @@ Do not generate text-to-speech from a copyrighted translation unless its license
 ### Exit criteria
 
 - At least one legally usable complete Catholic text path is identified for beta.
-- The YouVersion App Key can retrieve at least one complete 73-book Catholic edition and its required attribution.
+- The YouVersion App Key can retrieve at least one complete Catholic edition—including `ESG` and Daniel additions—and its required attribution; provider resource count is not assumed to equal 73.
 - The primary Scripture provider, exact edition allowlist, audio candidate, and fallback are chosen.
 - Hub/Echo boundaries are accepted.
 - No unresolved assumption can force a reader or data-model rewrite.

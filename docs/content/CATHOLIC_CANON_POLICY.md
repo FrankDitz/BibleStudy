@@ -46,7 +46,7 @@ Canonical identity is **Psalms** (`PS`). Verse and psalm numbering follow the se
 An edition may be shown as a complete Catholic Bible only when all of these pass:
 
 1. The provider license is accepted for the exact edition.
-2. All 73 manifest books map to unique provider books.
+2. All 73 manifest books map to provider resources without assuming a one-to-one count; for example, YouVersion currently represents Catholic Esther with both `EST` and `ESG`.
 3. Catholic Esther and Daniel content passes the content-level audit.
 4. Chapter navigation, canonical references, attribution, and plan links are spot-checked.
 5. Any provider-specific naming differences are mapped without changing stored canonical IDs.

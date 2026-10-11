@@ -22,6 +22,12 @@ struct ProfileView: View {
                     }
                     LabeledContent("YouVersion sign-in", value: "Off")
                     LabeledContent("iCloud sync", value: "Planned")
+
+                    if isYouVersionConfigured {
+                        NavigationLink("Audit licensed editions") {
+                            YouVersionDiagnosticsView()
+                        }
+                    }
                 }
 
                 Section("Privacy") {
