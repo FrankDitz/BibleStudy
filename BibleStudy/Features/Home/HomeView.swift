@@ -8,7 +8,7 @@ struct HomeView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
                     Text("A quiet place to read, learn, and grow.")
-                        .font(.title2.weight(.medium))
+                        .font(AppTypography.screenIntroduction)
                         .foregroundStyle(.secondary)
 
                     FeatureCard {
@@ -25,17 +25,13 @@ struct HomeView: View {
                         }
                     }
 
-                    HStack(alignment: .top, spacing: 14) {
-                        summaryCard(
-                            title: "Current plan",
-                            value: "Not started",
-                            icon: "checklist"
-                        )
-                        summaryCard(
-                            title: "Reading streak",
-                            value: "0 days",
-                            icon: "flame"
-                        )
+                    ViewThatFits(in: .horizontal) {
+                        HStack(alignment: .top, spacing: AppSpacing.standard) {
+                            summaryCards
+                        }
+                        VStack(alignment: .leading, spacing: AppSpacing.standard) {
+                            summaryCards
+                        }
                     }
 
                     FeatureCard {
@@ -57,6 +53,20 @@ struct HomeView: View {
             .background(AppTheme.warmSurface.opacity(0.35))
             .navigationTitle("Home")
         }
+    }
+
+    @ViewBuilder
+    private var summaryCards: some View {
+        summaryCard(
+            title: "Current plan",
+            value: "Not started",
+            icon: "checklist"
+        )
+        summaryCard(
+            title: "Reading streak",
+            value: "0 days",
+            icon: "flame"
+        )
     }
 
     private func summaryCard(title: String, value: String, icon: String) -> some View {

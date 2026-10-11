@@ -10,11 +10,14 @@ struct BibleTabView: View {
                 if isPlatformConfigured {
                     YouVersionBibleReaderView(navigation: navigation)
                 } else {
-                    ContentUnavailableView {
-                        Label("YouVersion setup required", systemImage: "book.closed")
-                    } description: {
-                        Text("Add your private YouVersion Platform App Key to Config/Secrets.xcconfig to enable the Bible reader.")
-                    }
+                    AppStateView(
+                        AppStateDescriptor(
+                            kind: .rightsLocked,
+                            title: "Bible provider setup required",
+                            message: "Add your private YouVersion Platform App Key to Config/Secrets.xcconfig to enable the licensed reader.",
+                            icon: "book.closed"
+                        )
+                    )
                 }
             }
             .navigationTitle("Bible")
