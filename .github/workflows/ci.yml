@@ -1,0 +1,15 @@
+name: Apple build
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  macos:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test
+        run: xcodebuild test -project BibleStudy.xcodeproj -scheme BibleStudy -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO
