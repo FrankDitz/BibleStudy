@@ -31,3 +31,11 @@
 ## Change evidence
 
 For UI changes, record the tested platform/window, text size, color scheme, VoiceOver/keyboard result, and any unverified case in the change description. Phase exit requires a manual pass on physical iPhone and Mac in addition to previews and automated builds.
+
+### 2026-10-11 foundation verification
+
+- iPhone 16e simulator, iOS 18.5: four shell UI tests passed, including largest accessibility text and labels/hit targets.
+- XCTest's audit exposed insufficient supporting-text contrast on the warm material card; the shell now uses `AppTheme.supportingText`.
+- Native Mac app: Home, Bible, Plans, Learning, and You launched and navigated successfully through the accessibility tree.
+- Mac XCTest UI automation: not executed because the host timed out while enabling automation mode; normal app behavior was verified separately.
+- Still required: physical iPhone/Mac VoiceOver, minimum-window/keyboard, light/dark, and Reduce Motion sign-off.
