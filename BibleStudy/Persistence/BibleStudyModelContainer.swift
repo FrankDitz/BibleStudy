@@ -2,8 +2,8 @@ import Foundation
 import SwiftData
 
 enum BibleStudyMigrationPlan: SchemaMigrationPlan {
-    static let schemas: [any VersionedSchema.Type] = [BibleStudySchemaV1.self]
-    static let stages: [MigrationStage] = []
+    static var schemas: [any VersionedSchema.Type] { [BibleStudySchemaV1.self] }
+    static var stages: [MigrationStage] { [] }
 }
 
 enum BibleStudyModelContainer {
