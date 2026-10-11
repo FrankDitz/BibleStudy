@@ -5,6 +5,33 @@ import XCTest
 
 @MainActor
 final class ScriptureAnnotationRepositoryTests: XCTestCase {
+    func testAnnotationStateSurvivesDiskContainerReopen() throws {
+        let storeDirectory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("BibleStudyAnnotationTests", isDirectory: true)
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        try FileManager.default.createDirectory(at: storeDirectory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: storeDirectory) }
+
+        let storeURL = storeDirectory.appendingPathComponent("BibleStudy.store")
+        let reference = try makeReference()
+        try writeAnnotationState(for: reference, to: storeURL)
+
+        let reopenedContainer = try BibleStudyModelContainer.make(storeURL: storeURL)
+        let reopenedRepository = ScriptureAnnotationRepository(
+            modelContext: ModelContext(reopenedContainer)
+        )
+        let restoredState = try reopenedRepository.state(for: reference)
+
+        XCTAssertEqual(
+            restoredState,
+            ScriptureAnnotationState(
+                isBookmarked: true,
+                highlightColor: .green,
+                noteText: "Persist across launch"
+            )
+        )
+    }
+
     func testBookmarkCanBeAddedRemovedAndRestoredWithoutDuplicateRows() throws {
         let (repository, context) = try makeRepository()
         let reference = try makeReference()
@@ -74,6 +101,17 @@ final class ScriptureAnnotationRepositoryTests: XCTestCase {
         let container = try BibleStudyModelContainer.make(inMemory: true)
         let context = ModelContext(container)
         return (ScriptureAnnotationRepository(modelContext: context), context)
+    }
+
+    private func writeAnnotationState(
+        for reference: ScriptureReference,
+        to storeURL: URL
+    ) throws {
+        let container = try BibleStudyModelContainer.make(storeURL: storeURL)
+        let repository = ScriptureAnnotationRepository(modelContext: ModelContext(container))
+        try repository.toggleBookmark(for: reference)
+        try repository.setHighlight(.green, for: reference)
+        try repository.saveNote("Persist across launch", for: reference)
     }
 
     private func makeReference(
