@@ -70,6 +70,8 @@ Tradeoffs:
 - provider caching and usage reporting must remain enabled and disclosed;
 - SDK updates require regression tests on iPhone, Mac, accessibility, attribution, and the 73-book manifest.
 
+The compatible-major declaration, exact resolved revision, and required upgrade review are governed by [`DEPENDENCY_UPGRADE_POLICY.md`](DEPENDENCY_UPGRADE_POLICY.md). Compatible releases are not auto-merged.
+
 ## Distribution constraint
 
 This acceptance applies to owner-only personal use. TestFlight, App Store, multi-user, organizational, or commercial distribution is blocked until the YouVersion Platform terms, translation rights, privacy disclosures, and product positioning are reviewed again.

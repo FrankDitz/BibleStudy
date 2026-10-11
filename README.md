@@ -2,7 +2,7 @@
 
 Bible Study is a personal, Apple-native Catholic Scripture and formation module for the local self-improvement hub. It targets iPhone and Mac with SwiftUI.
 
-The implementation roadmap lives in [PRODUCT_ROADMAP.md](PRODUCT_ROADMAP.md). Current delivery gates are summarized in [Phase 0 status](docs/project/PHASE_0_STATUS.md), with the [initial backlog](docs/project/INITIAL_BACKLOG.md), [risk register](docs/project/RISK_REGISTER.md), and [Definition of Done](docs/project/DEFINITION_OF_DONE.md). The YouVersion integration decision is recorded in [ADR-001](docs/architecture/ADR-001-youversion-platform.md), and third-party notices are tracked in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+The implementation roadmap lives in [PRODUCT_ROADMAP.md](PRODUCT_ROADMAP.md). Current delivery gates are summarized in [Phase 0 status](docs/project/PHASE_0_STATUS.md), with the [initial backlog](docs/project/INITIAL_BACKLOG.md), [risk register](docs/project/RISK_REGISTER.md), and [Definition of Done](docs/project/DEFINITION_OF_DONE.md). The YouVersion integration decision is recorded in [ADR-001](docs/architecture/ADR-001-youversion-platform.md), dependency changes follow the [SDK upgrade policy](docs/architecture/DEPENDENCY_UPGRADE_POLICY.md), and third-party notices are tracked in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Current foundation
 
