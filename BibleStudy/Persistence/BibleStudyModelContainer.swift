@@ -1,3 +1,4 @@
+import Foundation
 import SwiftData
 
 enum BibleStudyMigrationPlan: SchemaMigrationPlan {
@@ -6,14 +7,26 @@ enum BibleStudyMigrationPlan: SchemaMigrationPlan {
 }
 
 enum BibleStudyModelContainer {
-    static func make(inMemory: Bool = false) throws -> ModelContainer {
+    static func make(inMemory: Bool = false, storeURL: URL? = nil) throws -> ModelContainer {
         let schema = Schema(BibleStudySchemaV1.models)
-        let configuration = ModelConfiguration(
-            "BibleStudy",
-            schema: schema,
-            isStoredInMemoryOnly: inMemory,
-            cloudKitDatabase: .none
-        )
+        precondition(!inMemory || storeURL == nil, "An in-memory store cannot use a disk URL")
+
+        let configuration: ModelConfiguration
+        if let storeURL {
+            configuration = ModelConfiguration(
+                "BibleStudy",
+                schema: schema,
+                url: storeURL,
+                cloudKitDatabase: .none
+            )
+        } else {
+            configuration = ModelConfiguration(
+                "BibleStudy",
+                schema: schema,
+                isStoredInMemoryOnly: inMemory,
+                cloudKitDatabase: .none
+            )
+        }
         return try ModelContainer(
             for: schema,
             migrationPlan: BibleStudyMigrationPlan.self,

@@ -1,3 +1,4 @@
+import Foundation
 import SwiftData
 import XCTest
 
@@ -5,6 +6,29 @@ import XCTest
 
 @MainActor
 final class PersistenceSchemaTests: XCTestCase {
+    func testDiskContainerRestoresSampleStateAfterReopen() throws {
+        let storeDirectory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("BibleStudyPersistenceTests", isDirectory: true)
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        try FileManager.default.createDirectory(at: storeDirectory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: storeDirectory) }
+
+        let storeURL = storeDirectory.appendingPathComponent("BibleStudy.store")
+        try writeSampleState(to: storeURL)
+
+        XCTAssertTrue(FileManager.default.fileExists(atPath: storeURL.path))
+
+        let reopenedContainer = try BibleStudyModelContainer.make(storeURL: storeURL)
+        let reopenedContext = ModelContext(reopenedContainer)
+        let profile = try reopenedContext.fetch(FetchDescriptor<BibleStudySchemaV1.Profile>()).first
+        let position = try reopenedContext.fetch(FetchDescriptor<BibleStudySchemaV1.ReadingPosition>()).first
+
+        XCTAssertEqual(profile?.displayName, "Owner")
+        XCTAssertEqual(position?.canonicalBookID, "JOHN")
+        XCTAssertEqual(position?.chapter, 3)
+        XCTAssertEqual(position?.verse, 16)
+    }
+
     func testInMemoryContainerPersistsFoundationRecordsAcrossContexts() throws {
         let container = try BibleStudyModelContainer.make(inMemory: true)
         let planID = UUID()
@@ -107,5 +131,21 @@ final class PersistenceSchemaTests: XCTestCase {
         XCTAssertEqual(BibleStudyMigrationPlan.schemas.count, 1)
         XCTAssertEqual(BibleStudySchemaV1.versionIdentifier, Schema.Version(1, 0, 0))
         XCTAssertTrue(BibleStudyMigrationPlan.stages.isEmpty)
+    }
+
+    private func writeSampleState(to storeURL: URL) throws {
+        let container = try BibleStudyModelContainer.make(storeURL: storeURL)
+        let context = ModelContext(container)
+        context.insert(BibleStudySchemaV1.Profile(displayName: "Owner"))
+        context.insert(
+            BibleStudySchemaV1.ReadingPosition(
+                editionProviderID: ScriptureProviderIdentifier.fixture.rawValue,
+                editionValue: "catholic-complete",
+                canonicalBookID: "JOHN",
+                chapter: 3,
+                verse: 16
+            )
+        )
+        try context.save()
     }
 }
