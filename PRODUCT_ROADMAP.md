@@ -232,6 +232,7 @@ Use YouVersion's online search first for YouVersion-hosted text. It supplies tex
 - Gospels in 30 days.
 - Psalms and Proverbs rhythm.
 - A gentle “Start with Jesus” plan for a new reader.
+- Catholic deuterocanonical books and the additions to Esther and Daniel in 30 days.
 
 Each template includes a title, purpose, estimated daily time, duration, canon requirement, ordered assignments, optional rest/catch-up days, author/reviewer, version, and revision date.
 

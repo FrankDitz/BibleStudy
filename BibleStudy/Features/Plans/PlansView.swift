@@ -29,15 +29,20 @@ struct PlansView: View {
                             VStack(alignment: .leading, spacing: 10) {
                                 Text(plan.title)
                                     .font(.headline)
-                                Text("\(plan.durationDays) days")
-                                    .font(.subheadline.weight(.semibold))
-                                    .foregroundStyle(AppTheme.accent)
+                                Text(
+                                    "\(plan.durationDays) days · ~\(plan.estimatedDailyMinutes.lowerBound)–\(plan.estimatedDailyMinutes.upperBound) min/day"
+                                )
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(AppTheme.accent)
                                 Text(plan.summary)
                                     .foregroundStyle(AppTheme.supportingText)
                                 Button("Preview first reading") {
-                                    openReading(plan.firstReading)
+                                    if let firstReading = plan.firstReading {
+                                        openReading(firstReading)
+                                    }
                                 }
                                 .buttonStyle(.bordered)
+                                .disabled(plan.firstReading == nil)
                             }
                         }
                     }
