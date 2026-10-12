@@ -26,6 +26,11 @@ struct ScriptureAnnotationState: Equatable, Sendable {
     )
 }
 
+struct ScriptureHighlightSnapshot: Equatable, Sendable {
+    let reference: ScriptureReference
+    let color: ScriptureHighlightColor
+}
+
 @MainActor
 struct ScriptureAnnotationRepository {
     private let modelContext: ModelContext
@@ -49,6 +54,32 @@ struct ScriptureAnnotationRepository {
                 .first { $0.kind == .note }?
                 .noteText ?? ""
         )
+    }
+
+    func activeHighlights() throws -> [ScriptureHighlightSnapshot] {
+        let descriptor = FetchDescriptor<BibleStudySchemaV1.ScriptureAnnotation>()
+        return try modelContext.fetch(descriptor).compactMap { annotation in
+            guard
+                annotation.kind == .highlight,
+                annotation.deletedAt == nil,
+                annotation.editionProviderID == ScriptureProviderIdentifier.youVersion.rawValue,
+                let editionValue = annotation.editionValue,
+                let versionID = Int(editionValue),
+                let colorName = annotation.colorName,
+                let color = ScriptureHighlightColor(rawValue: colorName),
+                let reference = try? ScriptureReference(
+                    versionID: versionID,
+                    bookID: annotation.canonicalBookID,
+                    chapter: annotation.chapter,
+                    verseStart: annotation.verseStart,
+                    verseEnd: annotation.verseEnd
+                )
+            else {
+                return nil
+            }
+
+            return ScriptureHighlightSnapshot(reference: reference, color: color)
+        }
     }
 
     @discardableResult

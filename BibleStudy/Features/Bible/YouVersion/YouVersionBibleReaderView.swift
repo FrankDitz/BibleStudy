@@ -8,6 +8,7 @@ struct YouVersionBibleReaderView: View {
 
     @State private var readerNavigation = BibleReaderNavigation()
     @State private var selectedVerse: SelectedVerse?
+    @Environment(\.modelContext) private var modelContext
 
     var body: some View {
         BibleReaderView.restoringLastPassage(
@@ -23,12 +24,16 @@ struct YouVersionBibleReaderView: View {
             readerNavigation: readerNavigation
         )
         .task(id: navigation.request?.id) {
+            synchronizeHighlights()
             guard let reference = navigation.request?.reference else { return }
             guard let approvedReference = approvedReference(for: reference) else { return }
             readerNavigation.request(approvedReference.youVersionReference, showsFullChapter: true)
         }
         .sheet(item: $selectedVerse) { selection in
-            VerseActionsView(selection: selection)
+            VerseActionsView(
+                selection: selection,
+                onHighlightChanged: synchronizeHighlights
+            )
         }
     }
 
@@ -51,6 +56,16 @@ struct YouVersionBibleReaderView: View {
             verseEnd: reference.verseEnd
         )
     }
+
+    private func synchronizeHighlights() {
+        do {
+            let repository = ScriptureAnnotationRepository(modelContext: modelContext)
+            let snapshots = try repository.activeHighlights()
+            YouVersionLocalHighlightBridge().replaceCachedHighlights(with: snapshots)
+        } catch {
+            assertionFailure("Unable to render locally stored highlights: \(error)")
+        }
+    }
 }
 
 private struct SelectedVerse: Identifiable {
@@ -62,6 +77,7 @@ private struct SelectedVerse: Identifiable {
 
 private struct VerseActionsView: View {
     let selection: SelectedVerse
+    let onHighlightChanged: () -> Void
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
@@ -170,6 +186,7 @@ private struct VerseActionsView: View {
         performRepositoryAction {
             try repository.setHighlight(color, for: selection.canonicalReference)
             annotationState = try repository.state(for: selection.canonicalReference)
+            onHighlightChanged()
         }
     }
 
@@ -208,7 +225,7 @@ private struct VerseActionsView: View {
 }
 
 extension BibleReference {
-    fileprivate var canonicalReference: ScriptureReference? {
+    var canonicalReference: ScriptureReference? {
         guard let canonicalBookID = YouVersionCatholicBookMapping.canonicalID(forProviderID: bookId) else {
             return nil
         }
@@ -224,7 +241,7 @@ extension BibleReference {
 }
 
 extension ScriptureReference {
-    fileprivate var youVersionReference: BibleReference {
+    var youVersionReference: BibleReference {
         let providerBookID =
             YouVersionCatholicBookMapping
             .primaryProviderID(forCanonicalID: bookID) ?? bookID

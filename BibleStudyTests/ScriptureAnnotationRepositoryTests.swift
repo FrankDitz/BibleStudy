@@ -61,6 +61,34 @@ final class ScriptureAnnotationRepositoryTests: XCTestCase {
         XCTAssertNil(try repository.state(for: reference).highlightColor)
     }
 
+    func testActiveHighlightsReturnsOnlyLiveYouVersionHighlights() throws {
+        let (repository, context) = try makeRepository()
+        let activeReference = try makeReference()
+        let removedReference = try makeReference(verse: 17)
+
+        try repository.setHighlight(.green, for: activeReference)
+        try repository.setHighlight(.rose, for: removedReference)
+        try repository.setHighlight(nil, for: removedReference)
+
+        context.insert(
+            BibleStudySchemaV1.ScriptureAnnotation(
+                kind: .highlight,
+                canonicalBookID: "JOHN",
+                chapter: 3,
+                verseStart: 18,
+                editionProviderID: "another-provider",
+                editionValue: "55",
+                colorName: ScriptureHighlightColor.blue.rawValue
+            )
+        )
+        try context.save()
+
+        XCTAssertEqual(
+            try repository.activeHighlights(),
+            [ScriptureHighlightSnapshot(reference: activeReference, color: .green)]
+        )
+    }
+
     func testNoteIsTrimmedUpdatedAndSoftDeletedWhenCleared() throws {
         let (repository, context) = try makeRepository()
         let reference = try makeReference()
