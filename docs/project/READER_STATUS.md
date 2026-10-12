@@ -1,7 +1,7 @@
 # Reader Phase Status
 
 **Implementation status:** complete
-**Phase-exit status:** owner physical-device accessibility sign-off remains
+**Phase-exit status:** complete with owner-approved Phase 7 deferrals
 **Verified:** 2026-10-12
 
 The owner’s YouVersion App Key exposes CPDV (`42`), which passes the automated 73-book Catholic structure and attribution gate. NRSV-CI (`2015`) is not currently exposed to this developer App Key; the owner’s support request is pending but does not block continued work with CPDV. Bible Study remains fail-closed: the runtime audit must pass before the reader or search is enabled.
@@ -15,7 +15,7 @@ The owner’s YouVersion App Key exposes CPDV (`42`), which passes the automated
 | BS-0203 | Ship app-owned front-to-back navigation and restoration while retaining YouVersion rendering | `YouVersionBibleReaderView`, `YouVersionReaderNavigator`, `ReadingPositionRepository`, `ScriptureNavigationController` | Complete; live macOS relaunch restoration and Catholic boundary traversal pass |
 | BS-0204 | Store translation-scoped bookmarks, highlight choices, and private notes locally | `ScriptureAnnotationRepository`, `YouVersionLocalHighlightBridge`, reader verse actions, disk-reopen and render-cache tests | Complete; data remains app-local and YouVersion sign-in is disabled |
 | BS-0205 | Search licensed Scripture with version, attribution, paging, correction, and provider-error behavior | `YouVersionScriptureSearchAdapter`, `YouVersionBibleSearchView`, adapter contract tests, live CPDV probe | Complete |
-| BS-0206 | Validate reader text controls, VoiceOver, keyboard, contrast, and Reduce Motion on iPhone and Mac | App reader controls, semantic labels, keyboard shortcuts, Reduce Motion-aware transitions, app accessibility matrix | Implementation complete; owner physical-device sign-off remains |
+| BS-0206 | Validate reader text controls, VoiceOver, keyboard, contrast, and Reduce Motion on iPhone and Mac | App reader controls, semantic labels, keyboard shortcuts, Reduce Motion-aware transitions, app accessibility matrix | Implementation complete; physical-device sign-off deferred to Phase 7 by owner |
 
 ## Verification evidence
 
@@ -30,10 +30,10 @@ The owner’s YouVersion App Key exposes CPDV (`42`), which passes the automated
 - Live boundary checks opened Esther 15 and Daniel 14; next-chapter navigation reached 1 Maccabees 1 and Hosea 1 respectively.
 - Light, sepia, and dark reader themes, scalable text, semantic passage controls, `Command-[`/`Command-]` navigation, and Reduce Motion-aware transitions are implemented.
 
-## Remaining acceptance
+## Deferred hardening acceptance
 
 The repository does not contain a YouVersion credential. The owner’s key remains only in ignored `Config/Secrets.xcconfig`; never commit or paste it into an issue, log, test fixture, or chat message.
 
-The remaining owner acceptance is the physical-device portion of the accessibility matrix: VoiceOver reading order, maximum Dynamic Type, keyboard focus, contrast, Reduce Motion, and provider-managed offline/error recovery on the owner’s iPhone and Mac. Automated tests, simulator compilation, semantic accessibility inspection, and live Mac behavior are merge gates; physical sign-off remains an owner acceptance gate rather than unfinished implementation.
+On 2026-10-12, the owner approved closing Phase 2 and moving the remaining physical-device matrix—VoiceOver reading order, maximum Dynamic Type, keyboard focus, contrast, Reduce Motion, and provider-managed offline/error recovery on iPhone and Mac—to Phase 7 hardening. These checks remain required before the owner-only v1.0 release; the deferral records that they are unverified, not that they passed or no longer matter.
 
 The NRSV-CI support request can later add `2015` to the same fail-closed catalog and search paths after its exact book/chapter layout passes the navigation and restoration acceptance matrix. Audio remains outside this phase until a separately licensed Catholic audio source is approved.

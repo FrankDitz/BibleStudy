@@ -39,6 +39,8 @@ This backlog is intentionally small enough to steer delivery. The roadmap remain
 
 ## Phase 2 — reader vertical slice
 
+**Status:** Closed 2026-10-12. The owner approved moving physical-device accessibility and live offline/error-recovery acceptance to Phase 7 hardening; those checks remain unverified rather than waived permanently.
+
 | ID | Pri | Backlog item | Acceptance signal | Depends on |
 | --- | --- | --- | --- | --- |
 | BS-0201 | P0 | Implement approved edition catalog and fail-closed attribution | Only licensed/audited editions render; required notice is always visible | BS-0002, BS-0101 |
@@ -62,6 +64,11 @@ This backlog is intentionally small enough to steer delivery. The roadmap remain
 | ID | Pri | Backlog item | Acceptance signal | Depends on |
 | --- | --- | --- | --- | --- |
 | BS-0401 | P1 | Home “Today” orchestration | Resume, plan, learning, virtue, and recent activity are useful without exposing private text | Phases 2–3 |
+| BS-0451 | P0 | Define the seven-virtues formation and provenance model | Namespaced identifiers, sources, review state, freshness, practices, check-ins, and privacy rules are testable | Phase 4 Learning model, hub contract |
+| BS-0452 | P0 | Publish seven reviewed virtue pathways | Chastity, temperance, charity, diligence, patience, kindness, and humility each complete the formation loop with approved sources | BS-0451, Catholic reviewer |
+| BS-0453 | P1 | Build virtue focus, practices, check-ins, and weekly review | The owner can practice and review without scores, public comparison, punitive streaks, or inferred moral judgment | BS-0451/2 |
+| BS-0454 | P1 | Connect virtue formation to Scripture, Plans, Echo, and Home | One namespaced virtue identity crosses allowlisted contracts; no private reflection/check-in text leaves its owner | BS-0401, BS-0451, hub/Echo contracts |
+| BS-0455 | P1 | Complete virtue privacy, accessibility, export, and deletion acceptance | iPhone/Mac checks pass and virtue data can be exported/deleted independently | BS-0453/4, Phase 5 data controls |
 | BS-0501 | P0 | Implement provenance-aware Learning model | Every item enforces source, scope, reviewer, rights, freshness, and correction metadata | Learning editorial guide, BS-0102 |
 | BS-0502 | P1 | Publish first reviewed Learning collection | Mass, sacraments, liturgical year, and prayer modules pass Catholic/content QA | BS-0006, BS-0501 |
 | BS-0601 | P1 | Build You analytics and data controls | Streaks/progress are accurate; export/delete and integration status are understandable | BS-0102, Phase 3 |

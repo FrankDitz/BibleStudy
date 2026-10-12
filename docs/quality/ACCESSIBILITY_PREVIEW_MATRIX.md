@@ -2,7 +2,7 @@
 
 **Baseline:** Phase 1 navigation shell and design states  
 **Platforms:** iOS 17+ and macOS 15+  
-**Last updated:** 2026-10-11
+**Last updated:** 2026-10-12
 
 ## Required preview matrix
 
@@ -39,3 +39,7 @@ For UI changes, record the tested platform/window, text size, color scheme, Voic
 - Native Mac app: Home, Bible, Plans, Learning, and You launched and navigated successfully through the accessibility tree.
 - Mac XCTest UI automation: not executed because the host timed out while enabling automation mode; normal app behavior was verified separately.
 - Still required: physical iPhone/Mac VoiceOver, minimum-window/keyboard, light/dark, and Reduce Motion sign-off.
+
+### 2026-10-12 Phase 2 disposition
+
+The owner approved closing the reader phase and deferring the physical iPhone/Mac accessibility pass plus live provider-managed offline/error-recovery checks to Phase 7 hardening. Automated reader semantics, largest-text UI coverage, simulator compilation, keyboard shortcuts, themes, Reduce Motion-aware transitions, and live Mac reader behavior are complete. The deferred checks remain release requirements and must not be described as passing until performed.

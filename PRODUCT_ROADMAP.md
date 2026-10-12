@@ -1,9 +1,9 @@
 # Bible Study — Product Plan and Delivery Roadmap
 
-Status: planning baseline, revised after YouVersion Platform review
+Status: active delivery roadmap; Phase 2 closed with owner-approved hardening deferrals
 
 Platforms: iPhone and Mac, inside the local self-improvement hub
-Planning date: October 11, 2026
+Planning date: October 12, 2026
 
 ## The gist
 
@@ -13,7 +13,8 @@ Build the product around one daily loop:
 2. **Read or listen without friction** in Bible: Catholic canon, version selection, readable typography, notes, bookmarks, and optional synchronized narration.
 3. **Finish a concrete commitment** in Plans: a day-based checklist with flexible catch-up rules and honest progress.
 4. **Learn the faith in context** in Learning: concise, reviewed guides to Mass, sacraments, prayer, the liturgical year, holy days, and Catholic practice.
-5. **See growth without turning faith into a game** in You: private analytics, restrained milestones, preferences, data controls, and hub integration.
+5. **Practice one virtue deliberately** through reviewed teaching, Scripture, a concrete action, and optional Echo reflection.
+6. **See growth without turning faith into a game** in You: private analytics, restrained milestones, preferences, data controls, and hub integration.
 
 The personal-use release is a local-first formation app that uses the YouVersion Platform Swift SDK as its Scripture-text foundation, subject to the desired Catholic editions being licensed to our App Key. Bible Study owns plans, notes, bookmarks, learning, analytics, and iCloud state. Licensed human narration and verse-synchronized follow-along remain a gated second release because the reviewed YouVersion developer surface does not currently document audio APIs. Any future distribution beyond the owner's devices triggers a fresh Platform-terms, translation-rights, privacy, and App Store review.
 
@@ -26,6 +27,7 @@ The personal-use release is a local-first formation app that uses the YouVersion
 | 2. Bible vertical slice | Scripture is pleasant and dependable to read | Canon browser, chapter reader, version picker, navigation, search, highlights, notes, bookmarks, offline behavior | A user can read front-to-back and resume reliably |
 | 3. Plans | Reading goals become actionable and accountable | Premade plans, custom plan builder, schedule engine, day checklist, reminders, catch-up choices, progress | Plan math passes edge cases and a plan works end-to-end |
 | 4. Daily formation | The app feels like a coherent Catholic companion | Home dashboard, Learning MVP, Echo reflection handoff, source/reviewer metadata | A complete daily loop works without dead ends |
+| 4A. Seven Virtues formation | Scripture and reflection become concrete character practice | Seven reviewed virtue pathways, focus selection, practices, examen prompts, Echo handoff, private review | All seven pathways work end-to-end without scoring holiness |
 | 5. Personalization and hub | The experience persists across devices and belongs in the hub | You, private analytics, milestones, iCloud sync, deep links, import/export, hub events | iPhone/Mac state converges and hub journeys work |
 | 6. Narrated Bible | Listening is first-class where rights allow it | Licensed audio provider, background player, lock-screen controls, chapter queue, optional verse timecodes | Playback survives interruptions and text/audio stay aligned |
 | 7. Hardening and personal release | A trustworthy owner-only v1.0 is ready | Accessibility, performance, content/legal QA, direct-device testing, migration and recovery tests, release checklist | No personal-release blocker remains |
@@ -355,6 +357,63 @@ Examples: first plan started, first Gospel completed, seven reading days, first 
 - Clear history/cache without deleting notes or plan progress.
 - Sources, translation rights, audio credits, learning reviewers, privacy, and app version.
 - Diagnostic sharing is off by default.
+
+## 3.6 Seven Virtues formation
+
+### Purpose
+
+Help the owner intentionally cultivate the seven Christian virtues—chastity, temperance, charity, diligence, patience, kindness, and humility—through Catholic teaching, Scripture, concrete practice, and honest reflection. The feature measures participation and consistency, never a person’s holiness, moral worth, or standing before God.
+
+### Formation model
+
+Each virtue follows the same calm, repeatable path:
+
+1. **Understand** — a short, reviewed explanation of the virtue, its distortions, and its place in Catholic life.
+2. **Encounter Scripture** — a small set of licensed passages rendered by the Bible reader, with context rather than proof-texting.
+3. **Choose a practice** — one concrete, time-bounded action selected by the owner; suggestions remain optional.
+4. **Notice** — a private daily check-in records completed, skipped, or reflected without points, grades, public streaks, or shame language.
+5. **Reflect** — an explicit handoff opens Echo with the selected virtue, prompt, and canonical Scripture references; Echo owns the journal entry.
+6. **Review** — a weekly view shows practices attempted, reflections opened, and self-written observations without claiming virtue attainment.
+
+### The seven pathways
+
+| Virtue | Formation emphasis | Example practices |
+| --- | --- | --- |
+| Chastity | Integrity, purity of heart, and honoring the dignity of self and others | Curate media intentionally, maintain a chosen boundary, pray for purity of intention |
+| Temperance | Freedom through moderation and rightly ordered use of created goods | Choose a measured limit, fast from an optional comfort, pause before an impulse |
+| Charity | Love of God and neighbor expressed in willing the good | Perform a hidden work of mercy, contact someone who needs care, pray for another person |
+| Diligence | Faithful, steady attention to duties and worthy commitments | Complete one avoided duty, protect a focused work period, prepare tomorrow’s first action |
+| Patience | Peaceful endurance of delay, suffering, and other people’s limitations | Receive an interruption calmly, delay an angry response, remain present in difficulty |
+| Kindness | Gentle, generous action that makes charity tangible | Offer specific encouragement, help without being asked, speak with deliberate gentleness |
+| Humility | Living truthfully before God without self-exaltation or self-contempt | Admit a mistake, ask for help, accept unnoticed service, practice gratitude |
+
+These descriptions are product-planning summaries, not publishable catechesis. Final pathway language, Scripture choices, practices, and examen prompts require the same source, jurisdiction, copyright, and Catholic-review controls as Learning content. The UI must distinguish `christian.temperance` from `cardinal.temperance` even when teaching their relationship.
+
+### Experience and safeguards
+
+- The owner chooses the current virtue focus manually; the app never infers a moral weakness from reading, journal, browsing, or behavioral data.
+- Home may show one current practice and one optional reflection prompt, never a virtue leaderboard or comparative score.
+- Plans may include virtue practices, but completing Scripture never automatically claims progress in a virtue.
+- Check-ins, notes, and reflections remain local/private; hub events contain only allowlisted identifiers and completion metadata.
+- Analytics describe actions taken over a selected period and can be disabled or deleted.
+- Difficult or sensitive topics—especially chastity—use pastoral language, avoid diagnosing culpability, and direct personal questions to an appropriate priest or qualified guide.
+- Every path supports VoiceOver, Dynamic Type, keyboard navigation, Reduce Motion, and non-color status cues.
+
+### Deliverables
+
+- Provenance-aware virtue content model with the existing namespaced hub identifiers.
+- Seven reviewed formation pathways with Scripture references, practices, examen prompts, and review dates.
+- Virtue-focus selection, daily practice card, check-in history, and weekly private review.
+- Echo reflection handoff and allowlisted hub events that never include journal or check-in text.
+- Learning, Home, Plans, and You integrations that share one source of truth.
+- Export/delete behavior, accessibility coverage, privacy tests, and content-review fixtures.
+
+### Exit criteria
+
+- The owner can select any of the seven virtues, complete a practice, open a related passage, reflect in Echo, and review the week without a dead end.
+- All seven pathways have approved Catholic sources/review, visible freshness metadata, and tested Scripture links.
+- No score, rank, streak loss, automated moral judgment, or private reflection text crosses the module boundary.
+- Accessibility, persistence, export/delete, and hub-contract tests pass on iPhone and Mac.
 
 ---
 
@@ -697,6 +756,8 @@ Do not generate text-to-speech from a copyrighted translation unless its license
 
 ## Phase 2 — Bible reader vertical slice
 
+**Status:** Closed October 12, 2026. The owner accepted deferral of physical-device accessibility and live offline/error-recovery acceptance to Phase 7 hardening; this does not assert those checks passed.
+
 ### Deliverables
 
 - YouVersion-approved translation allowlist and catalog metadata with rights/capability details.
@@ -752,6 +813,24 @@ Do not generate text-to-speech from a copyrighted translation unless its license
 - The daily loop from Home through reading/learning to optional reflection is complete.
 - Every published article passes doctrinal/editorial and copyright review.
 - Bible Study does not duplicate Echo entries.
+
+## Phase 4A — Seven Virtues formation
+
+### Deliverables
+
+- Provenance-aware content records for chastity, temperance, charity, diligence, patience, kindness, and humility.
+- Seven reviewed pathways containing teaching, licensed Scripture references, practices, examen prompts, and pastoral boundaries.
+- Owner-selected virtue focus, Home practice card, private check-ins, and a weekly review without scores or competitive streaks.
+- Learning and Plans connections that preserve one virtue taxonomy and never auto-claim moral growth from task completion.
+- Echo handoff carrying only the visible prompt, canonical Scripture references, and namespaced virtue identifier.
+- Private analytics, export/delete support, accessibility coverage, and hub-contract/privacy tests.
+
+### Exit criteria
+
+- Every pathway completes the understand → Scripture → practice → notice → reflect → review loop.
+- A qualified Catholic review route approves all published formation content and sensitive pastoral language.
+- The owner can remove the complete virtue history without deleting Scripture annotations or Echo entries.
+- No private check-in or reflection text enters provider requests, logs, analytics, or hub events.
 
 ## Phase 5 — You, iCloud, and hub integration
 
@@ -883,9 +962,9 @@ The following decisions are now locked for the initial build:
 
 1. Distribution is owner-only personal use. Any TestFlight, App Store, multi-user, organizational, or commercial release requires a new terms, rights, privacy, and content review.
 2. YouVersion is the primary Scripture text, reader, catalog, search, and attribution provider.
-3. The approved Catholic allowlist is ordered NABRE (`463`), NRSV-CI (`2015`), then DRC1752 (`55`), subject to the App Key's actual licenses and 73-book manifests. DRC1752 is the development default until the App Key catalog is verified.
+3. CPDV (`42`) is the active approved Catholic edition. NRSV-CI (`2015`) is the desired edition pending provider access; NABRE (`463`) and DRC1752 (`55`) remain disabled unless the App Key later exposes them and the same live canon/attribution audit passes.
 4. YouVersion sign-in is disabled. Highlights, notes, bookmarks, history, plans, and analytics remain local and later sync through the owner's private iCloud database.
-5. `BibleReaderView` is the first reader implementation. The app owns a provider adapter and canonical references so it can move to `BibleTextView`, REST, API.Bible, or a public-domain source without changing plans or user data.
+5. The app owns Catholic canonical navigation and restoration while the supported YouVersion `BibleTextView` renders licensed Scripture. Provider adapters and canonical references preserve the option to move to another approved presentation/source without changing plans or user data.
 6. Reading plans are app-owned, complete manually, and never depend on YouVersion user data.
 7. YouVersion search supplies online reference, text, topic, suggestion, and correction results. Local FTS exists only for independently licensed offline text.
 8. Verse of the Day may appear on Home as **Scripture of the Day**, never as the Catholic daily Mass reading.
@@ -894,12 +973,13 @@ The following decisions are now locked for the initial build:
 11. iCloud follows the reader/plans vertical slice. Milestones are private, optional, and noncompetitive.
 12. US Catholic practice is the default Learning jurisdiction; variation is always labeled. Qualified external review becomes mandatory before any distribution beyond the owner.
 
-Inputs still required before Phase 2 can exit:
+Phase 2 closed on October 12, 2026 with CPDV (`42`) as the approved text edition. The owner explicitly deferred physical-device accessibility and live offline/error-recovery acceptance to Phase 7 hardening. NRSV-CI (`2015`) remains a desired edition pending provider access and must pass the same fail-closed audit before use.
 
-- a YouVersion Platform App Key stored in the ignored local secrets configuration;
-- confirmation of which allowlisted Catholic Bible IDs the App Key can retrieve;
-- the hub's exact virtue identifiers and definitions;
-- the existing Ambition/Echo hub contracts, if already implemented.
+Inputs still required before the seven-virtues track exits:
+
+- approved Catholic sources and a qualified review route for each formation pathway;
+- owner acceptance of the proposed practice/check-in model and pastoral language;
+- the existing Ambition and Echo runtime contracts when those sibling apps are ready for integration.
 
 ## 12. Definition of Done for every feature
 
