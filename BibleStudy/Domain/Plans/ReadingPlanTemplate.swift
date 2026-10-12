@@ -43,6 +43,26 @@ struct ReadingPlanAssignment: Identifiable, Hashable, Sendable {
     let bookID: String
     let startChapter: Int
     let endChapter: Int
+    let verseStart: Int?
+    let verseEnd: Int?
+
+    init(
+        id: String,
+        position: Int,
+        bookID: String,
+        startChapter: Int,
+        endChapter: Int,
+        verseStart: Int? = nil,
+        verseEnd: Int? = nil
+    ) {
+        self.id = id
+        self.position = position
+        self.bookID = bookID
+        self.startChapter = startChapter
+        self.endChapter = endChapter
+        self.verseStart = verseStart
+        self.verseEnd = verseEnd ?? verseStart
+    }
 
     var chapterCount: Int {
         max(0, endChapter - startChapter + 1)
@@ -59,7 +79,9 @@ struct ReadingPlanAssignment: Identifiable, Hashable, Sendable {
         try ScriptureReference(
             versionID: versionID,
             bookID: bookID,
-            chapter: startChapter
+            chapter: startChapter,
+            verseStart: verseStart,
+            verseEnd: verseEnd
         )
     }
 }
@@ -100,7 +122,14 @@ struct ReadingPlanTemplate: Identifiable, Hashable, Sendable {
     var assignmentFingerprint: String {
         let serializedAssignments = days.flatMap { day in
             day.assignments.map { assignment in
-                "\(day.logicalDayIndex):\(assignment.position):\(assignment.bookID):\(assignment.startChapter)-\(assignment.endChapter)"
+                let verseSuffix: String
+                if let verseStart = assignment.verseStart {
+                    verseSuffix = ":\(verseStart)-\(assignment.verseEnd ?? verseStart)"
+                } else {
+                    verseSuffix = ""
+                }
+                return
+                    "\(day.logicalDayIndex):\(assignment.position):\(assignment.bookID):\(assignment.startChapter)-\(assignment.endChapter)\(verseSuffix)"
             }
         }.joined(separator: ";")
         let snapshot = "\(id).v\(revision)|\(canonManifestID).v\(canonManifestRevision)|\(serializedAssignments)"
@@ -211,7 +240,12 @@ enum ReadingPlanTemplateValidator {
                 guard assignment.startChapter > 0,
                     assignment.endChapter >= assignment.startChapter,
                     !assignment.chapters.isEmpty,
-                    assignment.chapters.allSatisfy(manifest.contains)
+                    assignment.chapters.allSatisfy(manifest.contains),
+                    assignment.verseStart.map({ $0 > 0 }) ?? true,
+                    assignment.verseEnd.map({ end in
+                        guard let start = assignment.verseStart else { return false }
+                        return end >= start && assignment.startChapter == assignment.endChapter
+                    }) ?? (assignment.verseStart == nil)
                 else {
                     issues.insert(.invalidAssignment(assignment.id))
                     continue

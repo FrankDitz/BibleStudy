@@ -2,6 +2,7 @@ import SwiftUI
 
 struct PlansView: View {
     let openReading: (ScriptureReference) -> Void
+    @State private var isPresentingComposer = false
 
     var body: some View {
         NavigationStack {
@@ -54,11 +55,14 @@ struct PlansView: View {
             .navigationTitle("Plans")
             .toolbar {
                 Button {
-                    // Custom plan creation is a Phase 3 deliverable.
+                    isPresentingComposer = true
                 } label: {
                     Label("Create plan", systemImage: "plus")
                 }
-                .disabled(true)
+                .accessibilityIdentifier("create-custom-plan")
+            }
+            .sheet(isPresented: $isPresentingComposer) {
+                CustomPlanComposerView()
             }
         }
     }

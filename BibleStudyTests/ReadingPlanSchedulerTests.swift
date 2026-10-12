@@ -65,6 +65,22 @@ final class ReadingPlanSchedulerTests: XCTestCase {
         )
     }
 
+    func testFixedWindowScheduleSpreadsReadingDaysAcrossEligibleDates() throws {
+        let scheduler = ReadingPlanScheduler(calendar: newYorkCalendar)
+        let rules = PlanScheduleRules(startDate: date(2026, 10, 1))
+
+        let schedule = try scheduler.schedule(
+            logicalDayCount: 4,
+            rules: rules,
+            through: date(2026, 10, 31)
+        )
+
+        XCTAssertEqual(
+            schedule.map(\.scheduledDate),
+            [date(2026, 10, 1), date(2026, 10, 11), date(2026, 10, 21), date(2026, 10, 31)]
+        )
+    }
+
     func testLocalScheduleDoesNotShiftWhenViewedInAnotherTimeZone() throws {
         let start = date(2026, 11, 1)
         let newYork = try ReadingPlanScheduler(calendar: newYorkCalendar).schedule(

@@ -46,6 +46,22 @@ final class BibleStudyUITests: XCTestCase {
     }
 
     @MainActor
+    func testCustomPlanComposerIsReachableAndShowsAValidPreview() {
+        let app = launchApplication()
+        navigationElement("Plans", in: app).tap()
+
+        let createPlan = app.buttons["create-custom-plan"]
+        XCTAssertTrue(createPlan.waitForExistence(timeout: 3))
+        createPlan.tap()
+
+        XCTAssertTrue(app.textFields["custom-plan-title"].waitForExistence(timeout: 3))
+        XCTAssertTrue(
+            app.descendants(matching: .any)["custom-plan-preview"].waitForExistence(timeout: 3)
+        )
+        XCTAssertTrue(app.staticTexts["Schedule ready"].exists)
+    }
+
+    @MainActor
     private func launchApplication(additionalArguments: [String] = []) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing"] + additionalArguments

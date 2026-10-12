@@ -160,6 +160,47 @@ struct ReadingPlanScheduler: Sendable {
         return result
     }
 
+    /// Spreads logical days across the eligible dates in a fixed window. The first and last
+    /// logical days anchor to the first and last eligible dates when more than one day exists.
+    func schedule(
+        logicalDayCount: Int,
+        rules: PlanScheduleRules,
+        through finishDate: PlanLocalDate
+    ) throws -> [PlanScheduledDay] {
+        guard logicalDayCount > 0 else {
+            throw ReadingPlanSchedulerError.invalidLogicalDayCount
+        }
+        guard finishDate >= rules.startDate else {
+            throw ReadingPlanSchedulerError.finishDateBeforeRecoveryDate
+        }
+        try validate(rules)
+
+        let candidateDates = try eligibleDates(
+            from: rules.startDate,
+            through: finishDate,
+            rules: rules
+        )
+        guard !candidateDates.isEmpty else {
+            throw ReadingPlanSchedulerError.noEligibleRecoveryDates
+        }
+        guard logicalDayCount <= candidateDates.count else {
+            throw ReadingPlanSchedulerError.noEligibleRecoveryDates
+        }
+
+        return (0..<logicalDayCount).map { offset in
+            let dateIndex: Int
+            if logicalDayCount == 1 {
+                dateIndex = 0
+            } else {
+                dateIndex = offset * (candidateDates.count - 1) / (logicalDayCount - 1)
+            }
+            return PlanScheduledDay(
+                logicalDayIndex: offset + 1,
+                scheduledDate: candidateDates[dateIndex]
+            )
+        }
+    }
+
     func progress(
         schedule: [PlanScheduledDay],
         events: [PlanDayCompletionEvent],
@@ -379,7 +420,7 @@ struct ReadingPlanScheduler: Sendable {
             .sorted { $0.logicalDayIndex < $1.logicalDayIndex }
     }
 
-    private func eligibleDates(
+    func eligibleDates(
         from startDate: PlanLocalDate,
         through finishDate: PlanLocalDate,
         rules: PlanScheduleRules
