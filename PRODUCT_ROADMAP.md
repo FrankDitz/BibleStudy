@@ -275,11 +275,13 @@ Never silently rewrite history. Store schedule revisions so the user can underst
 
 Based on the attached reference:
 
-- title and cover art or restrained typographic card;
-- horizontally scrollable day rail with date, day number, completion state, and selected state;
+- title followed by large, app-owned plan cover art; use a restrained generated typographic cover only as an accessibility-safe fallback when a plan has no illustration;
+- horizontally scrollable day rail directly below the cover, with date, day number, completion state, and a strong selected outline;
+- tapping a day selects it and loads its assignments but never toggles completion by itself; a day receives its completion mark only when every assignment in that logical day is complete and loses it if an assignment is reopened;
+- selecting today, the next due day, or **Start Reading** scrolls that day into view without preventing the user from inspecting past or future days;
 - “Day 32 of 365” style position plus Ahead, On Track, or Behind status;
-- checklist of readings, each opening at the precise assignment;
-- primary Start/Continue Reading action that advances through incomplete items;
+- checklist of readings for the selected day, with a separate leading completion control and a tappable row/chevron that opens the precise assignment in the approved Bible edition;
+- primary Start/Continue Reading action pinned near the bottom that opens the selected day's first incomplete assignment and then advances through the remaining assignments;
 - completion summary and optional short reflection handoff to Echo;
 - plan settings for reminders, recovery, pause, archive, and restart.
 

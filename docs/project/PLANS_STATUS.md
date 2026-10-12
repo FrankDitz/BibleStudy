@@ -13,7 +13,7 @@ Phase 3 now has an app-owned deterministic scheduling engine and versioned Catho
 | BS-0301 | Deterministic plan scheduler covering eligible weekdays, DST, leap years, missed work, pause/resume, recovery, ahead/behind state, and completion reversal | `ReadingPlanScheduler`, `PlanLocalDate`, recovery revisions, completion ledger, focused scheduler tests | Complete |
 | BS-0302 | Validate bundled Catholic plan templates and exact canonical coverage | Seven v1 assignment manifests, licensed-edition chapter snapshot, and coverage validator tests | Complete |
 | BS-0303 | Build custom plan composer with workload preview | Scope, pace, date, weekday, rest-day, and recovery controls | Not started |
-| BS-0304 | Add active-plan day flow and truthful persistence | Day rail, assignments, completion/reversal, reader routing, recovery, and progress | Not started |
+| BS-0304 | Add active-plan day flow and truthful persistence | Cover art, selectable day rail, assignment checklist, completion/reversal, reader routing, recovery, and progress | Not started |
 
 ## Scheduler decisions
 
@@ -34,6 +34,14 @@ Phase 3 now has an app-owned deterministic scheduling engine and versioned Catho
 - Psalms and Proverbs in 31 Days intentionally pairs five psalms with one proverb for days 1–30, then closes with Proverbs 31.
 - Catholic Deuterocanon in 30 Days was added because it serves a distinct Catholic study need: the seven deuterocanonical books plus the additions to Esther and Daniel.
 - Template references remain app-owned and provider-neutral. Only editions explicitly compatible with the template's canon manifest may open its assignments.
+
+## Active-plan interaction contract
+
+- Large plan cover art leads the screen, followed immediately by a horizontal day rail and the selected day's readings.
+- Tapping a day selects it; it does not mark the day complete. The checkmark is derived from all assignments in that day being complete and reverses if any assignment is reopened.
+- Each reading row has a distinct completion control and a navigation action that opens that exact assignment in the approved Bible reader.
+- Start/Continue Reading opens the selected day's first incomplete assignment. The selected day and next due day remain easy to bring back into view while past and future days stay inspectable.
+- The screen shows truthful Day N of Total and Ahead, On Track, Behind, or Complete state from the scheduling engine rather than a decorative streak.
 
 ## Verification evidence
 

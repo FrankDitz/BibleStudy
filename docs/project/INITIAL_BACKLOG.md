@@ -57,7 +57,7 @@ This backlog is intentionally small enough to steer delivery. The roadmap remain
 | BS-0301 | P0 | Implement deterministic plan scheduler | Unit tests cover DST, leap years, missed days, pause/resume, ahead/behind, and completion reversal | BS-0102 |
 | BS-0302 | P0 | Validate bundled 90-day/year templates | Every canonical assignment exists exactly as designed and template totals are tested | Canon manifest, BS-0301 |
 | BS-0303 | P1 | Build custom plan composer | User selects scope, pace, start date, rest days, and recovery behavior with a valid preview | BS-0301 |
-| BS-0304 | P1 | Add accountable daily plan flow | Day cards route to reading, save atomically, recover missed days, and expose truthful progress | BS-0203, BS-0301 |
+| BS-0304 | P1 | Add accountable daily plan flow | Cover, selectable day rail, assignment rows, and Start/Continue route precisely; completion saves atomically and progress stays truthful | BS-0203, BS-0301 |
 
 ## Phases 4–7
 
