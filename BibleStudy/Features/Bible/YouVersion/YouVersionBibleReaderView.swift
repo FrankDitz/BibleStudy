@@ -4,6 +4,7 @@ import YouVersionPlatform
 
 struct YouVersionBibleReaderView: View {
     let navigation: ScriptureNavigationController
+    let approvedVersionIDs: Set<Int>
 
     @State private var readerNavigation = BibleReaderNavigation()
     @State private var selectedVerse: SelectedVerse?
@@ -23,11 +24,32 @@ struct YouVersionBibleReaderView: View {
         )
         .task(id: navigation.request?.id) {
             guard let reference = navigation.request?.reference else { return }
-            readerNavigation.request(reference.youVersionReference, showsFullChapter: true)
+            guard let approvedReference = approvedReference(for: reference) else { return }
+            readerNavigation.request(approvedReference.youVersionReference, showsFullChapter: true)
         }
         .sheet(item: $selectedVerse) { selection in
             VerseActionsView(selection: selection)
         }
+    }
+
+    private func approvedReference(for reference: ScriptureReference) -> ScriptureReference? {
+        if approvedVersionIDs.contains(reference.versionID) {
+            return reference
+        }
+        guard
+            let fallbackVersionID = YouVersionCatalogPolicy.preferredApprovedVersionID(
+                in: approvedVersionIDs
+            )
+        else {
+            return nil
+        }
+        return try? ScriptureReference(
+            versionID: fallbackVersionID,
+            bookID: reference.bookID,
+            chapter: reference.chapter,
+            verseStart: reference.verseStart,
+            verseEnd: reference.verseEnd
+        )
     }
 }
 

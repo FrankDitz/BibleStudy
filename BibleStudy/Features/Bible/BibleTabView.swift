@@ -41,8 +41,26 @@ struct BibleTabView: View {
                     icon: "checkmark.shield"
                 )
             )
-        case .ready:
-            YouVersionBibleReaderView(navigation: navigation)
+        case .ready(let approvedVersionIDs):
+            VStack(spacing: 0) {
+                YouVersionBibleReaderView(
+                    navigation: navigation,
+                    approvedVersionIDs: approvedVersionIDs
+                )
+
+                if let notice = YouVersionCatalogPolicy.approvedEditionNotice(
+                    for: approvedVersionIDs
+                ) {
+                    Text(notice)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, AppSpacing.compact)
+                        .padding(.vertical, 6)
+                        .background(.bar)
+                        .accessibilityLabel("Bible edition notice. \(notice)")
+                }
+            }
         case .rejected:
             AppStateView(
                 AppStateDescriptor(

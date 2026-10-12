@@ -86,11 +86,16 @@ struct YouVersionEditionSnapshot: Equatable, Sendable {
         }
         let chapterIDs = Dictionary(uniqueKeysWithValues: chapterPairs)
 
+        let providerAttribution = version.copyright ?? version.promotionalContent
+
         self.init(
             versionID: version.id,
             title: version.localizedTitle ?? version.title ?? "Bible \(version.id)",
             abbreviation: version.localizedAbbreviation ?? version.abbreviation ?? String(version.id),
-            attribution: version.copyright ?? version.promotionalContent,
+            attribution: YouVersionCatalogPolicy.attribution(
+                for: version.id,
+                providerAttribution: providerAttribution
+            ),
             providerBookIDs: Set(version.bookIds),
             chapterIDsByBook: chapterIDs
         )
@@ -122,7 +127,16 @@ struct YouVersionEditionAuditReport: Identifiable, Equatable, Sendable {
 enum YouVersionEditionAuditor {
     static func audit(_ snapshot: YouVersionEditionSnapshot) -> YouVersionEditionAuditReport {
         let expectedProviderIDs = YouVersionCatholicBookMapping.expectedProviderBookIDs
-        let missingProviderIDs = expectedProviderIDs.subtracting(snapshot.providerBookIDs).sorted()
+        var missingProviderIDs = expectedProviderIDs.subtracting(snapshot.providerBookIDs)
+
+        let estherChapterIDs = snapshot.chapterIDsByBook["EST"] ?? []
+        let hasSeparateEstherAdditions = snapshot.providerBookIDs.contains("ESG")
+        let hasIntegratedEstherAdditions = Set((11...15).map(String.init))
+            .isSubset(of: estherChapterIDs)
+        let hasEstherAdditions = hasSeparateEstherAdditions || hasIntegratedEstherAdditions
+        if hasIntegratedEstherAdditions {
+            missingProviderIDs.remove("ESG")
+        }
 
         let coveredCanonicalIDs = Set(
             snapshot.providerBookIDs.compactMap {
@@ -139,9 +153,9 @@ enum YouVersionEditionAuditor {
             title: snapshot.title,
             abbreviation: snapshot.abbreviation,
             providerBookCount: snapshot.providerBookIDs.count,
-            missingProviderBookIDs: missingProviderIDs,
+            missingProviderBookIDs: missingProviderIDs.sorted(),
             missingCanonicalBookIDs: missingCanonicalIDs,
-            hasEstherAdditions: snapshot.providerBookIDs.contains("ESG"),
+            hasEstherAdditions: hasEstherAdditions,
             hasDanielAdditions: danielChapterIDs.contains("13") && danielChapterIDs.contains("14"),
             hasAttribution: attribution?.isEmpty == false
         )
@@ -165,7 +179,32 @@ enum YouVersionCapabilityProbe {
         var reports: [YouVersionEditionAuditReport] = []
         var failures: [Failure] = []
 
+        let licensedVersionIDs: Set<Int>
+        do {
+            licensedVersionIDs = Set(
+                try await YouVersionAPI.Bible.versions(forLanguageTag: "en")
+                    .map(\.id)
+            )
+        } catch {
+            return Result(
+                reports: [],
+                failures: YouVersionCatalogPolicy.preferredVersionIDs.map {
+                    Failure(versionID: $0, message: String(describing: error))
+                }
+            )
+        }
+
         for versionID in YouVersionCatalogPolicy.preferredVersionIDs {
+            guard licensedVersionIDs.contains(versionID) else {
+                failures.append(
+                    Failure(
+                        versionID: versionID,
+                        message: "Not licensed to this App Key."
+                    )
+                )
+                continue
+            }
+
             do {
                 let version = try await YouVersionAPI.Bible.version(withId: versionID)
                 reports.append(YouVersionEditionAuditor.audit(.init(version: version)))

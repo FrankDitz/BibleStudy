@@ -100,6 +100,29 @@ final class YouVersionEditionAuditTests: XCTestCase {
         XCTAssertEqual(report.providerBookCount, 74)
     }
 
+    func testIntegratedEstherAdditionsPassWithoutSeparateESGResource() {
+        let providerBookIDs = YouVersionCatholicBookMapping.expectedProviderBookIDs
+            .subtracting(["ESG"])
+        let snapshot = YouVersionEditionSnapshot(
+            versionID: 42,
+            title: "Catholic Public Domain Version",
+            abbreviation: "CPDV",
+            attribution: "Catholic Public Domain Version · Scripture supplied by YouVersion",
+            providerBookIDs: providerBookIDs,
+            chapterIDsByBook: [
+                "EST": Set((1...15).map(String.init)),
+                "DAN": Set((1...14).map(String.init)),
+            ]
+        )
+
+        let report = YouVersionEditionAuditor.audit(snapshot)
+
+        XCTAssertTrue(report.isApprovedStructure)
+        XCTAssertTrue(report.hasEstherAdditions)
+        XCTAssertFalse(report.missingProviderBookIDs.contains("ESG"))
+        XCTAssertEqual(report.providerBookCount, 73)
+    }
+
     func testSixtySixBookEditionFailsWithCatholicBooksMissing() {
         let catholicOnlyProviderIDs: Set<String> = [
             "TOB", "JDT", "ESG", "1MA", "2MA", "WIS", "SIR", "BAR",
