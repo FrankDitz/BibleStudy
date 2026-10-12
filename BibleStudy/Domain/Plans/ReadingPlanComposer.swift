@@ -61,14 +61,14 @@ enum CustomPlanOrdering: String, CaseIterable, Hashable, Sendable {
     case interleaveTestaments
 }
 
-enum CustomPlanRecoveryPreference: String, CaseIterable, Hashable, Sendable {
+enum CustomPlanRecoveryPreference: String, CaseIterable, Codable, Hashable, Sendable {
     case keepDates
     case shiftForward
     case redistribute
     case chooseNewFinishDate
 }
 
-struct PlanReminderTime: Hashable, Sendable {
+struct PlanReminderTime: Codable, Hashable, Sendable {
     let hour: Int
     let minute: Int
 }

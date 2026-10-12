@@ -267,7 +267,7 @@ enum BibleStudySchemaV1: VersionedSchema {
     }
 }
 
-enum ReadingPlanStatus: String, Codable, Sendable {
+enum ReadingPlanStatus: String, Codable, Hashable, Sendable {
     case draft
     case active
     case paused
@@ -275,7 +275,7 @@ enum ReadingPlanStatus: String, Codable, Sendable {
     case archived
 }
 
-enum PlanCompletionAction: String, Codable, Sendable {
+enum PlanCompletionAction: String, Codable, Hashable, Sendable {
     case completed
     case reopened
 }

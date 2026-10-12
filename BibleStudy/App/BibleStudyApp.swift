@@ -10,7 +10,9 @@ struct BibleStudyApp: App {
         let configuration = AppConfiguration.current
         dependencies = .production(configuration: configuration)
         do {
-            modelContainer = try BibleStudyModelContainer.make()
+            modelContainer = try BibleStudyModelContainer.make(
+                inMemory: ProcessInfo.processInfo.arguments.contains("-ui-testing")
+            )
         } catch {
             fatalError("Unable to create the Bible Study data store: \(error)")
         }

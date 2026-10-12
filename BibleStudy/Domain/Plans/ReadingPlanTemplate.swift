@@ -37,7 +37,7 @@ struct ReadingPlanTemplateProvenance: Hashable, Sendable {
     let revisionDate: PlanLocalDate
 }
 
-struct ReadingPlanAssignment: Identifiable, Hashable, Sendable {
+struct ReadingPlanAssignment: Codable, Identifiable, Hashable, Sendable {
     let id: String
     let position: Int
     let bookID: String
@@ -86,7 +86,7 @@ struct ReadingPlanAssignment: Identifiable, Hashable, Sendable {
     }
 }
 
-struct ReadingPlanTemplateDay: Identifiable, Hashable, Sendable {
+struct ReadingPlanTemplateDay: Codable, Identifiable, Hashable, Sendable {
     let logicalDayIndex: Int
     let assignments: [ReadingPlanAssignment]
 

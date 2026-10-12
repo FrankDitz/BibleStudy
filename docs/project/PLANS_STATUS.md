@@ -1,10 +1,10 @@
 # Plans Phase Status
 
-**Implementation status:** in progress
-**Phase-exit status:** persistence and end-to-end active-plan flow remain
+**Implementation status:** complete
+**Phase-exit status:** passed
 **Verified:** 2026-10-12
 
-Phase 3 now has an app-owned deterministic scheduling engine, versioned Catholic reading-plan manifests, and a native custom-plan composer. The scheduler keeps logical plan days separate from calendar dates, while both premade and custom plans validate their assignments against the licensed CPDV chapter layout before a plan can be trusted.
+Phase 3 now delivers the complete accountable reading-plan loop: deterministic scheduling, validated Catholic templates, custom composition, durable activation, assignment-level completion, recovery, progress, and exact reader routing.
 
 ## Deliverables
 
@@ -13,7 +13,7 @@ Phase 3 now has an app-owned deterministic scheduling engine, versioned Catholic
 | BS-0301 | Deterministic plan scheduler covering eligible weekdays, DST, leap years, missed work, pause/resume, recovery, ahead/behind state, and completion reversal | `ReadingPlanScheduler`, `PlanLocalDate`, recovery revisions, completion ledger, focused scheduler tests | Complete |
 | BS-0302 | Validate bundled Catholic plan templates and exact canonical coverage | Seven v1 assignment manifests, licensed-edition chapter snapshot, and coverage validator tests | Complete |
 | BS-0303 | Build custom plan composer with workload preview | Catholic canon/testament/book/passage scope, finish-date or chapters-per-day pace, dates, weekdays, ordering, recovery, reminder, and truthful workload preview | Complete |
-| BS-0304 | Add active-plan day flow and truthful persistence | Cover art, selectable day rail, assignment checklist, completion/reversal, reader routing, recovery, and progress | Not started |
+| BS-0304 | Add active-plan day flow and truthful persistence | Cover art, selectable day rail, assignment checklist, completion/reversal, reader routing, pause/resume, recovery, archival, and progress | Complete |
 
 ## Scheduler decisions
 
@@ -50,7 +50,17 @@ Phase 3 now has an app-owned deterministic scheduling engine, versioned Catholic
 - Eligible weekdays are explicit; unselected weekdays are disclosed as rest days. The preview reports its actual reading-day count, finish date, daily chapter range, estimated minutes, and rest-day count.
 - Canonical order is the default. Interleaving preserves the internal order of both Testaments and is accepted only when the chosen scope contains both.
 - A demanding-workload warning appears when the busiest day reaches ten or more chapters.
-- Recovery and optional reminder preferences are retained in the draft for activation. The composer does not pretend to save or activate a plan before BS-0304 adds durable plan state.
+- Recovery and optional reminder preferences are retained in the draft, and activation persists the exact validated preview shown to the user.
+
+## Persistence and active-flow decisions
+
+- Schema v2 adds active-plan snapshots and assignment-completion events through a lightweight migration. A non-destructive automatic migration fallback preserves stores created by early development builds whose schema fingerprint predates the version chain.
+- Activating a plan stores its exact title, source revision, canon manifest, compatible edition, assignments, dates, eligible weekdays, recovery preference, reminder, and cover style. Later catalog changes cannot silently rewrite an in-progress plan.
+- Completion is an append-only assignment event ledger. A day becomes complete only when every assignment is complete; reopening any assignment immediately reverses day and plan completion.
+- Starting a new plan archives the prior active, paused, or completed plan. Archiving removes a plan from the active surface without deleting its history.
+- The active screen follows the agreed visual hierarchy: large cover, horizontal selectable day rail, truthful Day N of Total and pace, reading checklist, then Start/Continue Reading.
+- Reading rows navigate using the snapshot's approved provider-neutral Scripture reference. The completion control is separate, so opening a reading never marks it complete accidentally.
+- Pause/resume and all four recovery modes preserve completed work and use the scheduling engine to revise only unfinished dates.
 
 ## Verification evidence
 
@@ -59,9 +69,9 @@ Phase 3 now has an app-owned deterministic scheduling engine, versioned Catholic
 - Coverage tests prove all seven templates have valid sequential days and assignments, exact intended coverage, unique stable IDs, no omitted or duplicated chapters, compatible preview routing, and stable duration/workload totals.
 - Composer tests cover every scope, both pace models, weekday filtering, fixed-window spreading, canonical and interleaved order, exact verses, reminders, recovery preferences, invalid inputs, and demanding workloads.
 - The Plans UI exposes the composer on both Apple platforms and has an accessibility-addressable smoke test for a valid initial preview.
-- All 102 macOS unit and contract tests pass with the composer included.
+- All macOS unit and contract tests cover activation, snapshot restoration, migration, assignment completion and reversal, completed-plan reopening, archival, pause/resume, recovery schedule persistence, and invalid assignment rejection in addition to the earlier Phase 3 coverage.
 - The generic iOS Simulator app and UI-test bundle build successfully.
 
-## Next deliverable
+## Phase exit
 
-BS-0304 will persist and activate premade or custom plans, then implement the agreed cover-art, selectable-day-rail, assignment-checklist, reader-routing, recovery, and truthful progress experience.
+Phase 3 is complete. The next roadmap item is BS-0401, which brings the active plan's next due reading into Home's Today orchestration alongside Bible, Learning, virtue, and recent activity entry points.

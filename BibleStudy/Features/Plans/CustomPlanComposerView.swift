@@ -3,6 +3,8 @@ import SwiftUI
 struct CustomPlanComposerView: View {
     @Environment(\.dismiss) private var dismiss
 
+    let onActivate: (CustomReadingPlanPreview) -> Void
+
     @State private var title = "My reading plan"
     @State private var scopeChoice = ScopeChoice.catholicBible
     @State private var selectedBookIDs: Set<String> = []
@@ -28,6 +30,10 @@ struct CustomPlanComposerView: View {
         ) ?? Date()
 
     private let calendar = Calendar.current
+
+    init(onActivate: @escaping (CustomReadingPlanPreview) -> Void = { _ in }) {
+        self.onActivate = onActivate
+    }
 
     var body: some View {
         NavigationStack {
@@ -119,11 +125,18 @@ struct CustomPlanComposerView: View {
                 }
 
                 Section {
-                    Text(
-                        "This preview does not activate the plan yet. Saving, progress, and sync arrive in the next Plans deliverable."
-                    )
-                    .font(.footnote)
-                    .foregroundStyle(AppTheme.supportingText)
+                    Button {
+                        guard case .success(let preview) = previewResult else { return }
+                        onActivate(preview)
+                        dismiss()
+                    } label: {
+                        Label("Start This Plan", systemImage: "play.fill")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(AppTheme.accent)
+                    .disabled(!previewResult.isSuccess)
+                    .accessibilityIdentifier("activate-custom-plan")
                 }
             }
             .formStyle(.grouped)
@@ -315,7 +328,7 @@ private struct PreviewSummary: View {
     }
 }
 
-private struct WeekdaySelector: View {
+struct WeekdaySelector: View {
     @Binding var selection: Set<PlanWeekday>
 
     var body: some View {
@@ -433,7 +446,7 @@ extension PlanLocalDate {
 }
 
 extension PlanWeekday {
-    fileprivate var shortTitle: String {
+    var shortTitle: String {
         switch self {
         case .sunday: return "S"
         case .monday: return "M"
@@ -445,7 +458,7 @@ extension PlanWeekday {
         }
     }
 
-    fileprivate var fullTitle: String {
+    var fullTitle: String {
         Calendar.current.weekdaySymbols[rawValue - 1]
     }
 }
@@ -509,5 +522,12 @@ extension ReadingPlanComposerError {
         case .noEligibleDates: return "No selected reading day occurs in this date range."
         case .invalidSchedule: return "This schedule could not be created. Try adjusting the dates or pace."
         }
+    }
+}
+
+extension Result where Success == CustomReadingPlanPreview, Failure == ReadingPlanComposerError {
+    fileprivate var isSuccess: Bool {
+        if case .success = self { return true }
+        return false
     }
 }
