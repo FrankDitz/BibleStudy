@@ -85,7 +85,58 @@ protocol ScriptureProvider: Sendable {
     func editions() async throws -> [ScriptureEdition]
 }
 
+enum ScriptureSearchIntent: String, CaseIterable, Identifiable, Sendable {
+    case reference
+    case text
+    case topical
+
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .reference: "Reference"
+        case .text: "Text"
+        case .topical: "Topic"
+        }
+    }
+}
+
+struct ScriptureSearchRequest: Equatable, Sendable {
+    let query: String
+    let versionID: Int
+    let intent: ScriptureSearchIntent
+    let pageSize: Int
+    let pageToken: String?
+
+    init(
+        query: String,
+        versionID: Int,
+        intent: ScriptureSearchIntent = .text,
+        pageSize: Int = 10,
+        pageToken: String? = nil
+    ) {
+        self.query = query
+        self.versionID = versionID
+        self.intent = intent
+        self.pageSize = pageSize
+        self.pageToken = pageToken
+    }
+}
+
+struct ScriptureSearchPage: Equatable, Sendable {
+    let references: [ScriptureReference]
+    let resolvedIntent: String?
+    let spellingSuggestions: [String]
+    let searchedInsteadFor: String?
+    let nextPageToken: String?
+}
+
+protocol ScriptureSearchProvider: Sendable {
+    func search(_ request: ScriptureSearchRequest) async throws -> ScriptureSearchPage
+}
+
 enum ScriptureProviderFailure: Error, Equatable, Sendable {
+    case invalidRequest
     case notConfigured
     case unauthorized
     case unlicensed

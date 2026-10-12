@@ -5,6 +5,8 @@ struct BibleTabView: View {
     let navigation: ScriptureNavigationController
     let catalogApproval: YouVersionCatalogApproval
 
+    @State private var isSearchPresented = false
+
     var body: some View {
         NavigationStack {
             Group {
@@ -23,9 +25,33 @@ struct BibleTabView: View {
                 }
             }
             .navigationTitle("Bible")
+            .toolbar {
+                if approvedVersionID != nil {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button("Search", systemImage: "magnifyingglass") {
+                            isSearchPresented = true
+                        }
+                        .accessibilityIdentifier("bible-search-button")
+                    }
+                }
+            }
         }
         .task {
             await catalogApproval.audit(using: configuration)
+        }
+        .sheet(isPresented: $isSearchPresented) {
+            if let appKey = configuration.youVersionAppKey,
+                let versionID = approvedVersionID
+            {
+                YouVersionBibleSearchView(
+                    provider: YouVersionScriptureSearchAdapter(
+                        appKey: appKey,
+                        approvedVersionIDs: approvedVersionIDs
+                    ),
+                    versionID: versionID,
+                    navigation: navigation
+                )
+            }
         }
     }
 
@@ -88,5 +114,14 @@ struct BibleTabView: View {
                 catalogApproval.retry(using: configuration)
             }
         }
+    }
+
+    private var approvedVersionIDs: Set<Int> {
+        guard case .ready(let approvedVersionIDs) = catalogApproval.state else { return [] }
+        return approvedVersionIDs
+    }
+
+    private var approvedVersionID: Int? {
+        YouVersionCatalogPolicy.preferredApprovedVersionID(in: approvedVersionIDs)
     }
 }
