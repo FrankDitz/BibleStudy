@@ -1,16 +1,17 @@
 # Scripture and Audio Provider Rights Matrix
 
-**Status:** Research complete; account-specific approvals pending  
-**Use case:** Owner-only, non-commercial personal app  
-**Last verified:** 2026-10-11
+**Status:** CPDV text path approved; desired NRSV-CI access pending
+**Use case:** Owner-only, non-commercial personal app
+**Last verified:** 2026-10-12
 
 This matrix is an engineering control, not legal advice. “Available in a public catalog” does not mean an App Key is licensed to render that content. No provider content is production-approved until the account-specific checks below are recorded.
 
 ## Decisions
 
-- **Primary Scripture provider:** YouVersion Platform through the official Swift SDK.
-- **Preferred edition:** NABRE, subject to App Key licensing and a live Catholic-content audit.
-- **Secondary editions:** NRSV-CI, then DRC1752, subject to the same App Key audit.
+- **Primary Scripture provider:** YouVersion Platform through the official Swift SDK and API.
+- **Active edition:** Catholic Public Domain Version (CPDV), YouVersion ID `42`, approved by the live account audit.
+- **Desired edition:** NRSV-CI, YouVersion ID `2015`; the owner’s support request is pending because the current App Key does not expose it.
+- **Other candidates:** NABRE and DRC1752 remain disabled unless the App Key later exposes them and the same live audit passes.
 - **Independent text fallback:** not selected. API.Bible remains a candidate only if an account exposes a complete Catholic edition on acceptable terms.
 - **Audio:** deferred behind a provider-neutral interface. API.Bible is the technical first candidate; STREETLIGHTS is a partnership candidate. Neither is approved for integration yet.
 - **YouVersion Bible App audio:** not reusable. The public Bible App's listening catalog is not a documented YouVersion Platform audio API or grant.
@@ -19,9 +20,10 @@ This matrix is an engineering control, not legal advice. “Available in a publi
 
 | Provider | Edition/content | Provider ID | Public evidence | Account license | Catholic coverage | Attribution source | Decision |
 | --- | --- | ---: | --- | --- | --- | --- | --- |
-| YouVersion | New American Bible, revised edition (NABRE) | `463` | [Public version page](https://www.bible.com/versions/463) | **Pending App Key** | Public pages show deuterocanon, `ESG`, and Daniel 13; live index/content audit still required | Live `copyright`, falling back to `promotional_content`; publisher footer where supplied | Preferred, not yet approved |
-| YouVersion | New Revised Standard Version Catholic Interconfessional (NRSV-CI) | `2015` | [Public version page](https://www.bible.com/versions/2015) | **Pending App Key** | Public pages show 1–2 Maccabees and `ESG`; live audit still required | Live metadata; do not hard-code as the authoritative notice | Secondary, not yet approved |
-| YouVersion | Douay-Rheims Challoner Revision 1752 (DRC1752) | `55` | [Public version page](https://www.bible.com/versions/55) | **Pending App Key** | Public page states 46-book OT plus longer Esther/Daniel; live audit still required | Live metadata; public page says out of copyright but maintained by BFBS | Development default, not yet approved |
+| YouVersion | Catholic Public Domain Version (CPDV) | `42` | Live YouVersion Platform catalog and version metadata | **Exposed to owner App Key** | Live audit passes 73 canonical books, integrated Esther 11–15, and Daniel 13–14 | Stable CPDV notice plus YouVersion attribution; live metadata is used where supplied | **Approved active text edition** |
+| YouVersion | New Revised Standard Version Catholic Interconfessional (NRSV-CI) | `2015` | [Public version page](https://www.bible.com/versions/2015) | **Not exposed to current App Key; support request pending** | Public pages show 1–2 Maccabees and `ESG`; app audit must pass after access is granted | Live metadata; do not hard-code as the authoritative notice | Desired, not yet approved |
+| YouVersion | New American Bible, revised edition (NABRE) | `463` | [Public version page](https://www.bible.com/versions/463) | **Not exposed to current App Key** | Public pages show deuterocanon, `ESG`, and Daniel 13; live index/content audit still required | Live `copyright`, falling back to `promotional_content`; publisher footer where supplied | Disabled |
+| YouVersion | Douay-Rheims Challoner Revision 1752 (DRC1752) | `55` | [Public version page](https://www.bible.com/versions/55) | **Not exposed to current App Key** | Public page states 46-book OT plus longer Esther/Daniel; live audit still required | Live metadata; public page says out of copyright but maintained by BFBS | Disabled |
 | API.Bible | Holy Bible, New Living Translation, Catholic Edition | **Portal lookup required** | Named in current [API.Bible terms](https://api.bible/terms-and-conditions) | **Pending API.Bible account/plan** | Exact digital edition and book index unknown | API response `copyright` plus edition-specific license | Text/audio candidate only |
 | API.Bible | Any English Catholic audio Bible | **`GET /v1/audio-bibles` required** | [Audio API documentation](https://docs.api.bible/guides/audio-bibles/) | **Special audio license required** | Unknown until account response | Audio-Bible metadata and license | Audio spike candidate only |
 | STREETLIGHTS | English word-for-word NLT audio and soundtrack | No developer API or licensed content ID published | [English Audio Bible](https://www.streetlightsbible.com/english) | **Written permission required** | Site describes OT/NT NLT, not a complete Catholic edition | Permission agreement must specify credit | Optional partnership only |
@@ -40,7 +42,7 @@ Official documentation establishes these controls:
 - SDK caching follows provider response headers. Bible Study will not add a separate bulk download/export layer for YouVersion content.
 - A `429` honors `Retry-After`; authentication, unlicensed, offline, empty, and provider failures are distinct states.
 
-The official Swift `BibleReaderView` already renders `copyright` or `promotionalContent` and publisher footer data. Any custom Bible text screen must reproduce that behavior before it may ship.
+The app-owned reader uses the official Swift SDK’s `BibleTextView` for licensed rendering and keeps the approved edition notice visible directly below the reader. Search results use `BibleCardView`. Any future custom Bible text screen must preserve equivalent live attribution and fail-closed behavior before it may ship.
 
 ## API.Bible audio/fallback findings
 

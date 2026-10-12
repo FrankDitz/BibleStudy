@@ -1,7 +1,7 @@
 # Phase 0 Status
 
-**Status:** Repository work complete; external provider/owner gates remain open  
-**Updated:** 2026-10-11
+**Status:** Closed for the text-reader path; optional audio/content-review follow-ups remain
+**Updated:** 2026-10-12
 
 ## Completed and merged
 
@@ -19,9 +19,9 @@
 | OS/support and migration policy | [`ADR-003-platform-support-and-data-migrations.md`](../architecture/ADR-003-platform-support-and-data-migrations.md) |
 | Backlog, risk register, and Definition of Done | [`INITIAL_BACKLOG.md`](INITIAL_BACKLOG.md), [`RISK_REGISTER.md`](RISK_REGISTER.md), [`DEFINITION_OF_DONE.md`](DEFINITION_OF_DONE.md) |
 
-## Owner/provider actions required to close Phase 0
+## Remaining owner/provider follow-ups
 
-1. **YouVersion:** register the personal native app, accept the desired Catholic edition licenses, store the App Key only in local `Config/Secrets.xcconfig`, run the in-app edition audit, and perform the manual `ESG`/Daniel/navigation/accessibility/offline/error checklist.
+1. **YouVersion:** the personal App Key is configured locally and CPDV `42` passed the 73-book audit and live Esther/Daniel navigation checks. Continue the support request for NRSV-CI `2015`; it can be added only after the same runtime audit passes.
 2. **API.Bible:** create the owner account/key, inspect the live licensed Catholic text and audio catalogs, request special audio licensing if desired, and record exact IDs/rights. This is optional if YouVersion passes and audio is deferred.
 3. **STREETLIGHTS:** replace the owner placeholders and send the prepared inquiry. A response is not required to close Phase 0 if STREETLIGHTS remains deferred.
 4. **Content review:** identify the Catholic reviewer or review route that will approve Learning articles before Phase 5 publication.
@@ -31,12 +31,12 @@
 
 | Exit criterion | State | Reason |
 | --- | --- | --- |
-| One legally usable complete Catholic text path for beta | **Open** | Candidate editions exist publicly, but the owner's App Key entitlement/license has not been demonstrated |
-| App Key retrieves a complete Catholic edition and attribution | **Open** | Audit harness is ready; live credential and manual Catholic-content checks are pending |
-| Primary provider, exact allowlist, audio candidate, and fallback chosen | **Partial** | YouVersion is primary candidate; preferred IDs are known; audio/fallback remain gated or may be explicitly deferred |
+| One legally usable complete Catholic text path for beta | **Complete** | The owner’s App Key exposes CPDV `42`, a public-domain Catholic edition, through the licensed YouVersion Platform path |
+| App Key retrieves a complete Catholic edition and attribution | **Complete** | CPDV passed the live 73-book, Esther 11–15, Daniel 13–14, and attribution gates on 2026-10-12 |
+| Primary provider, exact allowlist, audio candidate, and fallback chosen | **Complete for text** | YouVersion/CPDV `42` is active; NRSV-CI is pending provider access; independent text fallback and audio are explicitly deferred |
 | Hub/Echo boundaries accepted | **Complete** | Versioned contracts and tests are merged |
-| No unresolved assumption can force a reader/data-model rewrite | **Open** | Stable SDK handling of nonstandard `ESG` chapters requires the live test before reader architecture is locked |
+| No unresolved assumption can force a reader/data-model rewrite | **Complete for CPDV** | The app owns canonical navigation/restoration while YouVersion supplies licensed rendering; integrated Esther and Daniel boundaries pass live |
 
 ## Go/no-go
 
-Do not declare Phase 0 closed or begin the production reader slice until the YouVersion live gate passes or a licensed fallback is selected. Work on provider-neutral Phase 1 foundation can begin without waiting, but it must not encode a concrete provider assumption or represent any edition/audio source as approved.
+The production text-reader gate is cleared for CPDV `42`. NRSV-CI, another text provider, audio, public distribution, or monetization each require a new rights and capability review; none is implied by the CPDV approval.
