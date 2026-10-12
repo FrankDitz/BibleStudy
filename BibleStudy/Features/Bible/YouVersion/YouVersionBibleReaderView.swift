@@ -10,34 +10,65 @@ struct YouVersionBibleReaderView: View {
     @State private var selectedVerse: SelectedVerse?
     @Environment(\.modelContext) private var modelContext
 
+    @ViewBuilder
     var body: some View {
-        BibleReaderView.restoringLastPassage(
-            verseSelectionStyle: .solid,
-            onVerseTap: { reference in
-                if let canonicalReference = reference.canonicalReference {
-                    selectedVerse = SelectedVerse(
-                        providerReference: reference,
-                        canonicalReference: canonicalReference
-                    )
-                }
-            },
-            readerNavigation: readerNavigation
-        )
-        .task(id: navigation.request?.id) {
-            synchronizeHighlights()
-            guard let reference = navigation.request?.reference else { return }
-            guard let approvedReference = approvedReference(for: reference) else { return }
-            readerNavigation.request(approvedReference.youVersionReference, showsFullChapter: true)
-        }
-        .sheet(item: $selectedVerse) { selection in
-            VerseActionsView(
-                selection: selection,
-                onHighlightChanged: synchronizeHighlights
+        if let initialReference {
+            BibleReaderView(
+                reference: initialReference.youVersionReference,
+                verseSelectionStyle: .solid,
+                onVerseTap: { reference in
+                    if let canonicalReference = reference.canonicalReference {
+                        selectedVerse = SelectedVerse(
+                            providerReference: reference,
+                            canonicalReference: canonicalReference
+                        )
+                    }
+                },
+                showsFullChapter: true,
+                readerNavigation: readerNavigation
+            )
+            .task(id: navigation.request?.id) {
+                synchronizeHighlights()
+                guard let reference = navigation.request?.reference else { return }
+                guard let approvedReference = approvedReference(for: reference) else { return }
+                readerNavigation.request(
+                    approvedReference.youVersionReference,
+                    showsFullChapter: true
+                )
+            }
+            .sheet(item: $selectedVerse) { selection in
+                VerseActionsView(
+                    selection: selection,
+                    onHighlightChanged: synchronizeHighlights
+                )
+            }
+        } else {
+            AppStateView(
+                AppStateDescriptor(
+                    kind: .rightsLocked,
+                    title: "No approved Bible edition",
+                    message: "The reader will remain closed until a licensed Catholic edition passes its audit.",
+                    icon: "book.closed"
+                )
             )
         }
     }
 
+    private var initialReference: ScriptureReference? {
+        Self.approvedReference(
+            navigation.request?.reference ?? YouVersionCatalogPolicy.developmentStart,
+            approvedVersionIDs: approvedVersionIDs
+        )
+    }
+
     private func approvedReference(for reference: ScriptureReference) -> ScriptureReference? {
+        Self.approvedReference(reference, approvedVersionIDs: approvedVersionIDs)
+    }
+
+    static func approvedReference(
+        _ reference: ScriptureReference,
+        approvedVersionIDs: Set<Int>
+    ) -> ScriptureReference? {
         if approvedVersionIDs.contains(reference.versionID) {
             return reference
         }
