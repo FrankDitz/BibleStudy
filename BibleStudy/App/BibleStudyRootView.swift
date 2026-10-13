@@ -8,6 +8,7 @@ struct BibleStudyRootView: View {
     @State private var catalogApproval = YouVersionCatalogApproval()
     @State private var didApplyLaunchRoute = false
     @State private var activePlanNavigationRequest = 0
+    @State private var isPresentingProfile = false
 
     var body: some View {
         Group {
@@ -16,6 +17,7 @@ struct BibleStudyRootView: View {
                     List(AppDestination.allCases, selection: $selection) { destination in
                         Label(destination.title, systemImage: destination.systemImage)
                             .tag(destination)
+                            .accessibilityIdentifier("navigation-\(destination.rawValue)")
                     }
                     .navigationTitle("Bible Study")
                     .navigationSplitViewColumnWidth(min: 190, ideal: 220)
@@ -25,7 +27,7 @@ struct BibleStudyRootView: View {
                 }
             #else
                 TabView(selection: $selection) {
-                    ForEach(AppDestination.allCases) { destination in
+                    ForEach(AppDestination.primaryTabs) { destination in
                         destinationView(destination)
                             .tabItem {
                                 Label(destination.title, systemImage: destination.systemImage)
@@ -35,6 +37,13 @@ struct BibleStudyRootView: View {
                 }
             #endif
         }
+        #if !os(macOS)
+            .sheet(isPresented: $isPresentingProfile) {
+                ProfileView(
+                    isYouVersionConfigured: dependencies.configuration.isYouVersionConfigured
+                )
+            }
+        #endif
         .task {
             guard !didApplyLaunchRoute else { return }
             didApplyLaunchRoute = true
@@ -58,7 +67,9 @@ struct BibleStudyRootView: View {
             HomeView(
                 openReading: openScripture,
                 openPlans: openActivePlan,
-                openLearning: { selection = .learning }
+                openLearning: { selection = .learning },
+                openVirtues: { selection = .virtues },
+                openProfile: openProfile
             )
         case .bible:
             BibleTabView(
@@ -71,6 +82,8 @@ struct BibleStudyRootView: View {
                 openReading: openScripture,
                 activePlanNavigationRequest: activePlanNavigationRequest
             )
+        case .virtues:
+            VirtuesView()
         case .learning:
             LearningView()
         case .you:
@@ -90,10 +103,22 @@ struct BibleStudyRootView: View {
         selection = .plans
     }
 
+    private func openProfile() {
+        #if os(macOS)
+            selection = .you
+        #else
+            isPresentingProfile = true
+        #endif
+    }
+
     private func handle(_ route: BibleStudyRoute) {
         switch route {
         case .destination(let destination):
-            selection = destination
+            if destination == .you {
+                openProfile()
+            } else {
+                selection = destination
+            }
         case .scripture(let reference):
             openScripture(reference)
         }

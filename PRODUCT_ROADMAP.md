@@ -27,7 +27,7 @@ The personal-use release is a local-first formation app that uses the YouVersion
 | 2. Bible vertical slice | Scripture is pleasant and dependable to read | Canon browser, chapter reader, version picker, navigation, search, highlights, notes, bookmarks, offline behavior | A user can read front-to-back and resume reliably |
 | 3. Plans | Reading goals become actionable and accountable | Premade plans, custom plan builder, schedule engine, day checklist, reminders, catch-up choices, progress | Plan math passes edge cases and a plan works end-to-end |
 | 4. Daily formation | The app feels like a coherent Catholic companion | Home dashboard, Learning MVP, Echo reflection handoff, source/reviewer metadata | A complete daily loop works without dead ends |
-| 4A. Seven Virtues formation | Scripture and reflection become concrete character practice | Seven reviewed virtue pathways, focus selection, practices, examen prompts, Echo handoff, private review | All seven pathways work end-to-end without scoring holiness |
+| 4A. Seven Virtues formation | Scripture and reflection become lifelong character practice | First-class Virtues destination, Foundations Journey, repeatable Focus Cycles, Rule of Life, Echo handoff, private formation record | All seven pathways support continuing practice and honest review without scoring holiness |
 | 5. Personalization and hub | The experience persists across devices and belongs in the hub | You, private analytics, milestones, iCloud sync, deep links, import/export, hub events | iPhone/Mac state converges and hub journeys work |
 | 6. Narrated Bible | Listening is first-class where rights allow it | Licensed audio provider, background player, lock-screen controls, chapter queue, optional verse timecodes | Playback survives interruptions and text/audio stay aligned |
 | 7. Hardening and personal release | A trustworthy owner-only v1.0 is ready | Accessibility, performance, content/legal QA, direct-device testing, migration and recovery tests, release checklist | No personal-release blocker remains |
@@ -121,6 +121,8 @@ Proposed deep-link namespace:
 hub://bible/home
 hub://bible/read/{translation}/{book}/{chapter}?verse={verse}
 hub://bible/plan/{enrollmentID}/day/{dayNumber}
+hub://bible/virtues
+hub://bible/virtues/{virtueID}
 hub://bible/learn/{articleSlug}
 hub://bible/you
 ```
@@ -132,10 +134,11 @@ hub://bible/you
 | Home | Orient the current day and present the next best action | Continue Reading + active-plan task |
 | Bible | Read, search, annotate, or listen to Scripture | Last location, or Genesis 1 on first launch |
 | Plans | Browse, create, run, and review reading plans | Active plans, then recommended templates |
-| Learning | Browse reviewed Catholic formation material | Continue learning + topic collections |
+| Virtues | Turn Scripture and reflection into deliberate, continuing character practice | Current focus + today's practice |
+| Learning | Learn Catholic worship, sacraments, prayer, seasons, rituals, and practical Church life | Continue learning + Catholic-life collections |
 | You | Preferences, progress, milestones, data, and sources | This week + settings entry |
 
-On iPhone, use a system tab bar with five stable, labeled tabs. On Mac, adapt the same destinations to a sidebar and toolbar while preserving selection and navigation history. Apple's current guidance supports tab navigation for top-level sections and an adaptive sidebar where complexity warrants it ([Apple: Tab bars](https://developer.apple.com/design/human-interface-guidelines/tab-bars), [Apple: SwiftUI tab navigation](https://developer.apple.com/documentation/swiftui/enhancing-your-app-content-with-tab-navigation)).
+On iPhone, use five stable, labeled tabs: Home, Bible, Plans, Virtues, and Learning. You remains a complete destination opened from a persistent profile control rather than being hidden behind a More tab. On Mac, show all six destinations in the sidebar while preserving selection and navigation history. Apple's current guidance supports tab navigation for top-level sections and an adaptive sidebar where complexity warrants it ([Apple: Tab bars](https://developer.apple.com/design/human-interface-guidelines/tab-bars), [Apple: SwiftUI tab navigation](https://developer.apple.com/documentation/swiftui/enhancing-your-app-content-with-tab-navigation)).
 
 ### Visual direction from the references
 
@@ -170,10 +173,11 @@ Answer, “What is the most meaningful next step today?” without becoming a no
 
 1. **Continue Scripture** — last book/chapter, percentage or verse anchor, version, and listening state.
 2. **Today's plan** — next incomplete assignment, remaining item count, and estimated reading time.
-3. **Formation card** — continue a Learning lesson or a seasonally relevant reviewed guide.
-4. **Reflect in Echo** — a small prompt tied to the completed reading, plan, or the hub's virtue taxonomy.
-5. **Weekly rhythm** — reading days, plan completion, minutes, and a gentle recovery action if behind.
-6. **Optional Scripture of the Day** — use YouVersion's Verse of the Day reference rendered in the user's approved translation; never present it as the Catholic daily Mass reading.
+3. **Virtue practice** — continue the owner-selected Focus Cycle or enter Virtues; never infer a weakness.
+4. **Catholic-life learning** — continue a reviewed ritual, sacrament, prayer, season, or practical Church-life guide.
+5. **Reflect in Echo** — a small prompt tied to the completed reading, plan, or current virtue focus.
+6. **Weekly rhythm** — reading days, plan completion, minutes, and a gentle recovery action if behind.
+7. **Optional Scripture of the Day** — use YouVersion's Verse of the Day reference rendered in the user's approved translation; never present it as the Catholic daily Mass reading.
 
 ### Rules
 
@@ -378,6 +382,12 @@ Each virtue follows the same calm, repeatable path:
 5. **Reflect** — an explicit handoff opens Echo with the selected virtue, prompt, and canonical Scripture references; Echo owns the journal entry.
 6. **Review** — a weekly view shows practices attempted, reflections opened, and self-written observations without claiming virtue attainment.
 
+Completing all seven introductory pathways completes **Foundations**, not the work of virtue formation. The continuing system has three layers:
+
+1. **Foundations Journey** — one guided introductory week for each virtue, ending with a retained practice and closing reflection.
+2. **Focus Cycles** — repeatable owner-selected one-, two-, or four-week cycles tied to a life context and one concrete practice.
+3. **Rule of Life** — a revisable set of practices the owner deliberately retains across virtues. It is a personal aid, not a generated moral rule or substitute for pastoral guidance.
+
 ### The seven pathways
 
 | Virtue | Formation emphasis | Example practices |
@@ -395,25 +405,33 @@ These descriptions are product-planning summaries, not publishable catechesis. F
 ### Experience and safeguards
 
 - The owner chooses the current virtue focus manually; the app never infers a moral weakness from reading, journal, browsing, or behavioral data.
+- Virtues is a first-class destination. Learning remains the separate Catholic-life library for worship, sacraments, prayer, rituals, seasons, and practical participation in the Church.
 - Home may show one current practice and one optional reflection prompt, never a virtue leaderboard or comparative score.
 - Plans may include virtue practices, but completing Scripture never automatically claims progress in a virtue.
 - Check-ins, notes, and reflections remain local/private; hub events contain only allowlisted identifiers and completion metadata.
 - Analytics describe actions taken over a selected period and can be disabled or deleted.
+- Formation history reports facts—pathways encountered, cycles completed, practices attempted, contexts practiced, reviews completed, retained practices, and owner-written then/now observations. It never calculates a virtue percentage or attainment level.
+- Returning after a break is welcomed without lost progress, broken-streak language, or a penalty.
 - Difficult or sensitive topics—especially chastity—use pastoral language, avoid diagnosing culpability, and direct personal questions to an appropriate priest or qualified guide.
 - Every path supports VoiceOver, Dynamic Type, keyboard navigation, Reduce Motion, and non-color status cues.
 
 ### Deliverables
 
-- Provenance-aware virtue content model with the existing namespaced hub identifiers.
-- Seven reviewed formation pathways with Scripture references, practices, examen prompts, and review dates.
-- Virtue-focus selection, daily practice card, check-in history, and weekly private review.
-- Echo reflection handoff and allowlisted hub events that never include journal or check-in text.
-- Learning, Home, Plans, and You integrations that share one source of truth.
-- Export/delete behavior, accessibility coverage, privacy tests, and content-review fixtures.
+1. **Formation foundation and navigation** — first-class Virtues destination, namespaced identifiers, provenance, source, review, freshness, pastoral-boundary, practice, check-in, and privacy contracts.
+2. **Foundations Journey** — seven reviewed introductions, one per virtue, each completing understand → Scripture → practice → notice → reflect → review.
+3. **Focus Cycles** — owner-selected virtue, life context, one-/two-/four-week duration, practice selection, graceful pause/return, and truthful cycle state.
+4. **Daily practice and check-ins** — Home card plus practiced, noticed an opportunity, chose differently, not applicable, and reflected-in-Echo states; optional private observation.
+5. **Weekly and cycle review** — factual activity summary, beginning/ending “Then and Now” prompts, retained-practice decision, and continue/change/close actions.
+6. **Practice library and thematic journeys** — reviewed practices by context and commitment plus cross-virtue journeys such as work, relationships, digital life, speech, and liturgical seasons.
+7. **Personal Rule of Life** — owner-selected retained practices with revision history and clear non-authoritative framing.
+8. **Formation record and motivation** — pathway/cycle history, contexts, reviews, retained practices, quiet participation milestones, and annual review without virtue scores or mastery claims.
+9. **App and hub integration** — Scripture, Home, Plans, Echo, You, and future Ambition connections share one virtue identity and transmit only allowlisted metadata.
+10. **Trust and release acceptance** — independent export/delete, content fixtures, accessibility, privacy/redaction, migration, iPhone, and Mac coverage.
 
 ### Exit criteria
 
 - The owner can select any of the seven virtues, complete a practice, open a related passage, reflect in Echo, and review the week without a dead end.
+- After Foundations, the owner can begin unlimited Focus Cycles, retain practices in a Rule of Life, and review a factual formation history without an artificial endpoint.
 - All seven pathways have approved Catholic sources/review, visible freshness metadata, and tested Scripture links.
 - No score, rank, streak loss, automated moral judgment, or private reflection text crosses the module boundary.
 - Accessibility, persistence, export/delete, and hub-contract tests pass on iPhone and Mac.
@@ -821,16 +839,19 @@ Do not generate text-to-speech from a copyrighted translation unless its license
 
 ### Deliverables
 
-- Provenance-aware content records for chastity, temperance, charity, diligence, patience, kindness, and humility.
-- Seven reviewed pathways containing teaching, licensed Scripture references, practices, examen prompts, and pastoral boundaries.
-- Owner-selected virtue focus, Home practice card, private check-ins, and a weekly review without scores or competitive streaks.
-- Learning and Plans connections that preserve one virtue taxonomy and never auto-claim moral growth from task completion.
-- Echo handoff carrying only the visible prompt, canonical Scripture references, and namespaced virtue identifier.
-- Private analytics, export/delete support, accessibility coverage, and hub-contract/privacy tests.
+1. **BS-0451 — Formation model and first-class destination:** provenance-aware content and privacy contracts; Mac sidebar entry; iPhone Virtues tab; profile access outside the five-tab limit.
+2. **BS-0452 — Seven reviewed Foundations pathways:** chastity, temperance, charity, diligence, patience, kindness, and humility each include teaching, contextual Scripture, practices, examen prompts, pastoral boundaries, and visible review metadata.
+3. **BS-0453 — Repeatable Focus Cycles:** owner-selected virtue, context, duration, practice, pause/return, and close/continue/change behavior after Foundations.
+4. **BS-0454 — Daily practice and private check-ins:** Home practice card, factual check-in history, optional local observation, and no punitive streaks.
+5. **BS-0455 — Weekly review and Then/Now:** factual weekly summaries, owner-written beginning/ending reflections, retained-practice selection, and cycle review.
+6. **BS-0456 — Practice library, thematic journeys, and Rule of Life:** reviewed practices by context, cross-virtue application journeys, and a revisable owner-selected rule.
+7. **BS-0457 — Formation record and integrations:** private history and participation milestones plus Scripture, Plans, Echo, You, Hub, and future Ambition boundaries.
+8. **BS-0458 — Trust and release acceptance:** independent export/delete, migration, accessibility, content-review fixtures, privacy/redaction, iPhone, and Mac tests.
 
 ### Exit criteria
 
 - Every pathway completes the understand → Scripture → practice → notice → reflect → review loop.
+- Foundations leads into unlimited Focus Cycles, an owner-selected Rule of Life, and a factual long-term Formation Record.
 - A qualified Catholic review route approves all published formation content and sensitive pastoral language.
 - The owner can remove the complete virtue history without deleting Scripture annotations or Echo entries.
 - No private check-in or reflection text enters provider requests, logs, analytics, or hub events.

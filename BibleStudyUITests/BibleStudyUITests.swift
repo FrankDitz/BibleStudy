@@ -6,9 +6,9 @@ final class BibleStudyUITests: XCTestCase {
     }
 
     @MainActor
-    func testFiveDestinationsAreReachable() {
+    func testPrimaryDestinationsAreReachable() {
         let app = launchApplication()
-        for destination in ["Home", "Bible", "Plans", "Learning", "You"] {
+        for destination in navigationTitles {
             XCTAssertTrue(navigationElement(destination, in: app).waitForExistence(timeout: 3))
         }
     }
@@ -28,7 +28,7 @@ final class BibleStudyUITests: XCTestCase {
                 "UICTContentSizeCategoryAccessibilityExtraExtraExtraLarge",
             ])
 
-        for destination in ["Home", "Bible", "Plans", "Learning", "You"] {
+        for destination in navigationTitles {
             let element = navigationElement(destination, in: app)
             XCTAssertTrue(element.waitForExistence(timeout: 3))
             element.tap()
@@ -38,7 +38,7 @@ final class BibleStudyUITests: XCTestCase {
     @MainActor
     func testNavigationDestinationsExposeLabelsAndHitTargets() {
         let app = launchApplication()
-        for destination in ["Home", "Bible", "Plans", "Learning", "You"] {
+        for destination in navigationTitles {
             let element = navigationElement(destination, in: app)
             XCTAssertEqual(element.label, destination)
             XCTAssertTrue(element.isHittable)
@@ -67,9 +67,21 @@ final class BibleStudyUITests: XCTestCase {
 
         XCTAssertTrue(app.buttons["home-resume-reading"].waitForExistence(timeout: 3))
         XCTAssertTrue(app.buttons["home-open-learning"].exists)
+        XCTAssertTrue(app.buttons["home-open-virtues"].exists)
+        XCTAssertTrue(app.buttons["home-open-profile"].exists)
         XCTAssertTrue(app.descendants(matching: .any)["home-virtue-focus"].exists)
         XCTAssertTrue(app.descendants(matching: .any)["home-recent-activity"].exists)
         XCTAssertFalse(app.staticTexts["Daily reflection"].exists)
+    }
+
+    @MainActor
+    func testVirtuesHasAFirstClassPrivateFormationDestination() {
+        let app = launchApplication()
+        navigationElement("Virtues", in: app).tap()
+
+        XCTAssertTrue(app.descendants(matching: .any)["virtues-root"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.descendants(matching: .any)["virtues-formation-journey"].exists)
+        XCTAssertTrue(app.descendants(matching: .any)["virtues-privacy-note"].exists)
     }
 
     @MainActor
@@ -83,9 +95,17 @@ final class BibleStudyUITests: XCTestCase {
     @MainActor
     private func navigationElement(_ title: String, in app: XCUIApplication) -> XCUIElement {
         #if os(macOS)
-            app.staticTexts[title]
+            app.descendants(matching: .any)["navigation-\(title.lowercased())"]
         #else
             app.tabBars.buttons[title]
+        #endif
+    }
+
+    private var navigationTitles: [String] {
+        #if os(macOS)
+            ["Home", "Bible", "Plans", "Virtues", "Learning", "You"]
+        #else
+            ["Home", "Bible", "Plans", "Virtues", "Learning"]
         #endif
     }
 }

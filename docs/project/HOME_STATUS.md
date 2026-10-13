@@ -31,4 +31,4 @@ Phase 4 turns Home into a truthful “Today” surface. It derives the next usef
 
 ## Phase exit
 
-Phase 4 is complete. The next roadmap section is the seven-virtues formation track beginning with BS-0451: a reviewed, provenance-aware model for practices, check-ins, and privacy.
+Phase 4 is complete. Phase 4A is active with BS-0451: a first-class Virtues destination and reviewed, provenance-aware model for practices, check-ins, and privacy.

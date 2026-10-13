@@ -4,8 +4,11 @@ enum AppDestination: String, CaseIterable, Codable, Identifiable, Hashable, Send
     case home
     case bible
     case plans
+    case virtues
     case learning
     case you
+
+    static let primaryTabs: [AppDestination] = [.home, .bible, .plans, .virtues, .learning]
 
     var id: Self { self }
 
@@ -14,6 +17,7 @@ enum AppDestination: String, CaseIterable, Codable, Identifiable, Hashable, Send
         case .home: "Home"
         case .bible: "Bible"
         case .plans: "Plans"
+        case .virtues: "Virtues"
         case .learning: "Learning"
         case .you: "You"
         }
@@ -24,6 +28,7 @@ enum AppDestination: String, CaseIterable, Codable, Identifiable, Hashable, Send
         case .home: "house"
         case .bible: "book.closed"
         case .plans: "checkmark.square"
+        case .virtues: "sparkles"
         case .learning: "graduationcap"
         case .you: "person.crop.circle"
         }

@@ -18,6 +18,8 @@ struct HomeView: View {
     let openReading: (ScriptureReference) -> Void
     let openPlans: () -> Void
     let openLearning: () -> Void
+    let openVirtues: () -> Void
+    let openProfile: () -> Void
 
     @State private var now = Date.now
 
@@ -55,6 +57,14 @@ struct HomeView: View {
             }
             .background(AppTheme.warmSurface.opacity(0.35))
             .navigationTitle("Today")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button(action: openProfile) {
+                        Label("You", systemImage: "person.crop.circle")
+                    }
+                    .accessibilityIdentifier("home-open-profile")
+                }
+            }
         }
         .onAppear { now = .now }
     }
@@ -245,6 +255,9 @@ struct HomeView: View {
                     }
                     .buttonStyle(.bordered)
                     .accessibilityIdentifier("home-open-virtue-scripture")
+                    Button("Open Virtues", action: openVirtues)
+                        .buttonStyle(.bordered)
+                        .accessibilityIdentifier("home-open-virtues")
                 }
                 Spacer(minLength: 0)
             }

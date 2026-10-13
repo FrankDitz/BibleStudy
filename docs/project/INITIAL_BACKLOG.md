@@ -64,13 +64,16 @@ This backlog is intentionally small enough to steer delivery. The roadmap remain
 | ID | Pri | Backlog item | Acceptance signal | Depends on |
 | --- | --- | --- | --- | --- |
 | BS-0401 | P1 | Home “Today” orchestration | Resume, plan, learning, virtue, and recent activity are useful without exposing private text | Phases 2–3 |
-| BS-0451 | P0 | Define the seven-virtues formation and provenance model | Namespaced identifiers, sources, review state, freshness, practices, check-ins, and privacy rules are testable | Phase 4 Learning model, hub contract |
-| BS-0452 | P0 | Publish seven reviewed virtue pathways | Chastity, temperance, charity, diligence, patience, kindness, and humility each complete the formation loop with approved sources | BS-0451, Catholic reviewer |
-| BS-0453 | P1 | Build virtue focus, practices, check-ins, and weekly review | The owner can practice and review without scores, public comparison, punitive streaks, or inferred moral judgment | BS-0451/2 |
-| BS-0454 | P1 | Connect virtue formation to Scripture, Plans, Echo, and Home | One namespaced virtue identity crosses allowlisted contracts; no private reflection/check-in text leaves its owner | BS-0401, BS-0451, hub/Echo contracts |
-| BS-0455 | P1 | Complete virtue privacy, accessibility, export, and deletion acceptance | iPhone/Mac checks pass and virtue data can be exported/deleted independently | BS-0453/4, Phase 5 data controls |
+| BS-0451 | P0 | Define the formation model and first-class Virtues destination | Namespaced identifiers, sources, review/freshness, pastoral boundaries, practices, check-ins, privacy rules, Mac navigation, and the iPhone tab/profile split are testable | BS-0401, hub contract |
+| BS-0452 | P0 | Publish the seven reviewed Foundations pathways | Every virtue completes understand → Scripture → practice → notice → reflect → review with approved sources | BS-0451, Catholic reviewer |
+| BS-0453 | P0 | Build repeatable owner-selected Focus Cycles | After Foundations the owner can run unlimited one-/two-/four-week cycles by virtue, context, and practice with graceful pause/return | BS-0451/2 |
+| BS-0454 | P1 | Add daily practice and private check-ins | Home offers the selected practice and factual check-ins without scores, punitive streaks, or inferred moral judgment | BS-0401, BS-0453 |
+| BS-0455 | P1 | Add weekly review and Then/Now reflection | Weekly and cycle summaries show actions and owner-written observations, then retain/change/close the practice without claiming attainment | BS-0453/4 |
+| BS-0456 | P1 | Add the practice library, thematic journeys, and Rule of Life | Reviewed context practices and cross-virtue journeys feed a revisable owner-selected set of retained practices | BS-0452/5 |
+| BS-0457 | P1 | Build the Formation Record and app/hub integrations | Scripture, Plans, Echo, Home, You, Hub, and future Ambition use one identity; history remains factual and private text never crosses a boundary | BS-0453–6, hub/Echo contracts |
+| BS-0458 | P1 | Complete virtue privacy, accessibility, export, and deletion acceptance | iPhone/Mac checks pass and virtue data can be exported/deleted independently without removing Scripture annotations or Echo entries | BS-0457, Phase 5 data controls |
 | BS-0501 | P0 | Implement provenance-aware Learning model | Every item enforces source, scope, reviewer, rights, freshness, and correction metadata | Learning editorial guide, BS-0102 |
-| BS-0502 | P1 | Publish first reviewed Learning collection | Mass, sacraments, liturgical year, and prayer modules pass Catholic/content QA | BS-0006, BS-0501 |
+| BS-0502 | P1 | Publish the first reviewed Catholic-life Learning collection | Mass, sacraments and initiation, OCIA/adult preparation, sponsors/godparents, liturgical year and holy days, prayers/creeds, Rosary/devotions, and practical Church participation pass Catholic/content QA | BS-0006, BS-0501 |
 | BS-0601 | P1 | Build You analytics and data controls | Streaks/progress are accurate; export/delete and integration status are understandable | BS-0102, Phase 3 |
 | BS-0701 | P2 | Implement licensed chapter audio Tier A | Background playback, interruptions, expiry, attribution, position, and provider failures pass | BS-0003/5 |
 | BS-0702 | P2 | Add verse follow-along Tier B | Only verified timecodes/versification highlight; motion can be disabled | BS-0701 |

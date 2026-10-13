@@ -24,6 +24,13 @@ final class AppCompositionTests: XCTestCase {
         XCTAssertEqual(BibleStudyDeepLink.parse(url), .destination(.plans))
     }
 
+    func testVirtuesDestinationDeepLinkRoundTrips() throws {
+        let route = BibleStudyRoute.destination(.virtues)
+        let url = try XCTUnwrap(BibleStudyDeepLink.url(for: route))
+
+        XCTAssertEqual(BibleStudyDeepLink.parse(url), route)
+    }
+
     func testScriptureDeepLinkRoundTrips() throws {
         let reference = try ScriptureReference(
             versionID: 55,

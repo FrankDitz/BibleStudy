@@ -24,7 +24,8 @@ The product supports growth in the seven Christian virtues and four cardinal vir
 - **Home:** Continue reading, today's plan, seasonal learning, recent progress, and reflection prompts.
 - **Bible:** Catholic-canon-aware reading, edition selection, search, navigation, local annotations, attribution, and audio where licensed.
 - **Plans:** Premade and custom schedules, daily assignments, completion, recovery, reminders, and accountability analytics.
-- **Learning:** Reviewed Catholic guides with sources, jurisdiction, review status, and links into Scripture.
+- **Virtues:** Seven lifelong Christian-formation pathways with Foundations, repeatable Focus Cycles, concrete practices, private review, and an owner-selected Rule of Life.
+- **Learning:** Reviewed guides to Catholic worship, sacraments, initiation, prayer, rituals, holy days, devotions, and practical Church life, with sources, jurisdiction, and review status.
 - **You:** Private profile, preferences, milestones, analytics, privacy controls, and data management.
 
 ## V1 outcome
