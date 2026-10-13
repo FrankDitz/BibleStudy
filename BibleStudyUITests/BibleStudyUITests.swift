@@ -85,20 +85,22 @@ final class BibleStudyUITests: XCTestCase {
     }
 
     @MainActor
-    func testVirtueFoundationOpensWithHonestReviewStatusAndPracticePreview() {
+    func testVirtueCourseOpensWithHonestPreviewOutlineAndSources() {
         let app = launchApplication()
         navigationElement("Virtues", in: app).tap()
 
-        let charity = app.descendants(matching: .any)["virtue-pathway-christian.charity"]
-        XCTAssertTrue(charity.waitForExistence(timeout: 3))
-        charity.tap()
+        let foundations = app.buttons["virtue-foundation-course"]
+        XCTAssertTrue(foundations.waitForExistence(timeout: 3))
+        foundations.tap()
 
         XCTAssertTrue(
-            app.descendants(matching: .any)["virtue-pathway-detail-christian.charity"]
+            app.descendants(matching: .any)["virtue-course-virtue-foundations"]
                 .waitForExistence(timeout: 3)
         )
-        XCTAssertTrue(app.descendants(matching: .any)["virtue-review-status"].exists)
-        XCTAssertTrue(app.descendants(matching: .any)["virtue-practices"].exists)
+        XCTAssertTrue(app.descendants(matching: .any)["virtue-course-review-status"].exists)
+        XCTAssertTrue(app.descendants(matching: .any)["virtue-course-overview"].exists)
+        XCTAssertTrue(app.descendants(matching: .any)["virtue-course-outline"].exists)
+        XCTAssertTrue(app.descendants(matching: .any)["virtue-course-sources"].exists)
     }
 
     @MainActor
