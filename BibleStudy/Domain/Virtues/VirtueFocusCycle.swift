@@ -90,19 +90,22 @@ struct VirtueFormationState: Codable, Equatable, Sendable {
     var reviews: [VirtueCycleReview]
     var rulePractices: [VirtueRulePractice]
     var ruleRevisions: [VirtueRuleRevision]
+    var courseProgress: [VirtueCourseProgress]
 
     init(
         cycles: [VirtueFocusCycle] = [],
         checkIns: [VirtueCheckIn] = [],
         reviews: [VirtueCycleReview] = [],
         rulePractices: [VirtueRulePractice] = [],
-        ruleRevisions: [VirtueRuleRevision] = []
+        ruleRevisions: [VirtueRuleRevision] = [],
+        courseProgress: [VirtueCourseProgress] = []
     ) {
         self.cycles = cycles
         self.checkIns = checkIns
         self.reviews = reviews
         self.rulePractices = rulePractices
         self.ruleRevisions = ruleRevisions
+        self.courseProgress = courseProgress
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -111,6 +114,7 @@ struct VirtueFormationState: Codable, Equatable, Sendable {
         case reviews
         case rulePractices
         case ruleRevisions
+        case courseProgress
     }
 
     init(from decoder: Decoder) throws {
@@ -122,6 +126,8 @@ struct VirtueFormationState: Codable, Equatable, Sendable {
             try container.decodeIfPresent([VirtueRulePractice].self, forKey: .rulePractices) ?? []
         ruleRevisions =
             try container.decodeIfPresent([VirtueRuleRevision].self, forKey: .ruleRevisions) ?? []
+        courseProgress =
+            try container.decodeIfPresent([VirtueCourseProgress].self, forKey: .courseProgress) ?? []
     }
 
     static let empty = VirtueFormationState()
