@@ -85,6 +85,23 @@ final class BibleStudyUITests: XCTestCase {
     }
 
     @MainActor
+    func testVirtueFoundationOpensWithHonestReviewStatusAndPracticePreview() {
+        let app = launchApplication()
+        navigationElement("Virtues", in: app).tap()
+
+        let charity = app.descendants(matching: .any)["virtue-pathway-christian.charity"]
+        XCTAssertTrue(charity.waitForExistence(timeout: 3))
+        charity.tap()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)["virtue-pathway-detail-christian.charity"]
+                .waitForExistence(timeout: 3)
+        )
+        XCTAssertTrue(app.descendants(matching: .any)["virtue-review-status"].exists)
+        XCTAssertTrue(app.descendants(matching: .any)["virtue-practices"].exists)
+    }
+
+    @MainActor
     private func launchApplication(additionalArguments: [String] = []) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing"] + additionalArguments

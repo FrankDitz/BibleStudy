@@ -63,6 +63,13 @@ struct VirtueExamenPrompt: Identifiable, Codable, Equatable, Sendable {
     let text: String
 }
 
+struct VirtueScriptureEncounter: Identifiable, Codable, Equatable, Sendable {
+    let id: String
+    let title: String
+    let context: String
+    let reference: CanonicalScriptureReference
+}
+
 struct VirtueFormationPathway: Identifiable, Codable, Equatable, Sendable {
     let id: VirtueIdentifier
     let contentVersion: Int
@@ -70,10 +77,12 @@ struct VirtueFormationPathway: Identifiable, Codable, Equatable, Sendable {
     let summary: String
     let catholicRelationship: String
     let teaching: String
+    let whatItIsNot: [String]
     let sources: [VirtueContentSource]
-    let scriptureReferences: [CanonicalScriptureReference]
+    let scriptureEncounters: [VirtueScriptureEncounter]
     let practices: [VirtuePracticeDefinition]
     let examenPrompts: [VirtueExamenPrompt]
+    let prayer: String
     let pastoralBoundaries: [String]
     let review: VirtueContentReview
 
@@ -94,9 +103,11 @@ struct VirtueFormationPathway: Identifiable, Codable, Equatable, Sendable {
         if sources.contains(where: { $0.checkedAt > date }) {
             issues.insert(.invalidSourceDate)
         }
-        if scriptureReferences.isEmpty { issues.insert(.missingScripture) }
+        if whatItIsNot.isEmpty { issues.insert(.missingTeaching) }
+        if scriptureEncounters.isEmpty { issues.insert(.missingScripture) }
         if practices.isEmpty { issues.insert(.missingPractice) }
         if examenPrompts.isEmpty { issues.insert(.missingExamen) }
+        if prayer.trimmed.isEmpty { issues.insert(.missingPrayer) }
         if pastoralBoundaries.isEmpty { issues.insert(.missingPastoralBoundary) }
         if review.state != .approved { issues.insert(.notApproved) }
         if review.reviewerRole?.trimmed.isEmpty != false { issues.insert(.missingReviewerRole) }
@@ -109,6 +120,7 @@ struct VirtueFormationPathway: Identifiable, Codable, Equatable, Sendable {
         if Set(practices.map(\.id)).count != practices.count
             || Set(examenPrompts.map(\.id)).count != examenPrompts.count
             || Set(sources.map(\.id)).count != sources.count
+            || Set(scriptureEncounters.map(\.id)).count != scriptureEncounters.count
         {
             issues.insert(.duplicateContentIdentifier)
         }
@@ -131,6 +143,7 @@ enum VirtuePathwayPublicationIssue: String, Codable, Hashable, Sendable {
     case missingScripture
     case missingPractice
     case missingExamen
+    case missingPrayer
     case missingPastoralBoundary
     case notApproved
     case missingReviewerRole

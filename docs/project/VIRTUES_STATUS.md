@@ -1,8 +1,8 @@
 # Seven Virtues Formation Status
 
 **Phase:** 4A — Seven Virtues formation  
-**Current deliverable:** BS-0451 — Formation model and first-class destination  
-**Status:** Complete; phase-exit checks passed  
+**Current deliverable:** BS-0452 — Seven Foundations pathways
+**Status:** Implementation complete; qualified Catholic review pending
 **Started:** 2026-10-13
 **Verified:** 2026-10-13
 
@@ -19,7 +19,7 @@
 | ID | Deliverable | Status |
 | --- | --- | --- |
 | BS-0451 | Formation/provenance/privacy model and first-class navigation | Complete |
-| BS-0452 | Seven reviewed Foundations pathways | Not started; requires approved sources and review route |
+| BS-0452 | Seven reviewed Foundations pathways | Source-checked implementation complete; qualified Catholic approval pending |
 | BS-0453 | Repeatable owner-selected Focus Cycles | Not started |
 | BS-0454 | Daily practice and private check-ins | Not started |
 | BS-0455 | Weekly review and Then/Now reflection | Not started |
@@ -27,11 +27,11 @@
 | BS-0457 | Formation Record and app/hub integrations | Not started |
 | BS-0458 | Privacy, accessibility, export/delete, and release acceptance | Not started |
 
-## BS-0451 boundary
+## BS-0452 implementation
 
-The first deliverable establishes publishability gates for sources, Catholic review, freshness, Scripture references, practices, examen prompts, and pastoral boundaries. It also defines privacy-safe check-in metadata that cannot represent a private observation.
+All seven cards now open complete pathway drafts with teaching, Catholic context, common distortions, three Scripture encounters linked to the Bible reader, three repeatable practice previews, examen prompts, prayer, pastoral boundaries, and exact official sources. The content uses the existing publication gate and a reviewer packet at `docs/content/VIRTUE_FOUNDATIONS_REVIEW_PACKET.md`.
 
-The seven visible pathway cards remain explicitly **in review** until BS-0452 supplies reviewed content. Planning summaries are not presented as approved catechesis.
+The app labels every pathway **Source-checked draft · Catholic review pending**. It does not claim that generated or source-checked text has received qualified Catholic approval. The gate reports only `notApproved` and `missingReviewDates` for each structurally complete draft.
 
 ## Verification
 
@@ -41,7 +41,9 @@ The seven visible pathway cards remain explicitly **in review** until BS-0452 su
 - The generic iOS Simulator app and UI-test bundle build successfully.
 - A focused macOS UI test and live accessibility inspection confirm the first-class Virtues destination, formation journey, seven pathways, and privacy statement.
 - Strict Swift formatting and whitespace checks pass.
+- Seven-pathway library tests verify complete content, unique identifiers, official Vatican sources, Catholic-canon Scripture references, and fail-closed review state.
+- Each pathway detail provides an inspectable source trail and preserves the no-score, no-mastery formation boundary.
 
 ## Next deliverable
 
-BS-0452 publishes the seven reviewed Foundations pathways. It requires approved Catholic source selections and a recorded Catholic review route; unreviewed generated teaching will continue to fail closed.
+Obtain and record qualified Catholic review to close BS-0452 formally. Product engineering can proceed in parallel with BS-0453, repeatable owner-selected Focus Cycles, because the unapproved content remains visibly gated.

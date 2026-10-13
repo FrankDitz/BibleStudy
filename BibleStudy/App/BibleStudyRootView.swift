@@ -83,7 +83,7 @@ struct BibleStudyRootView: View {
                 activePlanNavigationRequest: activePlanNavigationRequest
             )
         case .virtues:
-            VirtuesView()
+            VirtuesView(openReading: openVirtueScripture)
         case .learning:
             LearningView()
         case .you:
@@ -96,6 +96,19 @@ struct BibleStudyRootView: View {
     private func openScripture(_ reference: ScriptureReference) {
         scriptureNavigation.open(reference)
         selection = .bible
+    }
+
+    private func openVirtueScripture(_ reference: CanonicalScriptureReference) {
+        guard
+            let scriptureReference = try? ScriptureReference(
+                versionID: YouVersionCatalogPolicy.developmentDefaultVersionID,
+                bookID: reference.bookID,
+                chapter: reference.chapter,
+                verseStart: reference.verseStart,
+                verseEnd: reference.verseEnd
+            )
+        else { return }
+        openScripture(scriptureReference)
     }
 
     private func openActivePlan() {

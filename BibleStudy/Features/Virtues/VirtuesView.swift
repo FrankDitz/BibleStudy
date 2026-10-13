@@ -1,6 +1,12 @@
 import SwiftUI
 
 struct VirtuesView: View {
+    let openReading: (CanonicalScriptureReference) -> Void
+
+    init(openReading: @escaping (CanonicalScriptureReference) -> Void = { _ in }) {
+        self.openReading = openReading
+    }
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -41,7 +47,8 @@ struct VirtuesView: View {
                 journeyRow(
                     number: 1,
                     title: "Foundations",
-                    detail: "Meet all seven virtues through reviewed teaching, Scripture, practice, and reflection."
+                    detail:
+                        "Meet all seven virtues through source-backed teaching, Scripture, practice, and reflection."
                 )
                 journeyRow(
                     number: 2,
@@ -54,7 +61,7 @@ struct VirtuesView: View {
                     detail: "Retain and revise the practices that help you live faithfully."
                 )
                 Label(
-                    "Pathway content is being source-checked and reviewed before it becomes available.",
+                    "Complete source-checked drafts are available to inspect; qualified Catholic review is still pending.",
                     systemImage: "checkmark.shield"
                 )
                 .font(.footnote)
@@ -74,26 +81,36 @@ struct VirtuesView: View {
                 spacing: AppSpacing.standard
             ) {
                 ForEach(VirtueFormationCatalog.descriptors) { virtue in
-                    FeatureCard {
-                        HStack(alignment: .top, spacing: 14) {
-                            Image(systemName: virtue.systemImage)
-                                .font(.title2)
-                                .foregroundStyle(AppTheme.accent)
-                                .frame(width: 42, height: 42)
-                                .background(AppTheme.accent.opacity(0.12), in: Circle())
-                            VStack(alignment: .leading, spacing: 6) {
-                                Text(virtue.title)
-                                    .font(.title3.bold())
-                                Text(virtue.emphasis)
-                                    .foregroundStyle(AppTheme.supportingText)
-                                Text("Pathway in review")
-                                    .font(.caption.bold())
-                                    .foregroundStyle(AppTheme.accent)
+                    if let pathway = VirtueFoundationLibrary.pathway(for: virtue.id) {
+                        NavigationLink {
+                            VirtuePathwayView(pathway: pathway, openReading: openReading)
+                        } label: {
+                            FeatureCard {
+                                HStack(alignment: .top, spacing: 14) {
+                                    Image(systemName: virtue.systemImage)
+                                        .font(.title2)
+                                        .foregroundStyle(AppTheme.accent)
+                                        .frame(width: 42, height: 42)
+                                        .background(AppTheme.accent.opacity(0.12), in: Circle())
+                                    VStack(alignment: .leading, spacing: 6) {
+                                        Text(virtue.title)
+                                            .font(.title3.bold())
+                                        Text(virtue.emphasis)
+                                            .foregroundStyle(AppTheme.supportingText)
+                                        Text("Source-checked draft")
+                                            .font(.caption.bold())
+                                            .foregroundStyle(AppTheme.accent)
+                                    }
+                                    Spacer(minLength: 0)
+                                    Image(systemName: "chevron.right")
+                                        .foregroundStyle(.secondary)
+                                        .accessibilityHidden(true)
+                                }
                             }
-                            Spacer(minLength: 0)
                         }
+                        .buttonStyle(.plain)
+                        .accessibilityIdentifier("virtue-pathway-\(virtue.id.rawValue)")
                     }
-                    .accessibilityIdentifier("virtue-pathway-\(virtue.id.rawValue)")
                 }
             }
         }
