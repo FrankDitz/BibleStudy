@@ -14,6 +14,8 @@ struct HomeView: View {
     private var annotations: [BibleStudySchemaV1.ScriptureAnnotation]
     @Query(sort: \BibleStudySchemaV1.LearningProgress.modifiedAt, order: .reverse)
     private var learningProgress: [BibleStudySchemaV1.LearningProgress]
+    @Query(sort: \BibleStudySchemaV3.VirtueFormationRecord.modifiedAt, order: .reverse)
+    private var formationRecords: [BibleStudySchemaV3.VirtueFormationRecord]
 
     let openReading: (ScriptureReference) -> Void
     let openPlans: () -> Void
@@ -75,6 +77,7 @@ struct HomeView: View {
         _ = completionEvents.count
         _ = annotations.count
         _ = learningProgress.count
+        _ = formationRecords.count
 
         if let snapshot = try? HomeTodayRepository(modelContext: modelContext).snapshot(asOf: now) {
             return snapshot
@@ -250,6 +253,24 @@ struct HomeView: View {
                         .font(.title2.bold())
                     Text(virtue.practice)
                         .font(.title3)
+                    if virtue.isPaused {
+                        Label("Cycle paused — return whenever you are ready", systemImage: "pause.circle")
+                            .font(.subheadline)
+                            .foregroundStyle(AppTheme.warning)
+                    } else if let cycleID = virtue.cycleID {
+                        if let status = virtue.checkInStatus {
+                            Label("Today: \(status.title)", systemImage: "checkmark.circle.fill")
+                                .font(.subheadline.bold())
+                                .foregroundStyle(AppTheme.success)
+                        } else {
+                            Button("Practiced it") {
+                                recordHomeCheckIn(cycleID: cycleID, status: .practiced)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .tint(AppTheme.accent)
+                            .accessibilityIdentifier("home-virtue-check-in")
+                        }
+                    }
                     Button("Read \(virtue.scriptureTitle)") {
                         openReading(virtue.scriptureReference)
                     }
@@ -263,6 +284,17 @@ struct HomeView: View {
             }
         }
         .accessibilityIdentifier("home-virtue-focus")
+    }
+
+    private func recordHomeCheckIn(cycleID: UUID, status: VirtueCheckInStatus) {
+        _ = try? VirtueFormationRepository(modelContext: modelContext).update { state in
+            try VirtueFocusCycleEngine.recordCheckIn(
+                cycleID: cycleID,
+                status: status,
+                privateObservation: nil,
+                in: &state
+            )
+        }
     }
 
     private func activitySection(_ today: HomeTodaySnapshot) -> some View {

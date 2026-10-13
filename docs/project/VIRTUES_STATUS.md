@@ -1,7 +1,7 @@
 # Seven Virtues Formation Status
 
 **Phase:** 4A — Seven Virtues formation  
-**Current deliverable:** BS-0453 — Repeatable Focus Cycles
+**Current deliverable:** BS-0454 — Daily practice and private check-ins
 **Status:** Complete; verification passed
 **Started:** 2026-10-13
 **Verified:** 2026-10-13
@@ -21,7 +21,7 @@
 | BS-0451 | Formation/provenance/privacy model and first-class navigation | Complete |
 | BS-0452 | Seven reviewed Foundations pathways | Source-checked implementation complete; qualified Catholic approval pending |
 | BS-0453 | Repeatable owner-selected Focus Cycles | Complete |
-| BS-0454 | Daily practice and private check-ins | Not started |
+| BS-0454 | Daily practice and private check-ins | Complete |
 | BS-0455 | Weekly review and Then/Now reflection | Not started |
 | BS-0456 | Practice library, thematic journeys, and Rule of Life | Not started |
 | BS-0457 | Formation Record and app/hub integrations | Not started |
@@ -37,6 +37,10 @@ The app labels every pathway **Source-checked draft · Catholic review pending**
 
 The owner can start an unlimited sequence of Focus Cycles by deliberately choosing one of the seven virtues, a relevant life context, one compatible concrete practice, and a one-, two-, or four-week duration. Only one cycle may be open at once. Pausing freezes elapsed formation time, and returning shifts the target date without penalties, broken-streak language, or lost history. Closing a cycle preserves its factual snapshot and permits the next cycle.
 
+## BS-0454 implementation
+
+The active practice replaces Home's generic weekly rotation and may be checked in directly from Home. The full cycle screen supports all five factual states plus an optional private observation. One entry per local calendar day is updated rather than duplicated. Paused cycles reject check-ins, private text stays out of Home activity and shareable metadata, and the interface contains no score, points, grade, or punitive streak.
+
 ## Verification
 
 - Publication-gate tests cover approved, draft, incomplete, stale, and namespaced-pathway states.
@@ -50,4 +54,4 @@ The owner can start an unlimited sequence of Focus Cycles by deliberately choosi
 
 ## Next deliverable
 
-BS-0454 adds private daily check-ins and replaces Home's rotating suggestion with the owner's active practice. Qualified Catholic review is still required to close BS-0452 formally; unapproved content remains visibly gated.
+BS-0455 adds a prayerful weekly review, factual summaries, and owner-written Then/Now reflection. Qualified Catholic review is still required to close BS-0452 formally; unapproved content remains visibly gated.

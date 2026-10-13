@@ -139,6 +139,7 @@ struct VirtueActiveCycleView: View {
 
     let cycleID: UUID
     @State private var errorMessage: String?
+    @State private var privateObservation = ""
 
     var body: some View {
         ScrollView {
@@ -177,6 +178,10 @@ struct VirtueActiveCycleView: View {
                         }
                     }
 
+                    if cycle.status == .active {
+                        dailyCheckIn(for: cycle)
+                    }
+
                     controls(for: cycle)
 
                     Label(
@@ -200,7 +205,55 @@ struct VirtueActiveCycleView: View {
         }
         .background(AppTheme.warmSurface.opacity(0.35))
         .navigationTitle("Focus Cycle")
+        .onAppear { privateObservation = todayCheckIn?.privateObservation ?? "" }
         .accessibilityIdentifier("virtue-active-cycle")
+    }
+
+    private var todayCheckIn: VirtueCheckIn? {
+        _ = formationRecords.count
+        return try? VirtueFormationRepository(modelContext: modelContext).state().checkIn(
+            for: cycleID,
+            on: .now
+        )
+    }
+
+    private func dailyCheckIn(for cycle: VirtueFocusCycle) -> some View {
+        FeatureCard {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Notice today")
+                    .font(AppTypography.sectionTitle)
+                Text("Choose the statement that best describes today. This is a factual check-in, not a grade.")
+                    .foregroundStyle(AppTheme.supportingText)
+
+                ForEach(VirtueCheckInStatus.allCases, id: \.self) { status in
+                    Button {
+                        record(status, for: cycle)
+                    } label: {
+                        HStack {
+                            Image(systemName: todayCheckIn?.status == status ? "checkmark.circle.fill" : "circle")
+                            Text(status.title)
+                            Spacer()
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    .foregroundStyle(todayCheckIn?.status == status ? AppTheme.accent : .primary)
+                    .accessibilityIdentifier("virtue-check-in-\(status.rawValue)")
+                }
+
+                TextField(
+                    "Private observation (optional)",
+                    text: $privateObservation,
+                    axis: .vertical
+                )
+                .lineLimit(3...6)
+                .textFieldStyle(.roundedBorder)
+                .accessibilityIdentifier("virtue-private-observation")
+
+                Label("Saved only in your private formation record.", systemImage: "lock.fill")
+                    .font(.footnote)
+                    .foregroundStyle(AppTheme.supportingText)
+            }
+        }
     }
 
     private var cycle: VirtueFocusCycle? {
@@ -232,6 +285,22 @@ struct VirtueActiveCycleView: View {
 
     private func pathwayTitle(_ id: VirtueIdentifier) -> String {
         VirtueFoundationLibrary.pathway(for: id)?.title ?? "Virtue"
+    }
+
+    private func record(_ status: VirtueCheckInStatus, for cycle: VirtueFocusCycle) {
+        do {
+            try VirtueFormationRepository(modelContext: modelContext).update { state in
+                try VirtueFocusCycleEngine.recordCheckIn(
+                    cycleID: cycle.id,
+                    status: status,
+                    privateObservation: privateObservation,
+                    in: &state
+                )
+            }
+            errorMessage = nil
+        } catch {
+            errorMessage = "Today's check-in could not be saved."
+        }
     }
 
     private enum Action { case pause, resume, close }

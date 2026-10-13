@@ -23,6 +23,7 @@ struct HomeTodayRepository {
         let completedTopicIDs = Set(
             learningProgress.filter { $0.status == .completed }.map(\.contentID)
         )
+        let formation = try VirtueFormationRepository(modelContext: modelContext).state()
 
         return HomeTodaySnapshot(
             reading: try readingResume(),
@@ -34,7 +35,11 @@ struct HomeTodayRepository {
                 completedTopicIDs: completedTopicIDs,
                 calendar: calendar
             ),
-            virtue: HomeTodayRecommendations.virtue(asOf: date, calendar: calendar),
+            virtue: HomeTodayRecommendations.virtue(
+                asOf: date,
+                calendar: calendar,
+                formation: formation
+            ),
             recentActivity: try recentActivity(planState: planState),
             planActivityStreak: try planActivityStreak(
                 planID: planState?.snapshot.id,

@@ -152,6 +152,44 @@ final class HomeTodayRepositoryTests: XCTestCase {
         XCTAssertEqual(today.planActivityStreak, 0)
     }
 
+    func testActiveFocusCycleReplacesRotationAndShowsTodaysCheckIn() throws {
+        let (repository, context) = try makeRepository()
+        let formationRepository = VirtueFormationRepository(modelContext: context)
+        let practice = try XCTUnwrap(VirtueFoundationLibrary.humility.practices.first)
+        let startedAt = date(2026, 10, 13, 8)
+        var cycleID: UUID?
+        try formationRepository.update(at: startedAt) { state in
+            cycleID = try VirtueFocusCycleEngine.start(
+                in: &state,
+                virtueID: .humility,
+                context: .work,
+                practice: practice,
+                duration: .twoWeeks,
+                at: startedAt
+            )
+        }
+        try formationRepository.update { state in
+            try VirtueFocusCycleEngine.recordCheckIn(
+                cycleID: try XCTUnwrap(cycleID),
+                status: .noticedOpportunity,
+                privateObservation: "Never show this on Home",
+                in: &state,
+                at: date(2026, 10, 13, 10),
+                calendar: calendar
+            )
+        }
+
+        let today = try repository.snapshot(
+            asOf: date(2026, 10, 13, 12),
+            calendar: calendar
+        )
+        XCTAssertEqual(today.virtue.cycleID, cycleID)
+        XCTAssertEqual(today.virtue.identifier, .humility)
+        XCTAssertEqual(today.virtue.practice, practice.instruction)
+        XCTAssertEqual(today.virtue.checkInStatus, .noticedOpportunity)
+        XCTAssertFalse(today.recentActivity.map(\.title).joined().contains("Never show this"))
+    }
+
     private func makeRepository() throws -> (HomeTodayRepository, ModelContext) {
         let container = try BibleStudyModelContainer.make(inMemory: true)
         let context = ModelContext(container)

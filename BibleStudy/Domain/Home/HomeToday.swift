@@ -28,11 +28,14 @@ struct HomeLearningSuggestion: Equatable, Sendable {
 }
 
 struct HomeVirtueFocus: Equatable, Sendable {
+    let cycleID: UUID?
     let identifier: VirtueIdentifier
     let title: String
     let practice: String
     let scriptureTitle: String
     let scriptureReference: ScriptureReference
+    let checkInStatus: VirtueCheckInStatus?
+    let isPaused: Bool
 }
 
 enum HomeActivityKind: String, Equatable, Sendable {
@@ -98,6 +101,36 @@ enum HomeTodayRecommendations {
         let weekOffset = calendar.dateComponents([.weekOfYear], from: anchor, to: date).weekOfYear ?? 0
         let index = ((weekOffset % virtues.count) + virtues.count) % virtues.count
         return virtues[index]
+    }
+
+    static func virtue(
+        asOf date: Date,
+        calendar: Calendar,
+        formation: VirtueFormationState
+    ) -> HomeVirtueFocus {
+        guard let cycle = formation.currentCycle,
+            let pathway = VirtueFoundationLibrary.pathway(for: cycle.virtueID),
+            let encounter = pathway.scriptureEncounters.first,
+            let reference = try? ScriptureReference(
+                versionID: YouVersionCatalogPolicy.developmentDefaultVersionID,
+                bookID: encounter.reference.bookID,
+                chapter: encounter.reference.chapter,
+                verseStart: encounter.reference.verseStart,
+                verseEnd: encounter.reference.verseEnd
+            )
+        else {
+            return virtue(asOf: date, calendar: calendar)
+        }
+        return HomeVirtueFocus(
+            cycleID: cycle.id,
+            identifier: cycle.virtueID,
+            title: pathway.title,
+            practice: cycle.practice.instruction,
+            scriptureTitle: encounter.reference.homeDisplayName,
+            scriptureReference: reference,
+            checkInStatus: formation.checkIn(for: cycle.id, on: date, calendar: calendar)?.status,
+            isPaused: cycle.status == .paused
+        )
     }
 
     private static let virtues: [HomeVirtueFocus] = [
@@ -178,11 +211,25 @@ enum HomeTodayRecommendations {
             preconditionFailure("Invalid bundled virtue Scripture reference: \(bookID) \(chapter)")
         }
         return HomeVirtueFocus(
+            cycleID: nil,
             identifier: identifier,
             title: title,
             practice: practice,
             scriptureTitle: scriptureTitle,
-            scriptureReference: reference
+            scriptureReference: reference,
+            checkInStatus: nil,
+            isPaused: false
         )
+    }
+}
+
+extension CanonicalScriptureReference {
+    fileprivate var homeDisplayName: String {
+        let book = CatholicCanon.book(osisID: bookID)?.displayName ?? bookID
+        guard let verseStart else { return "\(book) \(chapter)" }
+        guard let verseEnd, verseEnd != verseStart else {
+            return "\(book) \(chapter):\(verseStart)"
+        }
+        return "\(book) \(chapter):\(verseStart)–\(verseEnd)"
     }
 }

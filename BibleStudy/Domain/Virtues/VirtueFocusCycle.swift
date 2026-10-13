@@ -82,11 +82,38 @@ struct VirtueFocusCycle: Identifiable, Codable, Equatable, Sendable {
 
 struct VirtueFormationState: Codable, Equatable, Sendable {
     var cycles: [VirtueFocusCycle]
+    var checkIns: [VirtueCheckIn]
 
-    static let empty = VirtueFormationState(cycles: [])
+    init(cycles: [VirtueFocusCycle] = [], checkIns: [VirtueCheckIn] = []) {
+        self.cycles = cycles
+        self.checkIns = checkIns
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case cycles
+        case checkIns
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        cycles = try container.decodeIfPresent([VirtueFocusCycle].self, forKey: .cycles) ?? []
+        checkIns = try container.decodeIfPresent([VirtueCheckIn].self, forKey: .checkIns) ?? []
+    }
+
+    static let empty = VirtueFormationState()
 
     var currentCycle: VirtueFocusCycle? {
         cycles.last { $0.status == .active || $0.status == .paused }
+    }
+
+    func checkIn(
+        for cycleID: UUID,
+        on date: Date,
+        calendar: Calendar = .current
+    ) -> VirtueCheckIn? {
+        checkIns.last {
+            $0.cycleID == cycleID && calendar.isDate($0.occurredAt, inSameDayAs: date)
+        }
     }
 }
 
@@ -97,6 +124,7 @@ enum VirtueFocusCycleError: Error, Equatable {
     case activeCycleExists
     case cycleNotFound
     case invalidTransition
+    case checkInWhilePaused
 }
 
 enum VirtueFocusCycleEngine {
@@ -184,5 +212,38 @@ enum VirtueFocusCycleEngine {
         state.cycles[index].status = .completed
         state.cycles[index].pausedAt = nil
         state.cycles[index].completedAt = date
+    }
+
+    static func recordCheckIn(
+        cycleID: UUID,
+        status: VirtueCheckInStatus,
+        privateObservation: String?,
+        in state: inout VirtueFormationState,
+        at date: Date = .now,
+        calendar: Calendar = .current
+    ) throws {
+        guard let cycle = state.cycles.first(where: { $0.id == cycleID }) else {
+            throw VirtueFocusCycleError.cycleNotFound
+        }
+        guard cycle.status == .active else {
+            throw VirtueFocusCycleError.checkInWhilePaused
+        }
+        let observation = privateObservation?
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        let existing = state.checkIn(for: cycleID, on: date, calendar: calendar)
+        state.checkIns.removeAll {
+            $0.cycleID == cycleID && calendar.isDate($0.occurredAt, inSameDayAs: date)
+        }
+        state.checkIns.append(
+            VirtueCheckIn(
+                id: existing?.id ?? UUID(),
+                cycleID: cycleID,
+                virtueID: cycle.virtueID,
+                practiceID: cycle.practice.id,
+                status: status,
+                occurredAt: date,
+                privateObservation: observation?.isEmpty == false ? observation : nil
+            )
+        )
     }
 }

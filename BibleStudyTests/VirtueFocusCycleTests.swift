@@ -119,6 +119,77 @@ final class VirtueFocusCycleTests: XCTestCase {
         XCTAssertEqual(restored.currentCycle?.practice.id, practice.id)
     }
 
+    func testDailyCheckInUpdatesSameDayWithoutScoringAndKeepsObservationPrivate() throws {
+        let checkInDate = try date(2026, 10, 13)
+        let practice = try XCTUnwrap(VirtueFoundationLibrary.patience.practices.first)
+        var state = VirtueFormationState.empty
+        let cycleID = try VirtueFocusCycleEngine.start(
+            in: &state,
+            virtueID: .patience,
+            context: .difficultSeason,
+            practice: practice,
+            duration: .oneWeek,
+            at: checkInDate
+        )
+
+        try VirtueFocusCycleEngine.recordCheckIn(
+            cycleID: cycleID,
+            status: .noticedOpportunity,
+            privateObservation: "  Private detail  ",
+            in: &state,
+            at: checkInDate,
+            calendar: fixedCalendar
+        )
+        try VirtueFocusCycleEngine.recordCheckIn(
+            cycleID: cycleID,
+            status: .practiced,
+            privateObservation: "  Revised private detail  ",
+            in: &state,
+            at: checkInDate.addingTimeInterval(3_600),
+            calendar: fixedCalendar
+        )
+
+        let checkIn = try XCTUnwrap(state.checkIns.first)
+        XCTAssertEqual(state.checkIns.count, 1)
+        XCTAssertEqual(checkIn.status, .practiced)
+        XCTAssertEqual(checkIn.privateObservation, "Revised private detail")
+        let metadata = try JSONEncoder().encode(checkIn.shareableMetadata)
+        XCTAssertFalse(String(decoding: metadata, as: UTF8.self).contains("Revised private detail"))
+    }
+
+    func testPausedCycleRejectsCheckInWithoutChangingState() throws {
+        let practice = try XCTUnwrap(VirtueFoundationLibrary.patience.practices.first)
+        var state = VirtueFormationState.empty
+        let cycleID = try VirtueFocusCycleEngine.start(
+            in: &state,
+            virtueID: .patience,
+            context: .difficultSeason,
+            practice: practice,
+            duration: .oneWeek
+        )
+        try VirtueFocusCycleEngine.pause(cycleID: cycleID, in: &state)
+
+        XCTAssertThrowsError(
+            try VirtueFocusCycleEngine.recordCheckIn(
+                cycleID: cycleID,
+                status: .practiced,
+                privateObservation: nil,
+                in: &state
+            )
+        ) { error in
+            XCTAssertEqual(error as? VirtueFocusCycleError, .checkInWhilePaused)
+        }
+        XCTAssertTrue(state.checkIns.isEmpty)
+    }
+
+    func testLegacyCyclePayloadDecodesWithEmptyCheckIns() throws {
+        let state = try JSONDecoder().decode(
+            VirtueFormationState.self,
+            from: Data(#"{"cycles":[]}"#.utf8)
+        )
+        XCTAssertEqual(state, .empty)
+    }
+
     private var fixedCalendar: Calendar {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(secondsFromGMT: 0)!
