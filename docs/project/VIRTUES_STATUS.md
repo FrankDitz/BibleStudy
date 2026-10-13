@@ -1,8 +1,8 @@
-# Seven Virtues Formation Status
+# Virtue Study and Formation Status
 
 **Phase:** 4A — Seven Virtues formation  
-**Current deliverable:** BS-0457 — Formation Record and app/hub integrations
-**Status:** Complete; verification passed
+**Current deliverable:** BS-0459–BS-0463 — textbook-like virtue curriculum pivot
+**Status:** Implemented and technically verified; qualified Catholic review pending
 **Started:** 2026-10-13
 **Verified:** 2026-10-13
 
@@ -13,6 +13,9 @@
 - Completing the seven Foundations pathways is an introduction, not an endpoint. Continuing formation uses repeatable Focus Cycles and an owner-selected Rule of Life.
 - Progress reports factual participation and owner-written observations. The app never computes virtue scores, ranks, mastery, inferred weaknesses, or moral judgments.
 - Learning owns Catholic rituals, sacraments and initiation, prayer, liturgical seasons and holy days, devotions, and practical participation in Church life.
+- The primary Virtues experience is now learning-first: a foundation course, four cardinal-virtue courses, and seven Christian-virtue courses. Focus Cycles and the Rule of Life are secondary application tools.
+- Course completion records lessons studied. It never represents virtue mastery, holiness, culpability, or moral worth.
+- Joseph Rickaby’s 1908 *Four-Square* informs the course architecture as a historical secondary source. Current Catechism and universal-Church teaching govern definitions and pastoral framing.
 
 ## Deliverables
 
@@ -26,6 +29,17 @@
 | BS-0456 | Practice library, thematic journeys, and Rule of Life | Complete |
 | BS-0457 | Formation Record and app/hub integrations | Complete |
 | BS-0458 | Privacy, accessibility, export/delete, and release acceptance | Not started |
+| BS-0459 | Curriculum architecture and source method | Complete |
+| BS-0460 | Textbook-like course library, preview, lesson reader, and resume | Complete |
+| BS-0461 | Foundation and four cardinal-virtue curricula | Implemented as source-checked drafts; Catholic review pending |
+| BS-0462 | Seven Christian-virtue curricula | Implemented from the existing source-checked pathways; Catholic review pending |
+| BS-0463 | Practice bridge, persistence, accessibility, and acceptance | Complete |
+
+## Learning-first curriculum pivot
+
+The Virtues tab now presents twelve courses: one six-lesson foundation, four five-lesson cardinal-virtue courses, and seven four-lesson Christian-virtue courses. Every course exposes its full outline, estimated study time, purpose, source trail, and review status before the owner begins. Every lesson contains coherent teaching, one or more Catholic-canon Scripture routes, reflection prompts, and exact source identifiers. Progress is local, reversible, backward-compatible with existing formation payloads, and expressed only as lessons completed.
+
+The earlier Focus Cycle, practice library, thematic journey, Rule of Life, Formation Record, and Echo features remain available under **Live what you learn**. Existing data is preserved; these tools no longer dominate the tab or stand in for teaching.
 
 ## BS-0452 implementation
 
@@ -59,11 +73,11 @@ The Formation Record presents only owner-recorded facts: cycles begun and closed
 - Privacy tests prove the shareable check-in projection cannot represent a private observation.
 - All macOS unit and contract tests pass.
 - The generic iOS Simulator app and UI-test bundle build successfully.
-- A focused macOS UI test and live accessibility inspection confirm the first-class Virtues destination, formation journey, seven pathways, and privacy statement.
+- A focused macOS UI test and live accessibility inspection confirm the learning-first landing page, honest course preview, complete lesson outline, lesson reader, Scripture route, source trail, and practice bridge.
 - Strict Swift formatting and whitespace checks pass.
 - Seven-pathway library tests verify complete content, unique identifiers, official Vatican sources, Catholic-canon Scripture references, and fail-closed review state.
 - Each pathway detail provides an inspectable source trail and preserves the no-score, no-mastery formation boundary.
 
 ## Next deliverable
 
-BS-0458 completes virtue-specific privacy controls, export/delete, migration coverage, accessibility identifiers, and release acceptance. Qualified Catholic review is still required to close BS-0452 formally; unapproved content remains visibly gated.
+Have a qualified Catholic reviewer use `docs/content/VIRTUE_CURRICULUM_REVIEW_PACKET.md` before changing the visible review state. The next engineering deliverable is the deferred BS-0458 export/delete and release-acceptance work.

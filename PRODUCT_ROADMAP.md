@@ -27,7 +27,7 @@ The personal-use release is a local-first formation app that uses the YouVersion
 | 2. Bible vertical slice | Scripture is pleasant and dependable to read | Canon browser, chapter reader, version picker, navigation, search, highlights, notes, bookmarks, offline behavior | A user can read front-to-back and resume reliably |
 | 3. Plans | Reading goals become actionable and accountable | Premade plans, custom plan builder, schedule engine, day checklist, reminders, catch-up choices, progress | Plan math passes edge cases and a plan works end-to-end |
 | 4. Daily formation | The app feels like a coherent Catholic companion | Home dashboard, Learning MVP, Echo reflection handoff, source/reviewer metadata | A complete daily loop works without dead ends |
-| 4A. Seven Virtues formation | Scripture and reflection become lifelong character practice | First-class Virtues destination, Foundations Journey, repeatable Focus Cycles, Rule of Life, Echo handoff, private formation record | All seven pathways support continuing practice and honest review without scoring holiness |
+| 4A. Virtue study and formation | Catholic teaching and Scripture become an intelligible path toward virtuous life | First-class Virtues destination, foundation course, four cardinal-virtue courses, seven daily-life virtue courses, optional practice tools, private study record | Every virtue has a coherent source-backed course and Scripture path; study progress never claims moral mastery |
 | 5. Personalization and hub | The experience persists across devices and belongs in the hub | You, private analytics, milestones, iCloud sync, deep links, import/export, hub events | iPhone/Mac state converges and hub journeys work |
 | 6. Narrated Bible | Listening is first-class where rights allow it | Licensed audio provider, background player, lock-screen controls, chapter queue, optional verse timecodes | Playback survives interruptions and text/audio stay aligned |
 | 7. Hardening and personal release | A trustworthy owner-only v1.0 is ready | Accessibility, performance, content/legal QA, direct-device testing, migration and recovery tests, release checklist | No personal-release blocker remains |
@@ -365,28 +365,30 @@ Examples: first plan started, first Gospel completed, seven reading days, first 
 - Sources, translation rights, audio credits, learning reviewers, privacy, and app version.
 - Diagnostic sharing is off by default.
 
-## 3.6 Seven Virtues formation
+## 3.6 Virtue study and formation
 
 ### Purpose
 
-Help the owner intentionally cultivate the seven Christian virtues—chastity, temperance, charity, diligence, patience, kindness, and humility—through Catholic teaching, Scripture, concrete practice, and honest reflection. The feature measures participation and consistency, never a person’s holiness, moral worth, or standing before God.
+Teach the owner the four cardinal virtues—prudence, justice, fortitude, and temperance—and the seven Christian virtues used by this app—chastity, temperance, charity, diligence, patience, kindness, and humility—in enough depth that Scripture and Catholic moral teaching can shape ordinary choices. The primary experience is a calm, textbook-like course library. Practice and reflection remain important, but follow understanding rather than replacing it. The feature records study and voluntary participation, never a person’s holiness, moral worth, or standing before God.
 
-### Formation model
+### Learning model
 
-Each virtue follows the same calm, repeatable path:
+The tab is organized as a small virtue academy with the least possible navigation depth:
 
-1. **Understand** — a short, reviewed explanation of the virtue, its distortions, and its place in Catholic life.
-2. **Encounter Scripture** — a small set of licensed passages rendered by the Bible reader, with context rather than proof-texting.
-3. **Choose a practice** — one concrete, time-bounded action selected by the owner; suggestions remain optional.
-4. **Notice** — a private daily check-in records completed, skipped, or reflected without points, grades, public streaks, or shame language.
-5. **Reflect** — an explicit handoff opens Echo with the selected virtue, prompt, and canonical Scripture references; Echo owns the journal entry.
-6. **Review** — a weekly view shows practices attempted, reflections opened, and self-written observations without claiming virtue attainment.
+1. **Start Here: How a Virtuous Life Grows** — six lessons on stable dispositions, human acts and freedom, habit, the four hinges, grace, and imitation of Christ.
+2. **The Four Cardinal Virtues** — four clickable courses grounded in CCC 1803–1811, Wisdom 8:7, Joseph Rickaby’s *Four-Square*, and contemporary Church catechesis.
+3. **Seven Virtues for Daily Life** — seven clickable courses with Catholic meaning, common distortions, pastoral boundaries, Scripture in context, and concrete practice.
+4. **Course preview** — every course shows its purpose, honest overview, complete lesson breakdown, estimated time, source trail, and review status before the owner begins.
+5. **Lesson reader** — each lesson teaches one coherent idea, opens relevant passages in the licensed Bible reader, offers questions for consideration, and identifies its exact sources.
+6. **Factual study progress** — the app records lessons opened and completed, supports completion reversal, and resumes the most recent course. “Complete” means studied, never virtuous or mastered.
 
-Completing all seven introductory pathways completes **Foundations**, not the work of virtue formation. The continuing system has three layers:
+### From study to practice
 
-1. **Foundations Journey** — one guided introductory week for each virtue, ending with a retained practice and closing reflection.
-2. **Focus Cycles** — repeatable owner-selected one-, two-, or four-week cycles tied to a life context and one concrete practice.
-3. **Rule of Life** — a revisable set of practices the owner deliberately retains across virtues. It is a personal aid, not a generated moral rule or substitute for pastoral guidance.
+Completing a course is intellectual progress, not the endpoint of formation. A secondary **Live what you learn** area preserves the existing practice system:
+
+1. **Focus Cycles** — repeatable owner-selected one-, two-, or four-week cycles tied to one concrete practice.
+2. **Private check-ins and review** — factual participation plus owner-written reflection without points, grades, punitive streaks, or automated judgment.
+3. **Rule of Life** — a revisable set of practices the owner deliberately retains. It is a personal aid, not a generated moral rule or substitute for pastoral guidance.
 
 ### The seven pathways
 
@@ -400,7 +402,14 @@ Completing all seven introductory pathways completes **Foundations**, not the wo
 | Kindness | Gentle, generous action that makes charity tangible | Offer specific encouragement, help without being asked, speak with deliberate gentleness |
 | Humility | Living truthfully before God without self-exaltation or self-contempt | Admit a mistake, ask for help, accept unnoticed service, practice gratitude |
 
-These descriptions are product-planning summaries, not publishable catechesis. Final pathway language, Scripture choices, practices, and examen prompts require the same source, jurisdiction, copyright, and Catholic-review controls as Learning content. The UI must distinguish `christian.temperance` from `cardinal.temperance` even when teaching their relationship.
+These descriptions are product-planning summaries, not independently authoritative catechesis. Course language, Scripture choices, practices, and reflection prompts require the same source, copyright, freshness, and Catholic-review controls as Learning content. The UI distinguishes `christian.temperance` from `cardinal.temperance` while explicitly teaching their relationship.
+
+### Source method
+
+- Joseph Rickaby’s 1908 *Four-Square, or The Cardinal Virtues* is a historical secondary source for the intellectual architecture: virtue as stable habit, the four virtues as hinges, human acts and freedom, endurance under fortitude, justice and charity, religion under justice, humility joined to magnanimity, and acquired virtue elevated by grace.
+- Current Catechism teaching and contemporary universal-Church catechesis govern definitions and present pastoral framing.
+- Dated rhetoric, obsolete examples, unqualified clinical claims, and historically situated political or social assertions are not carried into the app as Catholic doctrine.
+- Scripture appears through canonical references opened in the licensed Bible reader, preserving translation rights and passage context instead of embedding unlicensed quotation text.
 
 ### Experience and safeguards
 
@@ -417,22 +426,20 @@ These descriptions are product-planning summaries, not publishable catechesis. F
 
 ### Deliverables
 
-1. **Formation foundation and navigation** — first-class Virtues destination, namespaced identifiers, provenance, source, review, freshness, pastoral-boundary, practice, check-in, and privacy contracts.
-2. **Foundations Journey** — seven reviewed introductions, one per virtue, each completing understand → Scripture → practice → notice → reflect → review.
-3. **Focus Cycles** — owner-selected virtue, life context, one-/two-/four-week duration, practice selection, graceful pause/return, and truthful cycle state.
-4. **Daily practice and check-ins** — Home card plus practiced, noticed an opportunity, chose differently, not applicable, and reflected-in-Echo states; optional private observation.
-5. **Weekly and cycle review** — factual activity summary, beginning/ending “Then and Now” prompts, retained-practice decision, and continue/change/close actions.
-6. **Practice library and thematic journeys** — reviewed practices by context and commitment plus cross-virtue journeys such as work, relationships, digital life, speech, and liturgical seasons.
-7. **Personal Rule of Life** — owner-selected retained practices with revision history and clear non-authoritative framing.
-8. **Formation record and motivation** — pathway/cycle history, contexts, reviews, retained practices, quiet participation milestones, and annual review without virtue scores or mastery claims.
-9. **App and hub integration** — Scripture, Home, Plans, Echo, You, and future Ambition connections share one virtue identity and transmit only allowlisted metadata.
-10. **Trust and release acceptance** — independent export/delete, content fixtures, accessibility, privacy/redaction, migration, iPhone, and Mac coverage.
+1. **Curriculum foundation and source synthesis** — stable course/lesson/source/review models; complete reading of Rickaby; current Catechism and Church-source reconciliation; explicit historical-source guardrails.
+2. **Course library experience** — Start Here hero, four cardinal cards, seven Christian-virtue cards, honest previews, complete outlines, estimated time, sources, and recent-course resume.
+3. **Foundations and cardinal curriculum** — six foundation lessons plus five lessons each for prudence, justice, fortitude, and cardinal temperance.
+4. **Seven Christian-virtue curriculum** — four lessons per virtue covering meaning, distortions and pastoral boundaries, Scripture in context, and daily-life application.
+5. **Study progress and Scripture integration** — local lesson completion, reversible state, recent-course restoration, Bible-reader routes, backward-compatible decoding, and no virtue score.
+6. **Practice companion** — preserve Focus Cycles, daily check-ins, weekly review, practice library, thematic journeys, Rule of Life, Formation Record, and Echo handoff as optional application tools.
+7. **Content review and release acceptance** — qualified Catholic review, source fixtures, copyright checks, accessibility, privacy/redaction, migration, iPhone, and Mac tests.
 
 ### Exit criteria
 
-- The owner can select any of the seven virtues, complete a practice, open a related passage, reflect in Echo, and review the week without a dead end.
-- After Foundations, the owner can begin unlimited Focus Cycles, retain practices in a Rule of Life, and review a factual formation history without an artificial endpoint.
-- All seven pathways have approved Catholic sources/review, visible freshness metadata, and tested Scripture links.
+- The owner can preview and begin the foundation course, any cardinal virtue, or any of the seven daily-life virtues without navigating through a tracker first.
+- Every course presents a coherent lesson sequence, exact sources, contextual Scripture routes, and factual reversible completion.
+- After study, the owner can begin unlimited Focus Cycles, retain practices in a Rule of Life, and review factual formation history without an artificial endpoint.
+- All courses have approved Catholic review, visible freshness metadata, and tested Scripture links before public distribution.
 - No score, rank, streak loss, automated moral judgment, or private reflection text crosses the module boundary.
 - Accessibility, persistence, export/delete, and hub-contract tests pass on iPhone and Mac.
 
@@ -835,7 +842,7 @@ Do not generate text-to-speech from a copyrighted translation unless its license
 - Every published article passes doctrinal/editorial and copyright review.
 - Bible Study does not duplicate Echo entries.
 
-## Phase 4A — Seven Virtues formation
+## Phase 4A — Virtue study and formation
 
 ### Deliverables
 
@@ -847,11 +854,16 @@ Do not generate text-to-speech from a copyrighted translation unless its license
 6. **BS-0456 — Practice library, thematic journeys, and Rule of Life:** reviewed practices by context, cross-virtue application journeys, and a revisable owner-selected rule.
 7. **BS-0457 — Formation record and integrations:** private history and participation milestones plus Scripture, Plans, Echo, You, Hub, and future Ambition boundaries.
 8. **BS-0458 — Trust and release acceptance:** independent export/delete, migration, accessibility, content-review fixtures, privacy/redaction, iPhone, and Mac tests.
+9. **BS-0459 — Curriculum architecture and source method:** course/lesson/progress contracts, complete Rickaby synthesis, current Catholic source reconciliation, and historical-source guardrails.
+10. **BS-0460 — Textbook-like course experience:** Start Here, grouped virtue cards, honest course previews, lesson reader, course outline, sources, and recent-course resume.
+11. **BS-0461 — Foundations and four cardinal courses:** six foundation lessons plus five lessons each for prudence, justice, fortitude, and temperance with contextual Scripture routes.
+12. **BS-0462 — Seven Christian-virtue courses:** four lessons each for chastity, temperance, charity, diligence, patience, kindness, and humility, reusing reviewed pathway material where appropriate.
+13. **BS-0463 — Practice bridge and acceptance:** keep existing formation tools secondary to study; verify backward-compatible progress, accessibility, iPhone/Mac presentation, privacy, and content review state.
 
 ### Exit criteria
 
-- Every pathway completes the understand → Scripture → practice → notice → reflect → review loop.
-- Foundations leads into unlimited Focus Cycles, an owner-selected Rule of Life, and a factual long-term Formation Record.
+- Every virtue card opens an honest preview and a complete teach → Scripture → consider → apply lesson sequence.
+- Study leads into optional Focus Cycles, an owner-selected Rule of Life, and a factual long-term Formation Record.
 - A qualified Catholic review route approves all published formation content and sensitive pastoral language.
 - The owner can remove the complete virtue history without deleting Scripture annotations or Echo entries.
 - No private check-in or reflection text enters provider requests, logs, analytics, or hub events.
