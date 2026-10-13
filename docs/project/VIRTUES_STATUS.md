@@ -1,7 +1,7 @@
 # Seven Virtues Formation Status
 
 **Phase:** 4A — Seven Virtues formation  
-**Current deliverable:** BS-0455 — Weekly review and Then/Now reflection
+**Current deliverable:** BS-0456 — Practice library, thematic journeys, and Rule of Life
 **Status:** Complete; verification passed
 **Started:** 2026-10-13
 **Verified:** 2026-10-13
@@ -23,7 +23,7 @@
 | BS-0453 | Repeatable owner-selected Focus Cycles | Complete |
 | BS-0454 | Daily practice and private check-ins | Complete |
 | BS-0455 | Weekly review and Then/Now reflection | Complete |
-| BS-0456 | Practice library, thematic journeys, and Rule of Life | Not started |
+| BS-0456 | Practice library, thematic journeys, and Rule of Life | Complete |
 | BS-0457 | Formation Record and app/hub integrations | Not started |
 | BS-0458 | Privacy, accessibility, export/delete, and release acceptance | Not started |
 
@@ -45,6 +45,10 @@ The active practice replaces Home's generic weekly rotation and may be checked i
 
 Each cycle now has a prayerful weekly review built from the owner's factual check-in history. The review shows days engaged and the recorded check-in states without scores or moral conclusions, preserves the owner's optional beginning reflection as “Then,” requires the owner to write “Now,” and offers deliberate continue, change, retain, or close decisions. Submitting the same week's review updates that review instead of duplicating it. Pauses remain neutral and do not turn unrecorded days into failures.
 
+## BS-0456 implementation
+
+The full set of Foundation practices is now browsable by life context and commitment size, and any compatible practice can seed a Focus Cycle. Five context-driven thematic journeys connect multiple virtues for faithful work, speech and relationships, digital freedom, service and community, and difficult seasons. Each journey carries exact Vatican sources, remains visibly marked as a source-checked draft pending Catholic review, and supports discernment rather than imposing a rigid program. Choosing “Retain” in a cycle review adds that concrete practice to the owner's Rule of Life; practices can be retired and restored without erasing their revision history.
+
 ## Verification
 
 - Publication-gate tests cover approved, draft, incomplete, stale, and namespaced-pathway states.
@@ -58,4 +62,4 @@ Each cycle now has a prayerful weekly review built from the owner's factual chec
 
 ## Next deliverable
 
-BS-0456 adds a browsable practice library, source-checked thematic journeys, and an owner-curated Rule of Life. Qualified Catholic review is still required to close BS-0452 formally; unapproved content remains visibly gated.
+BS-0457 adds a factual Formation Record plus explicit Echo and hub integration contracts. Qualified Catholic review is still required to close BS-0452 formally; unapproved content remains visibly gated.

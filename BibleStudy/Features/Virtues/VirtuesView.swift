@@ -19,6 +19,7 @@ struct VirtuesView: View {
                     introduction
                     formationJourney
                     focusCycle
+                    continuingFormation
                     pathwayGrid
                     privacyNote
                 }
@@ -30,6 +31,64 @@ struct VirtuesView: View {
             .navigationTitle("Virtues")
         }
         .accessibilityIdentifier("virtues-root")
+    }
+
+    private var continuingFormation: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Continuing formation")
+                .font(AppTypography.sectionTitle)
+            NavigationLink {
+                VirtuePracticeLibraryView()
+            } label: {
+                formationLink(
+                    title: "Practice Library",
+                    detail: "Find a concrete practice by life context and commitment.",
+                    systemImage: "books.vertical"
+                )
+            }
+            NavigationLink {
+                VirtueThematicJourneysView()
+            } label: {
+                formationLink(
+                    title: "Thematic Journeys",
+                    detail:
+                        "Follow source-checked practices for work, relationships, digital life, service, or a difficult season.",
+                    systemImage: "map"
+                )
+            }
+            NavigationLink {
+                VirtueRuleOfLifeView()
+            } label: {
+                formationLink(
+                    title: "My Rule of Life",
+                    detail: "Keep and revise the practices you deliberately choose to carry forward.",
+                    systemImage: "leaf"
+                )
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("virtues-continuing-formation")
+    }
+
+    private func formationLink(title: String, detail: String, systemImage: String) -> some View {
+        FeatureCard {
+            HStack(spacing: 14) {
+                Image(systemName: systemImage)
+                    .font(.title2)
+                    .foregroundStyle(AppTheme.accent)
+                    .frame(width: 36)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(.headline)
+                    Text(detail)
+                        .foregroundStyle(AppTheme.supportingText)
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .foregroundStyle(.secondary)
+                    .accessibilityHidden(true)
+            }
+        }
     }
 
     private var currentCycle: VirtueFocusCycle? {

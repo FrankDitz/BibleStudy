@@ -5,12 +5,25 @@ struct VirtueFocusCycleSetupView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
 
-    @State private var virtueID = VirtueIdentifier.charity
-    @State private var context = VirtuePracticeContext.relationships
+    @State private var virtueID: VirtueIdentifier
+    @State private var context: VirtuePracticeContext
     @State private var duration = VirtueCycleDuration.oneWeek
-    @State private var practiceID = "charity-attentive-presence"
+    @State private var practiceID: String
     @State private var beginningReflection = ""
     @State private var errorMessage: String?
+    private let origin: VirtueCycleOrigin
+
+    init(
+        virtueID: VirtueIdentifier = .charity,
+        context: VirtuePracticeContext = .relationships,
+        practiceID: String = "charity-attentive-presence",
+        origin: VirtueCycleOrigin = .focusCycle
+    ) {
+        _virtueID = State(initialValue: virtueID)
+        _context = State(initialValue: context)
+        _practiceID = State(initialValue: practiceID)
+        self.origin = origin
+    }
 
     var body: some View {
         Form {
@@ -133,6 +146,7 @@ struct VirtueFocusCycleSetupView: View {
                     context: context,
                     practice: selectedPractice,
                     duration: duration,
+                    origin: origin,
                     beginningReflection: beginningReflection
                 )
             }

@@ -88,21 +88,29 @@ struct VirtueFormationState: Codable, Equatable, Sendable {
     var cycles: [VirtueFocusCycle]
     var checkIns: [VirtueCheckIn]
     var reviews: [VirtueCycleReview]
+    var rulePractices: [VirtueRulePractice]
+    var ruleRevisions: [VirtueRuleRevision]
 
     init(
         cycles: [VirtueFocusCycle] = [],
         checkIns: [VirtueCheckIn] = [],
-        reviews: [VirtueCycleReview] = []
+        reviews: [VirtueCycleReview] = [],
+        rulePractices: [VirtueRulePractice] = [],
+        ruleRevisions: [VirtueRuleRevision] = []
     ) {
         self.cycles = cycles
         self.checkIns = checkIns
         self.reviews = reviews
+        self.rulePractices = rulePractices
+        self.ruleRevisions = ruleRevisions
     }
 
     private enum CodingKeys: String, CodingKey {
         case cycles
         case checkIns
         case reviews
+        case rulePractices
+        case ruleRevisions
     }
 
     init(from decoder: Decoder) throws {
@@ -110,6 +118,10 @@ struct VirtueFormationState: Codable, Equatable, Sendable {
         cycles = try container.decodeIfPresent([VirtueFocusCycle].self, forKey: .cycles) ?? []
         checkIns = try container.decodeIfPresent([VirtueCheckIn].self, forKey: .checkIns) ?? []
         reviews = try container.decodeIfPresent([VirtueCycleReview].self, forKey: .reviews) ?? []
+        rulePractices =
+            try container.decodeIfPresent([VirtueRulePractice].self, forKey: .rulePractices) ?? []
+        ruleRevisions =
+            try container.decodeIfPresent([VirtueRuleRevision].self, forKey: .ruleRevisions) ?? []
     }
 
     static let empty = VirtueFormationState()
@@ -147,6 +159,7 @@ enum VirtueFocusCycleEngine {
         context: VirtuePracticeContext,
         practice: VirtuePracticeDefinition,
         duration: VirtueCycleDuration,
+        origin: VirtueCycleOrigin = .focusCycle,
         beginningReflection: String? = nil,
         at date: Date = .now
     ) throws -> UUID {
@@ -172,6 +185,7 @@ enum VirtueFocusCycleEngine {
             context: context,
             practice: practice,
             duration: duration,
+            origin: origin,
             startedAt: date,
             beginningReflection: beginningReflection
         )
@@ -367,6 +381,10 @@ enum VirtueReviewEngine {
         )
         state.reviews.removeAll { $0.cycleID == cycleID && $0.weekIndex == weekIndex }
         state.reviews.append(review)
+
+        if decision == .retainPractice {
+            VirtueRuleOfLifeEngine.retain(cycle: cycle, in: &state, at: date)
+        }
 
         if decision != .continuePractice {
             state.cycles[cycleIndex].status = .completed

@@ -281,6 +281,9 @@ final class VirtueFocusCycleTests: XCTestCase {
         XCTAssertEqual(state.reviews.first?.nowObservation, "Revised wording")
         XCTAssertEqual(state.cycles.first?.status, .completed)
         XCTAssertNil(state.currentCycle)
+        XCTAssertEqual(state.rulePractices.count, 1)
+        XCTAssertEqual(state.rulePractices.first?.practice.id, practice.id)
+        XCTAssertEqual(state.ruleRevisions.map(\.action), [.retained])
     }
 
     func testReviewRequiresOwnerWrittenNowReflection() throws {
@@ -307,6 +310,58 @@ final class VirtueFocusCycleTests: XCTestCase {
         }
         XCTAssertTrue(state.reviews.isEmpty)
         XCTAssertEqual(state.currentCycle?.status, .active)
+    }
+
+    func testPracticeLibraryFiltersByContextAndCommitment() {
+        let entries = VirtuePracticeLibrary.filtered(
+            context: .digitalLife,
+            commitment: .small
+        )
+
+        XCTAssertFalse(entries.isEmpty)
+        XCTAssertTrue(entries.allSatisfy { $0.practice.contexts.contains(.digitalLife) })
+        XCTAssertTrue(entries.allSatisfy { $0.practice.commitment == .small })
+        XCTAssertEqual(Set(VirtuePracticeLibrary.entries.map(\.id)).count, VirtuePracticeLibrary.entries.count)
+    }
+
+    func testThematicJourneyStagesResolveToPracticesForTheirContext() {
+        XCTAssertFalse(VirtueThematicJourneyLibrary.journeys.isEmpty)
+        for journey in VirtueThematicJourneyLibrary.journeys {
+            XCTAssertEqual(journey.review.state, .draft)
+            XCTAssertFalse(journey.sources.isEmpty)
+            for stage in journey.stages {
+                let entry = VirtuePracticeLibrary.entry(
+                    virtueID: stage.virtueID,
+                    practiceID: stage.practiceID
+                )
+                XCTAssertNotNil(entry, "Missing practice for \(journey.id).\(stage.id)")
+                XCTAssertTrue(
+                    entry?.practice.contexts.contains(journey.context) == true,
+                    "Practice does not support \(journey.context.rawValue)"
+                )
+            }
+        }
+    }
+
+    func testRuleOfLifeCanBeRevisedWithoutLosingHistory() throws {
+        let practice = try XCTUnwrap(VirtueFoundationLibrary.charity.practices.first)
+        let cycle = VirtueFocusCycle(
+            virtueID: .charity,
+            context: .serviceAndCommunity,
+            practice: practice,
+            duration: .oneWeek
+        )
+        var state = VirtueFormationState.empty
+
+        VirtueRuleOfLifeEngine.retain(cycle: cycle, in: &state, at: .now)
+        let retainedID = try XCTUnwrap(state.rulePractices.first?.id)
+        VirtueRuleOfLifeEngine.retain(cycle: cycle, in: &state, at: .now)
+        VirtueRuleOfLifeEngine.retire(practiceID: retainedID, in: &state)
+        VirtueRuleOfLifeEngine.restore(practiceID: retainedID, in: &state)
+
+        XCTAssertEqual(state.rulePractices.count, 1)
+        XCTAssertTrue(state.rulePractices[0].isActive)
+        XCTAssertEqual(state.ruleRevisions.map(\.action), [.retained, .retired, .restored])
     }
 
     private var fixedCalendar: Calendar {
