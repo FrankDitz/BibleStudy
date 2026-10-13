@@ -41,12 +41,34 @@ enum VirtuePracticeContext: String, Codable, CaseIterable, Sendable {
     case healthAndAppetite
     case serviceAndCommunity
     case difficultSeason
+
+    var title: String {
+        switch self {
+        case .prayer: "Prayer"
+        case .work: "Work"
+        case .family: "Family"
+        case .relationships: "Relationships"
+        case .speechAndConflict: "Speech and conflict"
+        case .digitalLife: "Digital life"
+        case .healthAndAppetite: "Health and appetite"
+        case .serviceAndCommunity: "Service and community"
+        case .difficultSeason: "Difficult season"
+        }
+    }
 }
 
 enum VirtuePracticeCommitment: String, Codable, CaseIterable, Sendable {
     case small
     case ordinary
     case demanding
+
+    var title: String {
+        switch self {
+        case .small: "Small"
+        case .ordinary: "Ordinary"
+        case .demanding: "Demanding"
+        }
+    }
 }
 
 struct VirtuePracticeDefinition: Identifiable, Codable, Equatable, Sendable {

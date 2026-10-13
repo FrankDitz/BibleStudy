@@ -127,11 +127,12 @@ final class PersistenceSchemaTests: XCTestCase {
         XCTAssertEqual(stored?.jurisdictionRawValue, "latin-roman")
     }
 
-    func testMigrationPlanPreservesVersionOneAndAddsPlanStateInVersionTwo() {
-        XCTAssertEqual(BibleStudyMigrationPlan.schemas.count, 2)
+    func testMigrationPlanPreservesEarlierVersionsAndAddsVirtueStateInVersionThree() {
+        XCTAssertEqual(BibleStudyMigrationPlan.schemas.count, 3)
         XCTAssertEqual(BibleStudySchemaV1.versionIdentifier, Schema.Version(1, 0, 0))
         XCTAssertEqual(BibleStudySchemaV2.versionIdentifier, Schema.Version(2, 0, 0))
-        XCTAssertEqual(BibleStudyMigrationPlan.stages.count, 1)
+        XCTAssertEqual(BibleStudySchemaV3.versionIdentifier, Schema.Version(3, 0, 0))
+        XCTAssertEqual(BibleStudyMigrationPlan.stages.count, 2)
     }
 
     private func writeSampleState(to storeURL: URL) throws {

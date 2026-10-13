@@ -215,29 +215,3 @@ extension CanonicalScriptureReference {
         return "\(book) \(chapter):\(verseStart)–\(verseEnd)"
     }
 }
-
-extension VirtuePracticeCommitment {
-    fileprivate var title: String {
-        switch self {
-        case .small: "Small"
-        case .ordinary: "Ordinary"
-        case .demanding: "Demanding"
-        }
-    }
-}
-
-extension VirtuePracticeContext {
-    fileprivate var title: String {
-        switch self {
-        case .prayer: "Prayer"
-        case .work: "Work"
-        case .family: "Family"
-        case .relationships: "Relationships"
-        case .speechAndConflict: "Speech"
-        case .digitalLife: "Digital life"
-        case .healthAndAppetite: "Health"
-        case .serviceAndCommunity: "Service"
-        case .difficultSeason: "Difficult season"
-        }
-    }
-}

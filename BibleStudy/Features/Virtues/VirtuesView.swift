@@ -1,6 +1,11 @@
+import SwiftData
 import SwiftUI
 
 struct VirtuesView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \BibleStudySchemaV3.VirtueFormationRecord.modifiedAt, order: .reverse)
+    private var formationRecords: [BibleStudySchemaV3.VirtueFormationRecord]
+
     let openReading: (CanonicalScriptureReference) -> Void
 
     init(openReading: @escaping (CanonicalScriptureReference) -> Void = { _ in }) {
@@ -13,6 +18,7 @@ struct VirtuesView: View {
                 LazyVStack(alignment: .leading, spacing: AppSpacing.spacious) {
                     introduction
                     formationJourney
+                    focusCycle
                     pathwayGrid
                     privacyNote
                 }
@@ -24,6 +30,67 @@ struct VirtuesView: View {
             .navigationTitle("Virtues")
         }
         .accessibilityIdentifier("virtues-root")
+    }
+
+    private var currentCycle: VirtueFocusCycle? {
+        _ = formationRecords.count
+        return try? VirtueFormationRepository(modelContext: modelContext).state().currentCycle
+    }
+
+    private var focusCycle: some View {
+        Group {
+            if let cycle = currentCycle {
+                NavigationLink {
+                    VirtueActiveCycleView(cycleID: cycle.id)
+                } label: {
+                    FeatureCard {
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack {
+                                Label("Current Focus Cycle", systemImage: "scope")
+                                    .font(.headline)
+                                Spacer()
+                                Text(cycle.status == .paused ? "Paused" : "Day \(cycle.dayNumber(asOf: .now))")
+                                    .font(.caption.bold())
+                                    .foregroundStyle(
+                                        cycle.status == .paused ? AppTheme.warning : AppTheme.success
+                                    )
+                            }
+                            Text(VirtueFoundationLibrary.pathway(for: cycle.virtueID)?.title ?? "Virtue")
+                                .font(.title2.bold())
+                            Text(cycle.practice.title)
+                                .font(.headline)
+                            Text(cycle.practice.instruction)
+                                .foregroundStyle(AppTheme.supportingText)
+                        }
+                    }
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("virtue-current-cycle")
+            } else {
+                NavigationLink {
+                    VirtueFocusCycleSetupView()
+                } label: {
+                    FeatureCard {
+                        HStack(spacing: 14) {
+                            Image(systemName: "scope")
+                                .font(.title2)
+                                .foregroundStyle(AppTheme.accent)
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text("Begin a Focus Cycle")
+                                    .font(.title2.bold())
+                                Text("Choose a virtue, life context, practice, and a one-, two-, or four-week rhythm.")
+                                    .foregroundStyle(AppTheme.supportingText)
+                            }
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("virtue-start-cycle")
+            }
+        }
     }
 
     private var introduction: some View {

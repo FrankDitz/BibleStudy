@@ -3,21 +3,25 @@ import SwiftData
 
 enum BibleStudyMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] {
-        [BibleStudySchemaV1.self, BibleStudySchemaV2.self]
+        [BibleStudySchemaV1.self, BibleStudySchemaV2.self, BibleStudySchemaV3.self]
     }
     static var stages: [MigrationStage] {
         [
             .lightweight(
                 fromVersion: BibleStudySchemaV1.self,
                 toVersion: BibleStudySchemaV2.self
-            )
+            ),
+            .lightweight(
+                fromVersion: BibleStudySchemaV2.self,
+                toVersion: BibleStudySchemaV3.self
+            ),
         ]
     }
 }
 
 enum BibleStudyModelContainer {
     static func make(inMemory: Bool = false, storeURL: URL? = nil) throws -> ModelContainer {
-        let schema = Schema(BibleStudySchemaV2.models)
+        let schema = Schema(BibleStudySchemaV3.models)
         precondition(!inMemory || storeURL == nil, "An in-memory store cannot use a disk URL")
 
         let configuration: ModelConfiguration

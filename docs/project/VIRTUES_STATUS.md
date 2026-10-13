@@ -1,8 +1,8 @@
 # Seven Virtues Formation Status
 
 **Phase:** 4A — Seven Virtues formation  
-**Current deliverable:** BS-0452 — Seven Foundations pathways
-**Status:** Implementation complete; qualified Catholic review pending
+**Current deliverable:** BS-0453 — Repeatable Focus Cycles
+**Status:** Complete; verification passed
 **Started:** 2026-10-13
 **Verified:** 2026-10-13
 
@@ -20,7 +20,7 @@
 | --- | --- | --- |
 | BS-0451 | Formation/provenance/privacy model and first-class navigation | Complete |
 | BS-0452 | Seven reviewed Foundations pathways | Source-checked implementation complete; qualified Catholic approval pending |
-| BS-0453 | Repeatable owner-selected Focus Cycles | Not started |
+| BS-0453 | Repeatable owner-selected Focus Cycles | Complete |
 | BS-0454 | Daily practice and private check-ins | Not started |
 | BS-0455 | Weekly review and Then/Now reflection | Not started |
 | BS-0456 | Practice library, thematic journeys, and Rule of Life | Not started |
@@ -32,6 +32,10 @@
 All seven cards now open complete pathway drafts with teaching, Catholic context, common distortions, three Scripture encounters linked to the Bible reader, three repeatable practice previews, examen prompts, prayer, pastoral boundaries, and exact official sources. The content uses the existing publication gate and a reviewer packet at `docs/content/VIRTUE_FOUNDATIONS_REVIEW_PACKET.md`.
 
 The app labels every pathway **Source-checked draft · Catholic review pending**. It does not claim that generated or source-checked text has received qualified Catholic approval. The gate reports only `notApproved` and `missingReviewDates` for each structurally complete draft.
+
+## BS-0453 implementation
+
+The owner can start an unlimited sequence of Focus Cycles by deliberately choosing one of the seven virtues, a relevant life context, one compatible concrete practice, and a one-, two-, or four-week duration. Only one cycle may be open at once. Pausing freezes elapsed formation time, and returning shifts the target date without penalties, broken-streak language, or lost history. Closing a cycle preserves its factual snapshot and permits the next cycle.
 
 ## Verification
 
@@ -46,4 +50,4 @@ The app labels every pathway **Source-checked draft · Catholic review pending**
 
 ## Next deliverable
 
-Obtain and record qualified Catholic review to close BS-0452 formally. Product engineering can proceed in parallel with BS-0453, repeatable owner-selected Focus Cycles, because the unapproved content remains visibly gated.
+BS-0454 adds private daily check-ins and replaces Home's rotating suggestion with the owner's active practice. Qualified Catholic review is still required to close BS-0452 formally; unapproved content remains visibly gated.
