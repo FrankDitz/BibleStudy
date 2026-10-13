@@ -325,46 +325,22 @@ struct ReadingPlanComposer: Sendable {
     private func makeDays(from groups: [[ReadingUnit]]) -> [ReadingPlanTemplateDay] {
         groups.enumerated().map { dayOffset, units in
             let logicalDayIndex = dayOffset + 1
-            let assignments = assignmentRuns(in: units).enumerated().map {
-                assignmentOffset, run in
+            let assignments = units.enumerated().map { assignmentOffset, unit in
                 let position = assignmentOffset + 1
                 return ReadingPlanAssignment(
                     id: "custom-preview.d\(logicalDayIndex).a\(position)",
                     position: position,
-                    bookID: run.bookID,
-                    startChapter: run.startChapter,
-                    endChapter: run.endChapter,
-                    verseStart: run.verseStart,
-                    verseEnd: run.verseEnd
+                    bookID: unit.bookID,
+                    startChapter: unit.chapter,
+                    endChapter: unit.chapter,
+                    verseStart: unit.verseStart,
+                    verseEnd: unit.verseEnd
                 )
             }
             return ReadingPlanTemplateDay(
                 logicalDayIndex: logicalDayIndex,
                 assignments: assignments
             )
-        }
-    }
-
-    private func assignmentRuns(in units: [ReadingUnit]) -> [AssignmentRun] {
-        units.reduce(into: []) { runs, unit in
-            if let lastIndex = runs.indices.last,
-                runs[lastIndex].verseStart == nil,
-                unit.verseStart == nil,
-                runs[lastIndex].bookID == unit.bookID,
-                runs[lastIndex].endChapter + 1 == unit.chapter
-            {
-                runs[lastIndex].endChapter = unit.chapter
-            } else {
-                runs.append(
-                    AssignmentRun(
-                        bookID: unit.bookID,
-                        startChapter: unit.chapter,
-                        endChapter: unit.chapter,
-                        verseStart: unit.verseStart,
-                        verseEnd: unit.verseEnd
-                    )
-                )
-            }
         }
     }
 
@@ -442,13 +418,6 @@ struct ReadingPlanComposer: Sendable {
         }
     }
 
-    private struct AssignmentRun {
-        let bookID: String
-        let startChapter: Int
-        var endChapter: Int
-        let verseStart: Int?
-        let verseEnd: Int?
-    }
 }
 
 extension Array {

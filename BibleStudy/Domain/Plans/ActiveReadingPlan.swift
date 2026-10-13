@@ -42,6 +42,75 @@ struct ActiveReadingPlanSnapshot: Codable, Identifiable, Hashable, Sendable {
         schedule.first { $0.logicalDayIndex == logicalDayIndex }
     }
 
+    /// Converts snapshots made before chapter-level completion into the current checklist shape.
+    /// The original payload can remain readable while new completion events target one chapter.
+    func separatingChapterAssignments() -> ActiveReadingPlanSnapshot {
+        ActiveReadingPlanSnapshot(
+            id: id,
+            source: source,
+            sourceID: sourceID,
+            sourceRevision: sourceRevision,
+            title: title,
+            summary: summary,
+            versionID: versionID,
+            canonManifestID: canonManifestID,
+            canonManifestRevision: canonManifestRevision,
+            days: days.map { day in
+                let assignments = day.assignments.flatMap { assignment in
+                    separatedAssignments(for: assignment)
+                }.enumerated().map { offset, assignment in
+                    ReadingPlanAssignment(
+                        id: assignment.id,
+                        position: offset + 1,
+                        bookID: assignment.bookID,
+                        startChapter: assignment.startChapter,
+                        endChapter: assignment.endChapter,
+                        verseStart: assignment.verseStart,
+                        verseEnd: assignment.verseEnd
+                    )
+                }
+                return ReadingPlanTemplateDay(
+                    logicalDayIndex: day.logicalDayIndex,
+                    assignments: assignments
+                )
+            },
+            schedule: schedule,
+            eligibleWeekdays: eligibleWeekdays,
+            recoveryPreference: recoveryPreference,
+            reminderTime: reminderTime,
+            coverStyle: coverStyle,
+            createdAt: createdAt
+        )
+    }
+
+    func chapterAssignmentIDsByOriginalID() -> [String: [String]] {
+        Dictionary(
+            uniqueKeysWithValues: days.flatMap { day in
+                day.assignments.map { assignment in
+                    (assignment.id, separatedAssignments(for: assignment).map(\.id))
+                }
+            })
+    }
+
+    private func separatedAssignments(
+        for assignment: ReadingPlanAssignment
+    ) -> [ReadingPlanAssignment] {
+        guard assignment.startChapter < assignment.endChapter,
+            assignment.verseStart == nil
+        else {
+            return [assignment]
+        }
+        return (assignment.startChapter...assignment.endChapter).map { chapter in
+            ReadingPlanAssignment(
+                id: "\(assignment.id).chapter-\(chapter)",
+                position: assignment.position,
+                bookID: assignment.bookID,
+                startChapter: chapter,
+                endChapter: chapter
+            )
+        }
+    }
+
     static func make(
         template: ReadingPlanTemplate,
         startDate: PlanLocalDate,
@@ -77,7 +146,7 @@ struct ActiveReadingPlanSnapshot: Codable, Identifiable, Hashable, Sendable {
             reminderTime: nil,
             coverStyle: coverStyle(for: template.id),
             createdAt: createdAt
-        )
+        ).separatingChapterAssignments()
     }
 
     static func make(
@@ -103,7 +172,7 @@ struct ActiveReadingPlanSnapshot: Codable, Identifiable, Hashable, Sendable {
             reminderTime: preview.draft.reminderTime,
             coverStyle: .burgundy,
             createdAt: createdAt
-        )
+        ).separatingChapterAssignments()
     }
 
     static func coverStyle(for identifier: String) -> ActiveReadingPlanCoverStyle {

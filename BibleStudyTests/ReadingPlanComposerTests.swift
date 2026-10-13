@@ -3,6 +3,16 @@ import XCTest
 @testable import BibleStudy
 
 final class ReadingPlanComposerTests: XCTestCase {
+    func testEveryChapterIsAnIndependentChecklistAssignment() throws {
+        let preview = try composer.preview(
+            draft(scope: .books(["MATT"]), pace: .chaptersPerReadingDay(3))
+        )
+
+        let firstDay = try XCTUnwrap(preview.days.first)
+        XCTAssertEqual(firstDay.assignments.map(\.displayTitle), ["Matthew 1", "Matthew 2", "Matthew 3"])
+        XCTAssertTrue(firstDay.assignments.allSatisfy { $0.chapterCount == 1 })
+    }
+
     private let calendar = makeCalendar(timeZone: "America/New_York")
 
     func testChaptersPerDayUsesOnlyEligibleWeekdaysAndKeepsFinalPartialDay() throws {

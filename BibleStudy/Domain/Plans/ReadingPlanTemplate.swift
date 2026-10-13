@@ -75,6 +75,22 @@ struct ReadingPlanAssignment: Codable, Identifiable, Hashable, Sendable {
         }
     }
 
+    var displayTitle: String {
+        let book = CatholicCanon.book(osisID: bookID)?.displayName ?? bookID
+        let chapterText =
+            startChapter == endChapter
+            ? "\(startChapter)"
+            : "\(startChapter)–\(endChapter)"
+        guard let verseStart else {
+            return "\(book) \(chapterText)"
+        }
+        let verseText =
+            verseEnd == verseStart
+            ? "\(verseStart)"
+            : "\(verseStart)–\(verseEnd ?? verseStart)"
+        return "\(book) \(chapterText):\(verseText)"
+    }
+
     func scriptureReference(versionID: Int) throws -> ScriptureReference {
         try ScriptureReference(
             versionID: versionID,
@@ -397,18 +413,17 @@ enum ReadingPlanTemplateCatalog {
         estimatedDailyMinutes: ClosedRange<Int>,
         dayChapters: [[CanonicalChapter]]
     ) -> ReadingPlanTemplate {
-        let revision = 1
+        let revision = 2
         let days = dayChapters.enumerated().map { dayOffset, chapters in
             let logicalDayIndex = dayOffset + 1
-            let runs = chapterRuns(in: chapters)
-            let assignments = runs.enumerated().map { assignmentOffset, run in
+            let assignments = chapters.enumerated().map { assignmentOffset, chapter in
                 let position = assignmentOffset + 1
                 return ReadingPlanAssignment(
                     id: "\(id).v\(revision).d\(logicalDayIndex).a\(position)",
                     position: position,
-                    bookID: run.bookID,
-                    startChapter: run.startChapter,
-                    endChapter: run.endChapter
+                    bookID: chapter.bookID,
+                    startChapter: chapter.chapter,
+                    endChapter: chapter.chapter
                 )
             }
             return ReadingPlanTemplateDay(
@@ -432,34 +447,9 @@ enum ReadingPlanTemplateCatalog {
             provenance: ReadingPlanTemplateProvenance(
                 author: "Bible Study",
                 reviewer: "Catholic canon validator",
-                revisionDate: PlanLocalDate(year: 2026, month: 10, day: 12)
+                revisionDate: PlanLocalDate(year: 2026, month: 10, day: 13)
             ),
             days: days
         )
-    }
-
-    private static func chapterRuns(in chapters: [CanonicalChapter]) -> [ChapterRun] {
-        chapters.reduce(into: []) { runs, chapter in
-            if let lastIndex = runs.indices.last,
-                runs[lastIndex].bookID == chapter.bookID,
-                runs[lastIndex].endChapter + 1 == chapter.chapter
-            {
-                runs[lastIndex].endChapter = chapter.chapter
-            } else {
-                runs.append(
-                    ChapterRun(
-                        bookID: chapter.bookID,
-                        startChapter: chapter.chapter,
-                        endChapter: chapter.chapter
-                    )
-                )
-            }
-        }
-    }
-
-    private struct ChapterRun {
-        let bookID: String
-        let startChapter: Int
-        var endChapter: Int
     }
 }

@@ -435,18 +435,7 @@ private struct ReadingAssignmentRow: View {
     }
 
     private var title: String {
-        let book = CatholicCanon.book(osisID: assignment.bookID)?.displayName ?? assignment.bookID
-        let chapterText =
-            assignment.startChapter == assignment.endChapter
-            ? "\(assignment.startChapter)"
-            : "\(assignment.startChapter)–\(assignment.endChapter)"
-        guard let verseStart = assignment.verseStart else {
-            return "\(book) \(chapterText)"
-        }
-        let verseText =
-            assignment.verseEnd == verseStart
-            ? "\(verseStart)" : "\(verseStart)–\(assignment.verseEnd ?? verseStart)"
-        return "\(book) \(chapterText):\(verseText)"
+        assignment.displayTitle
     }
 }
 

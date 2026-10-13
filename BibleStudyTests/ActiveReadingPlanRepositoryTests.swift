@@ -159,6 +159,69 @@ final class ActiveReadingPlanRepositoryTests: XCTestCase {
         XCTAssertEqual(resumed.snapshot.schedule, snapshot.schedule)
     }
 
+    func testLegacyRangeBecomesChapterChecklistAndPreservesCompletion() throws {
+        let (repository, context) = try makeRepository()
+        let planID = UUID()
+        let legacyAssignment = ReadingPlanAssignment(
+            id: "legacy.matthew-1-3",
+            position: 1,
+            bookID: "MATT",
+            startChapter: 1,
+            endChapter: 3
+        )
+        let snapshot = ActiveReadingPlanSnapshot(
+            id: planID,
+            source: .template,
+            sourceID: "legacy",
+            sourceRevision: 1,
+            title: "Legacy Plan",
+            summary: "Legacy grouped readings",
+            versionID: 42,
+            canonManifestID: CatholicChapterManifest.cpdvV1.id,
+            canonManifestRevision: CatholicChapterManifest.cpdvV1.revision,
+            days: [
+                ReadingPlanTemplateDay(logicalDayIndex: 1, assignments: [legacyAssignment])
+            ],
+            schedule: [
+                PlanScheduledDay(
+                    logicalDayIndex: 1,
+                    scheduledDate: localDate(2026, 10, 13)
+                )
+            ],
+            eligibleWeekdays: PlanWeekday.everyDay,
+            recoveryPreference: .keepDates,
+            reminderTime: nil,
+            coverStyle: .midnight,
+            createdAt: Date(timeIntervalSince1970: 1)
+        )
+        try repository.activate(snapshot)
+        context.insert(
+            BibleStudySchemaV2.PlanAssignmentCompletionEvent(
+                planID: planID,
+                assignmentID: legacyAssignment.id,
+                action: .completed,
+                occurredAt: Date(timeIntervalSince1970: 2),
+                deviceID: "legacy-device"
+            )
+        )
+        try context.save()
+
+        var state = try XCTUnwrap(repository.activeState())
+        let assignments = try XCTUnwrap(state.snapshot.days.first?.assignments)
+        XCTAssertEqual(assignments.map(\.displayTitle), ["Matthew 1", "Matthew 2", "Matthew 3"])
+        XCTAssertEqual(state.completedAssignmentIDs.count, 3)
+        XCTAssertTrue(state.completedDayIndices.contains(1))
+
+        try repository.toggleAssignment(
+            planID: planID,
+            assignmentID: assignments[1].id,
+            at: Date(timeIntervalSince1970: 3)
+        )
+        state = try XCTUnwrap(repository.activeState())
+        XCTAssertEqual(state.completedAssignmentIDs.count, 2)
+        XCTAssertFalse(state.completedDayIndices.contains(1))
+    }
+
     private func makeRepository() throws -> (ActiveReadingPlanRepository, ModelContext) {
         let container = try BibleStudyModelContainer.make(inMemory: true)
         let context = ModelContext(container)

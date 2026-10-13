@@ -12,6 +12,7 @@ struct PlansView: View {
     let openReading: (ScriptureReference) -> Void
 
     @State private var isPresentingComposer = false
+    @State private var previewedTemplate: ReadingPlanTemplate?
     @State private var selectedTemplate: ReadingPlanTemplate?
     @State private var isShowingActivePlan = false
     @State private var shouldOpenActivePlanAfterDismiss = false
@@ -30,11 +31,7 @@ struct PlansView: View {
                     ForEach(ReadingPlanTemplate.featured) { plan in
                         PremadePlanCard(
                             plan: plan,
-                            previewReading: {
-                                if let firstReading = plan.firstReading {
-                                    openReading(firstReading)
-                                }
-                            },
+                            previewPlan: { previewedTemplate = plan },
                             startPlan: { selectedTemplate = plan }
                         )
                     }
@@ -61,6 +58,17 @@ struct PlansView: View {
             ) {
                 CustomPlanComposerView { preview in
                     activate(.make(preview: preview))
+                }
+            }
+            .sheet(item: $previewedTemplate) { template in
+                NavigationStack {
+                    ReadingPlanPreviewView(plan: template) {
+                        previewedTemplate = nil
+                        Task { @MainActor in
+                            try? await Task.sleep(for: .milliseconds(300))
+                            selectedTemplate = template
+                        }
+                    }
                 }
             }
             .sheet(item: $selectedTemplate, onDismiss: openActivatedPlanIfNeeded) { template in
@@ -188,7 +196,7 @@ struct PlansView: View {
 
 private struct PremadePlanCard: View {
     let plan: ReadingPlanTemplate
-    let previewReading: () -> Void
+    let previewPlan: () -> Void
     let startPlan: () -> Void
 
     var body: some View {
@@ -204,9 +212,8 @@ private struct PremadePlanCard: View {
                 Text(plan.summary)
                     .foregroundStyle(AppTheme.supportingText)
                 HStack {
-                    Button("Preview Reading", action: previewReading)
+                    Button("Preview Plan", action: previewPlan)
                         .buttonStyle(.bordered)
-                        .disabled(plan.firstReading == nil)
                     Button("Start Plan", action: startPlan)
                         .buttonStyle(.borderedProminent)
                         .tint(AppTheme.accent)

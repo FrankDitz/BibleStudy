@@ -59,6 +59,9 @@ Phase 3 now delivers the complete accountable reading-plan loop: deterministic s
 - Completion is an append-only assignment event ledger. A day becomes complete only when every assignment is complete; reopening any assignment immediately reverses day and plan completion.
 - Starting a new plan archives the prior active, paused, or completed plan. Archiving removes a plan from the active surface without deleting its history.
 - The active screen follows the agreed visual hierarchy: large cover, horizontal selectable day rail, truthful Day N of Total and pace, reading checklist, then Start/Continue Reading.
+- Template revision 2 makes every chapter its own reading and completion item. A day containing Matthew 1–3 therefore shows Matthew 1, Matthew 2, and Matthew 3 separately; opening or completing one chapter does not affect the others.
+- Older active snapshots that grouped consecutive chapters are expanded at read time. Existing completion events are mapped onto the new chapter checklist so this refinement does not discard progress.
+- Premade-plan cards open an honest plan preview rather than an arbitrary first passage. The preview explains why the plan exists, discloses its total and daily commitment, and exposes the exact chapter-by-chapter breakdown for every day before activation.
 - Reading rows navigate using the snapshot's approved provider-neutral Scripture reference. The completion control is separate, so opening a reading never marks it complete accidentally.
 - Pause/resume and all four recovery modes preserve completed work and use the scheduling engine to revise only unfinished dates.
 

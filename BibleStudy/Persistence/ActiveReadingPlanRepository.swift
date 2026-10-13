@@ -28,15 +28,17 @@ struct ActiveReadingPlanRepository {
         else {
             return nil
         }
-        let snapshot: ActiveReadingPlanSnapshot
+        let decodedSnapshot: ActiveReadingPlanSnapshot
         do {
-            snapshot = try decoder.decode(ActiveReadingPlanSnapshot.self, from: model.payload)
+            decodedSnapshot = try decoder.decode(ActiveReadingPlanSnapshot.self, from: model.payload)
         } catch {
             throw ActiveReadingPlanError.corruptPayload
         }
+        let snapshot = decodedSnapshot.separatingChapterAssignments()
         let completedAssignmentIDs = try completionState(
             planID: model.id,
-            validAssignmentIDs: snapshot.assignmentIDs
+            validAssignmentIDs: snapshot.assignmentIDs,
+            chapterAssignmentIDsByOriginalID: decodedSnapshot.chapterAssignmentIDsByOriginalID()
         )
         return ActiveReadingPlanState(
             snapshot: snapshot,
@@ -213,7 +215,8 @@ struct ActiveReadingPlanRepository {
 
     private func completionState(
         planID: UUID,
-        validAssignmentIDs: Set<String>
+        validAssignmentIDs: Set<String>,
+        chapterAssignmentIDsByOriginalID: [String: [String]]
     ) throws -> Set<String> {
         let events = try modelContext.fetch(
             FetchDescriptor<BibleStudySchemaV2.PlanAssignmentCompletionEvent>(
@@ -222,11 +225,19 @@ struct ActiveReadingPlanRepository {
                     SortDescriptor(\.id),
                 ]
             )
-        ).filter { $0.planID == planID && validAssignmentIDs.contains($0.assignmentID) }
+        ).filter { $0.planID == planID }
 
         var state: [String: Bool] = [:]
         for event in events {
-            state[event.assignmentID] = event.action == .completed
+            let affectedIDs: [String]
+            if validAssignmentIDs.contains(event.assignmentID) {
+                affectedIDs = [event.assignmentID]
+            } else {
+                affectedIDs = chapterAssignmentIDsByOriginalID[event.assignmentID] ?? []
+            }
+            for assignmentID in affectedIDs where validAssignmentIDs.contains(assignmentID) {
+                state[assignmentID] = event.action == .completed
+            }
         }
         return Set(state.compactMap { $0.value ? $0.key : nil })
     }

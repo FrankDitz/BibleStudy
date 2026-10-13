@@ -26,14 +26,14 @@ final class ReadingPlanTemplateTests: XCTestCase {
         )
 
         for template in ReadingPlanTemplateCatalog.all {
-            XCTAssertEqual(template.revision, 1, template.id)
+            XCTAssertEqual(template.revision, 2, template.id)
             XCTAssertEqual(template.canonRequirement, .catholic73Book, template.id)
             XCTAssertGreaterThan(template.estimatedDailyMinutes.lowerBound, 0, template.id)
             XCTAssertFalse(template.provenance.author.isEmpty, template.id)
             XCTAssertFalse(template.provenance.reviewer.isEmpty, template.id)
             XCTAssertEqual(
                 template.provenance.revisionDate,
-                PlanLocalDate(year: 2026, month: 10, day: 12),
+                PlanLocalDate(year: 2026, month: 10, day: 13),
                 template.id
             )
             XCTAssertEqual(
@@ -47,6 +47,10 @@ final class ReadingPlanTemplateTests: XCTestCase {
                 template.id
             )
             XCTAssertNotNil(template.firstReading, template.id)
+            XCTAssertTrue(
+                template.days.flatMap(\.assignments).allSatisfy { $0.chapterCount == 1 },
+                "Every reading must be independently completable: \(template.id)"
+            )
         }
     }
 
@@ -77,13 +81,13 @@ final class ReadingPlanTemplateTests: XCTestCase {
         XCTAssertEqual(
             fingerprints,
             [
-                "new-testament-90": "361c5e99b6e7fe4d",
-                "catholic-old-testament-90": "d3a8bb699ba2892a",
-                "catholic-bible-365": "937e00ccf70b704d",
-                "gospels-30": "8ffde2bad8e78865",
-                "psalms-proverbs-31": "2608f43969aeaeda",
-                "start-with-jesus-21": "67eefd1f6777d4f0",
-                "catholic-deuterocanon-30": "71d4557c5bc6532a",
+                "new-testament-90": "1895269d0a4ff495",
+                "catholic-old-testament-90": "0a17bf7f272f24bb",
+                "catholic-bible-365": "b7db1c00168817fa",
+                "gospels-30": "cecc847b44bc6532",
+                "psalms-proverbs-31": "4cf005a94853c71d",
+                "start-with-jesus-21": "eb3b174ed0fd6c4d",
+                "catholic-deuterocanon-30": "fab40e4ced4929f4",
             ]
         )
     }
