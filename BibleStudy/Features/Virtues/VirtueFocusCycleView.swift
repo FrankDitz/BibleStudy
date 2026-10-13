@@ -9,6 +9,7 @@ struct VirtueFocusCycleSetupView: View {
     @State private var context = VirtuePracticeContext.relationships
     @State private var duration = VirtueCycleDuration.oneWeek
     @State private var practiceID = "charity-attentive-presence"
+    @State private var beginningReflection = ""
     @State private var errorMessage: String?
 
     var body: some View {
@@ -65,6 +66,18 @@ struct VirtueFocusCycleSetupView: View {
                 }
             }
 
+            Section("Then — at the beginning") {
+                TextField(
+                    "What do you notice about this virtue in your life right now? (optional)",
+                    text: $beginningReflection,
+                    axis: .vertical
+                )
+                .lineLimit(3...6)
+                Text("This private note will be placed beside your later reflection, not graded or analyzed.")
+                    .font(.footnote)
+                    .foregroundStyle(AppTheme.supportingText)
+            }
+
             Section {
                 Text(
                     "This cycle records participation, not holiness. Returning after a pause never erases progress or creates a penalty."
@@ -119,7 +132,8 @@ struct VirtueFocusCycleSetupView: View {
                     virtueID: virtueID,
                     context: context,
                     practice: selectedPractice,
-                    duration: duration
+                    duration: duration,
+                    beginningReflection: beginningReflection
                 )
             }
             dismiss()
@@ -180,6 +194,21 @@ struct VirtueActiveCycleView: View {
 
                     if cycle.status == .active {
                         dailyCheckIn(for: cycle)
+                    }
+
+                    if cycle.status != .paused {
+                        NavigationLink {
+                            VirtueCycleReviewView(cycleID: cycle.id)
+                        } label: {
+                            Label(
+                                cycle.status == .completed ? "View cycle review" : "Review this week",
+                                systemImage: "text.book.closed"
+                            )
+                            .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(AppTheme.accent)
+                        .accessibilityIdentifier("virtue-open-review")
                     }
 
                     controls(for: cycle)
@@ -276,10 +305,12 @@ struct VirtueActiveCycleView: View {
                     .tint(AppTheme.accent)
                     .accessibilityIdentifier("virtue-resume-cycle")
             }
-            Button("Close Cycle") { update(.close) }
-                .buttonStyle(.bordered)
-                .foregroundStyle(AppTheme.danger)
-                .accessibilityIdentifier("virtue-close-cycle")
+            if cycle.status != .completed {
+                Button("Close Cycle") { update(.close) }
+                    .buttonStyle(.bordered)
+                    .foregroundStyle(AppTheme.danger)
+                    .accessibilityIdentifier("virtue-close-cycle")
+            }
         }
     }
 

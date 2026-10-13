@@ -201,6 +201,27 @@ struct VirtueCheckIn: Identifiable, Codable, Equatable, Sendable {
     let status: VirtueCheckInStatus
     let occurredAt: Date
     let privateObservation: String?
+    let cycleDay: Int?
+
+    init(
+        id: UUID,
+        cycleID: UUID,
+        virtueID: VirtueIdentifier,
+        practiceID: String,
+        status: VirtueCheckInStatus,
+        occurredAt: Date,
+        privateObservation: String?,
+        cycleDay: Int? = nil
+    ) {
+        self.id = id
+        self.cycleID = cycleID
+        self.virtueID = virtueID
+        self.practiceID = practiceID
+        self.status = status
+        self.occurredAt = occurredAt
+        self.privateObservation = privateObservation
+        self.cycleDay = cycleDay
+    }
 
     var shareableMetadata: VirtueCheckInMetadata {
         VirtueCheckInMetadata(

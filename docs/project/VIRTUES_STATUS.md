@@ -1,7 +1,7 @@
 # Seven Virtues Formation Status
 
 **Phase:** 4A — Seven Virtues formation  
-**Current deliverable:** BS-0454 — Daily practice and private check-ins
+**Current deliverable:** BS-0455 — Weekly review and Then/Now reflection
 **Status:** Complete; verification passed
 **Started:** 2026-10-13
 **Verified:** 2026-10-13
@@ -22,7 +22,7 @@
 | BS-0452 | Seven reviewed Foundations pathways | Source-checked implementation complete; qualified Catholic approval pending |
 | BS-0453 | Repeatable owner-selected Focus Cycles | Complete |
 | BS-0454 | Daily practice and private check-ins | Complete |
-| BS-0455 | Weekly review and Then/Now reflection | Not started |
+| BS-0455 | Weekly review and Then/Now reflection | Complete |
 | BS-0456 | Practice library, thematic journeys, and Rule of Life | Not started |
 | BS-0457 | Formation Record and app/hub integrations | Not started |
 | BS-0458 | Privacy, accessibility, export/delete, and release acceptance | Not started |
@@ -41,6 +41,10 @@ The owner can start an unlimited sequence of Focus Cycles by deliberately choosi
 
 The active practice replaces Home's generic weekly rotation and may be checked in directly from Home. The full cycle screen supports all five factual states plus an optional private observation. One entry per local calendar day is updated rather than duplicated. Paused cycles reject check-ins, private text stays out of Home activity and shareable metadata, and the interface contains no score, points, grade, or punitive streak.
 
+## BS-0455 implementation
+
+Each cycle now has a prayerful weekly review built from the owner's factual check-in history. The review shows days engaged and the recorded check-in states without scores or moral conclusions, preserves the owner's optional beginning reflection as “Then,” requires the owner to write “Now,” and offers deliberate continue, change, retain, or close decisions. Submitting the same week's review updates that review instead of duplicating it. Pauses remain neutral and do not turn unrecorded days into failures.
+
 ## Verification
 
 - Publication-gate tests cover approved, draft, incomplete, stale, and namespaced-pathway states.
@@ -54,4 +58,4 @@ The active practice replaces Home's generic weekly rotation and may be checked i
 
 ## Next deliverable
 
-BS-0455 adds a prayerful weekly review, factual summaries, and owner-written Then/Now reflection. Qualified Catholic review is still required to close BS-0452 formally; unapproved content remains visibly gated.
+BS-0456 adds a browsable practice library, source-checked thematic journeys, and an owner-curated Rule of Life. Qualified Catholic review is still required to close BS-0452 formally; unapproved content remains visibly gated.

@@ -190,6 +190,125 @@ final class VirtueFocusCycleTests: XCTestCase {
         XCTAssertEqual(state, .empty)
     }
 
+    func testWeeklyReviewSummarizesFactsAndPreservesThenNowWords() throws {
+        let start = try date(2026, 10, 1)
+        let practice = try XCTUnwrap(VirtueFoundationLibrary.kindness.practices.first)
+        var state = VirtueFormationState.empty
+        let cycleID = try VirtueFocusCycleEngine.start(
+            in: &state,
+            virtueID: .kindness,
+            context: .relationships,
+            practice: practice,
+            duration: .twoWeeks,
+            beginningReflection: "I rush past opportunities to encourage people.",
+            at: start
+        )
+        try VirtueFocusCycleEngine.recordCheckIn(
+            cycleID: cycleID,
+            status: .noticedOpportunity,
+            privateObservation: nil,
+            in: &state,
+            at: start,
+            calendar: fixedCalendar
+        )
+        try VirtueFocusCycleEngine.recordCheckIn(
+            cycleID: cycleID,
+            status: .practiced,
+            privateObservation: nil,
+            in: &state,
+            at: start.addingTimeInterval(2 * 86_400),
+            calendar: fixedCalendar
+        )
+
+        try VirtueReviewEngine.submit(
+            cycleID: cycleID,
+            nowObservation: "I notice the moment sooner and can choose a specific word.",
+            graceNoticed: "A conversation slowed me down.",
+            decision: .continuePractice,
+            in: &state,
+            at: start.addingTimeInterval(6 * 86_400),
+            calendar: fixedCalendar
+        )
+
+        let review = try XCTUnwrap(state.reviews.first)
+        XCTAssertEqual(review.weekIndex, 1)
+        XCTAssertEqual(review.summary.totalCheckIns, 2)
+        XCTAssertEqual(review.summary.practiced, 1)
+        XCTAssertEqual(review.summary.noticedOpportunity, 1)
+        XCTAssertEqual(review.thenObservation, "I rush past opportunities to encourage people.")
+        XCTAssertEqual(
+            review.nowObservation,
+            "I notice the moment sooner and can choose a specific word."
+        )
+        XCTAssertEqual(state.currentCycle?.status, .active)
+    }
+
+    func testReviewUpdateIsIdempotentAndCloseDecisionEndsCycle() throws {
+        let start = try date(2026, 10, 1)
+        let practice = try XCTUnwrap(VirtueFoundationLibrary.kindness.practices.first)
+        var state = VirtueFormationState.empty
+        let cycleID = try VirtueFocusCycleEngine.start(
+            in: &state,
+            virtueID: .kindness,
+            context: .relationships,
+            practice: practice,
+            duration: .oneWeek,
+            at: start
+        )
+
+        try VirtueReviewEngine.submit(
+            cycleID: cycleID,
+            nowObservation: "First wording",
+            graceNoticed: nil,
+            decision: .continuePractice,
+            in: &state,
+            at: start.addingTimeInterval(6 * 86_400),
+            calendar: fixedCalendar
+        )
+        let reviewID = try XCTUnwrap(state.reviews.first?.id)
+        try VirtueReviewEngine.submit(
+            cycleID: cycleID,
+            nowObservation: "Revised wording",
+            graceNoticed: nil,
+            decision: .retainPractice,
+            in: &state,
+            at: start.addingTimeInterval(6 * 86_400),
+            calendar: fixedCalendar
+        )
+
+        XCTAssertEqual(state.reviews.count, 1)
+        XCTAssertEqual(state.reviews.first?.id, reviewID)
+        XCTAssertEqual(state.reviews.first?.nowObservation, "Revised wording")
+        XCTAssertEqual(state.cycles.first?.status, .completed)
+        XCTAssertNil(state.currentCycle)
+    }
+
+    func testReviewRequiresOwnerWrittenNowReflection() throws {
+        let practice = try XCTUnwrap(VirtueFoundationLibrary.kindness.practices.first)
+        var state = VirtueFormationState.empty
+        let cycleID = try VirtueFocusCycleEngine.start(
+            in: &state,
+            virtueID: .kindness,
+            context: .relationships,
+            practice: practice,
+            duration: .oneWeek
+        )
+
+        XCTAssertThrowsError(
+            try VirtueReviewEngine.submit(
+                cycleID: cycleID,
+                nowObservation: "   ",
+                graceNoticed: nil,
+                decision: .closePractice,
+                in: &state
+            )
+        ) { error in
+            XCTAssertEqual(error as? VirtueFocusCycleError, .missingReflection)
+        }
+        XCTAssertTrue(state.reviews.isEmpty)
+        XCTAssertEqual(state.currentCycle?.status, .active)
+    }
+
     private var fixedCalendar: Calendar {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(secondsFromGMT: 0)!

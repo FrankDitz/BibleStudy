@@ -34,6 +34,7 @@ struct VirtueFocusCycle: Identifiable, Codable, Equatable, Sendable {
     let duration: VirtueCycleDuration
     let origin: VirtueCycleOrigin
     let startedAt: Date
+    let beginningReflection: String?
     var status: VirtueCycleStatus
     var pausedAt: Date?
     var accumulatedPauseInterval: TimeInterval
@@ -47,6 +48,7 @@ struct VirtueFocusCycle: Identifiable, Codable, Equatable, Sendable {
         duration: VirtueCycleDuration,
         origin: VirtueCycleOrigin = .focusCycle,
         startedAt: Date = .now,
+        beginningReflection: String? = nil,
         status: VirtueCycleStatus = .active,
         pausedAt: Date? = nil,
         accumulatedPauseInterval: TimeInterval = 0,
@@ -59,6 +61,8 @@ struct VirtueFocusCycle: Identifiable, Codable, Equatable, Sendable {
         self.duration = duration
         self.origin = origin
         self.startedAt = startedAt
+        self.beginningReflection = beginningReflection?
+            .trimmingCharacters(in: .whitespacesAndNewlines)
         self.status = status
         self.pausedAt = pausedAt
         self.accumulatedPauseInterval = accumulatedPauseInterval
@@ -83,21 +87,29 @@ struct VirtueFocusCycle: Identifiable, Codable, Equatable, Sendable {
 struct VirtueFormationState: Codable, Equatable, Sendable {
     var cycles: [VirtueFocusCycle]
     var checkIns: [VirtueCheckIn]
+    var reviews: [VirtueCycleReview]
 
-    init(cycles: [VirtueFocusCycle] = [], checkIns: [VirtueCheckIn] = []) {
+    init(
+        cycles: [VirtueFocusCycle] = [],
+        checkIns: [VirtueCheckIn] = [],
+        reviews: [VirtueCycleReview] = []
+    ) {
         self.cycles = cycles
         self.checkIns = checkIns
+        self.reviews = reviews
     }
 
     private enum CodingKeys: String, CodingKey {
         case cycles
         case checkIns
+        case reviews
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         cycles = try container.decodeIfPresent([VirtueFocusCycle].self, forKey: .cycles) ?? []
         checkIns = try container.decodeIfPresent([VirtueCheckIn].self, forKey: .checkIns) ?? []
+        reviews = try container.decodeIfPresent([VirtueCycleReview].self, forKey: .reviews) ?? []
     }
 
     static let empty = VirtueFormationState()
@@ -125,6 +137,7 @@ enum VirtueFocusCycleError: Error, Equatable {
     case cycleNotFound
     case invalidTransition
     case checkInWhilePaused
+    case missingReflection
 }
 
 enum VirtueFocusCycleEngine {
@@ -134,6 +147,7 @@ enum VirtueFocusCycleEngine {
         context: VirtuePracticeContext,
         practice: VirtuePracticeDefinition,
         duration: VirtueCycleDuration,
+        beginningReflection: String? = nil,
         at date: Date = .now
     ) throws -> UUID {
         guard VirtueFormationCatalog.supportedIdentifiers.contains(virtueID) else {
@@ -158,7 +172,8 @@ enum VirtueFocusCycleEngine {
             context: context,
             practice: practice,
             duration: duration,
-            startedAt: date
+            startedAt: date,
+            beginningReflection: beginningReflection
         )
         state.cycles.append(cycle)
         return cycle.id
@@ -242,8 +257,121 @@ enum VirtueFocusCycleEngine {
                 practiceID: cycle.practice.id,
                 status: status,
                 occurredAt: date,
-                privateObservation: observation?.isEmpty == false ? observation : nil
+                privateObservation: observation?.isEmpty == false ? observation : nil,
+                cycleDay: cycle.dayNumber(asOf: date, calendar: calendar)
             )
         )
+    }
+}
+
+struct VirtueActivitySummary: Codable, Equatable, Sendable {
+    let practiced: Int
+    let noticedOpportunity: Int
+    let choseDifferently: Int
+    let notApplicable: Int
+    let reflectedInEcho: Int
+
+    var totalCheckIns: Int {
+        practiced + noticedOpportunity + choseDifferently + notApplicable + reflectedInEcho
+    }
+}
+
+enum VirtueReviewDecision: String, Codable, CaseIterable, Sendable {
+    case continuePractice
+    case changePractice
+    case retainPractice
+    case closePractice
+
+    var title: String {
+        switch self {
+        case .continuePractice: "Continue this practice"
+        case .changePractice: "Close and choose another"
+        case .retainPractice: "Retain in my Rule of Life"
+        case .closePractice: "Close without retaining"
+        }
+    }
+}
+
+struct VirtueCycleReview: Identifiable, Codable, Equatable, Sendable {
+    let id: UUID
+    let cycleID: UUID
+    let weekIndex: Int
+    let reviewedAt: Date
+    let summary: VirtueActivitySummary
+    let thenObservation: String?
+    let nowObservation: String
+    let graceNoticed: String?
+    let decision: VirtueReviewDecision
+}
+
+enum VirtueReviewEngine {
+    static func summary(
+        cycleID: UUID,
+        weekIndex: Int,
+        in state: VirtueFormationState,
+        calendar: Calendar = .current
+    ) throws -> VirtueActivitySummary {
+        guard let cycle = state.cycles.first(where: { $0.id == cycleID }) else {
+            throw VirtueFocusCycleError.cycleNotFound
+        }
+        let firstCycleDay = max(1, (weekIndex - 1) * 7 + 1)
+        let lastCycleDay = weekIndex * 7
+        let checkIns = state.checkIns.filter {
+            guard $0.cycleID == cycleID else { return false }
+            let day = $0.cycleDay ?? cycle.dayNumber(asOf: $0.occurredAt, calendar: calendar)
+            return (firstCycleDay...lastCycleDay).contains(day)
+        }
+        return VirtueActivitySummary(
+            practiced: checkIns.count { $0.status == .practiced },
+            noticedOpportunity: checkIns.count { $0.status == .noticedOpportunity },
+            choseDifferently: checkIns.count { $0.status == .choseDifferently },
+            notApplicable: checkIns.count { $0.status == .notApplicable },
+            reflectedInEcho: checkIns.count { $0.status == .reflectedInEcho }
+        )
+    }
+
+    static func submit(
+        cycleID: UUID,
+        nowObservation: String,
+        graceNoticed: String?,
+        decision: VirtueReviewDecision,
+        in state: inout VirtueFormationState,
+        at date: Date = .now,
+        calendar: Calendar = .current
+    ) throws {
+        guard let cycleIndex = state.cycles.firstIndex(where: { $0.id == cycleID }) else {
+            throw VirtueFocusCycleError.cycleNotFound
+        }
+        let now = nowObservation.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !now.isEmpty else { throw VirtueFocusCycleError.missingReflection }
+        let cycle = state.cycles[cycleIndex]
+        let weekIndex = max(1, Int(ceil(Double(cycle.dayNumber(asOf: date, calendar: calendar)) / 7)))
+        let previousID = state.reviews.first {
+            $0.cycleID == cycleID && $0.weekIndex == weekIndex
+        }?.id
+        let review = VirtueCycleReview(
+            id: previousID ?? UUID(),
+            cycleID: cycleID,
+            weekIndex: weekIndex,
+            reviewedAt: date,
+            summary: try summary(
+                cycleID: cycleID,
+                weekIndex: weekIndex,
+                in: state,
+                calendar: calendar
+            ),
+            thenObservation: cycle.beginningReflection,
+            nowObservation: now,
+            graceNoticed: graceNoticed?.trimmingCharacters(in: .whitespacesAndNewlines),
+            decision: decision
+        )
+        state.reviews.removeAll { $0.cycleID == cycleID && $0.weekIndex == weekIndex }
+        state.reviews.append(review)
+
+        if decision != .continuePractice {
+            state.cycles[cycleIndex].status = .completed
+            state.cycles[cycleIndex].pausedAt = nil
+            state.cycles[cycleIndex].completedAt = date
+        }
     }
 }
