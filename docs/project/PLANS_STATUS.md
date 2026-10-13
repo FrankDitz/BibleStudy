@@ -77,4 +77,4 @@ Phase 3 now delivers the complete accountable reading-plan loop: deterministic s
 
 ## Phase exit
 
-Phase 3 is complete. The next roadmap item is BS-0401, which brings the active plan's next due reading into Home's Today orchestration alongside Bible, Learning, virtue, and recent activity entry points.
+Phase 3 is complete. BS-0401 now brings the active plan's next due chapter into Home's Today orchestration alongside Bible, Learning, virtue, and privacy-safe recent activity entry points.

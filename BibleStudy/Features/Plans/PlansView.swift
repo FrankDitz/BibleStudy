@@ -10,6 +10,7 @@ struct PlansView: View {
     private var completionEvents: [BibleStudySchemaV2.PlanAssignmentCompletionEvent]
 
     let openReading: (ScriptureReference) -> Void
+    var activePlanNavigationRequest = 0
 
     @State private var isPresentingComposer = false
     @State private var previewedTemplate: ReadingPlanTemplate?
@@ -80,6 +81,10 @@ struct PlansView: View {
                 Button("OK", role: .cancel) { errorMessage = nil }
             } message: {
                 Text(errorMessage ?? "Please try again.")
+            }
+            .task(id: activePlanNavigationRequest) {
+                guard activePlanNavigationRequest > 0, activeState != nil else { return }
+                isShowingActivePlan = true
             }
         }
     }

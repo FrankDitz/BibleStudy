@@ -1,20 +1,9 @@
 import SwiftUI
 
 struct LearningView: View {
-    private let topics = [
-        LearningTopic(
-            title: "The Mass", subtitle: "Parts of the liturgy, posture, and responses", icon: "building.columns"),
-        LearningTopic(
-            title: "The Rosary", subtitle: "Prayers, mysteries, and how to begin", icon: "circle.hexagongrid"),
-        LearningTopic(title: "The Sacraments", subtitle: "Signs of grace in Catholic life", icon: "drop"),
-        LearningTopic(title: "The Liturgical Year", subtitle: "Seasons, solemnities, and holy days", icon: "calendar"),
-        LearningTopic(
-            title: "Prayer & Devotions", subtitle: "Practices inside and outside the church", icon: "hands.sparkles"),
-    ]
-
     var body: some View {
         NavigationStack {
-            List(topics) { topic in
+            List(LearningTopicCatalog.topics) { topic in
                 HStack(spacing: 14) {
                     Image(systemName: topic.icon)
                         .font(.title2)
@@ -43,12 +32,4 @@ struct LearningView: View {
             }
         }
     }
-}
-
-private struct LearningTopic: Identifiable {
-    let title: String
-    let subtitle: String
-    let icon: String
-
-    var id: String { title }
 }

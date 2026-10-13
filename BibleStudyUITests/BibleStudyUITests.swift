@@ -62,6 +62,17 @@ final class BibleStudyUITests: XCTestCase {
     }
 
     @MainActor
+    func testHomeTodayExposesUsefulPrivateEntryPoints() {
+        let app = launchApplication()
+
+        XCTAssertTrue(app.buttons["home-resume-reading"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.buttons["home-open-learning"].exists)
+        XCTAssertTrue(app.descendants(matching: .any)["home-virtue-focus"].exists)
+        XCTAssertTrue(app.descendants(matching: .any)["home-recent-activity"].exists)
+        XCTAssertFalse(app.staticTexts["Daily reflection"].exists)
+    }
+
+    @MainActor
     private func launchApplication(additionalArguments: [String] = []) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing"] + additionalArguments

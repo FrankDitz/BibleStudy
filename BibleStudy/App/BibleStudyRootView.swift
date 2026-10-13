@@ -7,6 +7,7 @@ struct BibleStudyRootView: View {
     @State private var scriptureNavigation = ScriptureNavigationController()
     @State private var catalogApproval = YouVersionCatalogApproval()
     @State private var didApplyLaunchRoute = false
+    @State private var activePlanNavigationRequest = 0
 
     var body: some View {
         Group {
@@ -54,9 +55,11 @@ struct BibleStudyRootView: View {
     private func destinationView(_ destination: AppDestination) -> some View {
         switch destination {
         case .home:
-            HomeView {
-                openScripture(YouVersionCatalogPolicy.developmentStart)
-            }
+            HomeView(
+                openReading: openScripture,
+                openPlans: openActivePlan,
+                openLearning: { selection = .learning }
+            )
         case .bible:
             BibleTabView(
                 configuration: dependencies.configuration,
@@ -64,9 +67,10 @@ struct BibleStudyRootView: View {
                 catalogApproval: catalogApproval
             )
         case .plans:
-            PlansView { reference in
-                openScripture(reference)
-            }
+            PlansView(
+                openReading: openScripture,
+                activePlanNavigationRequest: activePlanNavigationRequest
+            )
         case .learning:
             LearningView()
         case .you:
@@ -79,6 +83,11 @@ struct BibleStudyRootView: View {
     private func openScripture(_ reference: ScriptureReference) {
         scriptureNavigation.open(reference)
         selection = .bible
+    }
+
+    private func openActivePlan() {
+        activePlanNavigationRequest += 1
+        selection = .plans
     }
 
     private func handle(_ route: BibleStudyRoute) {
