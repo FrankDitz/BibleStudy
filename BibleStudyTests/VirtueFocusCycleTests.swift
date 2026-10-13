@@ -364,6 +364,50 @@ final class VirtueFocusCycleTests: XCTestCase {
         XCTAssertEqual(state.ruleRevisions.map(\.action), [.retained, .retired, .restored])
     }
 
+    func testFormationRecordReportsFactsAndQuietMilestones() throws {
+        let practice = try XCTUnwrap(VirtueFoundationLibrary.charity.practices.first)
+        let cycle = VirtueFocusCycle(
+            virtueID: .charity,
+            context: .serviceAndCommunity,
+            practice: practice,
+            duration: .oneWeek,
+            status: .completed,
+            completedAt: .now
+        )
+        let retained = VirtueRulePractice(
+            id: UUID(),
+            virtueID: .charity,
+            practice: practice,
+            context: .serviceAndCommunity,
+            retainedAt: .now,
+            retiredAt: nil
+        )
+        let state = VirtueFormationState(
+            cycles: [cycle],
+            checkIns: [
+                VirtueCheckIn(
+                    id: UUID(),
+                    cycleID: cycle.id,
+                    virtueID: .charity,
+                    practiceID: practice.id,
+                    status: .practiced,
+                    occurredAt: .now,
+                    privateObservation: "Never aggregate this text"
+                )
+            ],
+            rulePractices: [retained]
+        )
+
+        let snapshot = VirtueFormationSnapshot(state: state)
+        let milestones = VirtueFormationRecordBuilder.milestones(for: state)
+
+        XCTAssertEqual(snapshot.cyclesBegun, 1)
+        XCTAssertEqual(snapshot.cyclesCompleted, 1)
+        XCTAssertEqual(snapshot.checkInsByStatus[.practiced], 1)
+        XCTAssertEqual(snapshot.activeRulePractices, 1)
+        XCTAssertEqual(milestones.map(\.id), ["first-cycle", "rule-practice"])
+    }
+
     private var fixedCalendar: Calendar {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(secondsFromGMT: 0)!

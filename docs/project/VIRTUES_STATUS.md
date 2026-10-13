@@ -1,7 +1,7 @@
 # Seven Virtues Formation Status
 
 **Phase:** 4A — Seven Virtues formation  
-**Current deliverable:** BS-0456 — Practice library, thematic journeys, and Rule of Life
+**Current deliverable:** BS-0457 — Formation Record and app/hub integrations
 **Status:** Complete; verification passed
 **Started:** 2026-10-13
 **Verified:** 2026-10-13
@@ -24,7 +24,7 @@
 | BS-0454 | Daily practice and private check-ins | Complete |
 | BS-0455 | Weekly review and Then/Now reflection | Complete |
 | BS-0456 | Practice library, thematic journeys, and Rule of Life | Complete |
-| BS-0457 | Formation Record and app/hub integrations | Not started |
+| BS-0457 | Formation Record and app/hub integrations | Complete |
 | BS-0458 | Privacy, accessibility, export/delete, and release acceptance | Not started |
 
 ## BS-0452 implementation
@@ -49,6 +49,10 @@ Each cycle now has a prayerful weekly review built from the owner's factual chec
 
 The full set of Foundation practices is now browsable by life context and commitment size, and any compatible practice can seed a Focus Cycle. Five context-driven thematic journeys connect multiple virtues for faithful work, speech and relationships, digital freedom, service and community, and difficult seasons. Each journey carries exact Vatican sources, remains visibly marked as a source-checked draft pending Catholic review, and supports discernment rather than imposing a rigid program. Choosing “Retain” in a cycle review adds that concrete practice to the owner's Rule of Life; practices can be retired and restored without erasing their revision history.
 
+## BS-0457 implementation
+
+The Formation Record presents only owner-recorded facts: cycles begun and closed, reviews written, contexts practiced, retained practices, check-in-state counts, cycle history, and quiet milestones. It never calculates a percentage, rank, virtue score, inferred weakness, or claim of mastery. The record is reachable from both Virtues and You. Each cycle can prepare an explicit Echo reflection request containing a fresh prompt and the relevant virtue identifier, while excluding private check-in observations and review text. A transport-neutral `virtueCycleCompleted` hub event exposes only the cycle identifier, timestamp, and virtue identifier. Home continues to show the active practice; Scripture links remain inside Foundation pathways. Virtue work does not silently advance Bible reading plans.
+
 ## Verification
 
 - Publication-gate tests cover approved, draft, incomplete, stale, and namespaced-pathway states.
@@ -62,4 +66,4 @@ The full set of Foundation practices is now browsable by life context and commit
 
 ## Next deliverable
 
-BS-0457 adds a factual Formation Record plus explicit Echo and hub integration contracts. Qualified Catholic review is still required to close BS-0452 formally; unapproved content remains visibly gated.
+BS-0458 completes virtue-specific privacy controls, export/delete, migration coverage, accessibility identifiers, and release acceptance. Qualified Catholic review is still required to close BS-0452 formally; unapproved content remains visibly gated.

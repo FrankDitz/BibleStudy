@@ -130,4 +130,37 @@ final class BibleStudyHubContractTests: XCTestCase {
         XCTAssertTrue(VirtueIdentifier.supported.contains(.cardinalTemperance))
         XCTAssertNotEqual(VirtueIdentifier.temperance, .cardinalTemperance)
     }
+
+    func testVirtueCycleIntegrationSharesOnlyAllowlistedMetadata() throws {
+        let practice = try XCTUnwrap(VirtueFoundationLibrary.patience.practices.first)
+        var cycle = VirtueFocusCycle(
+            id: UUID(uuidString: "55555555-5555-5555-5555-555555555555")!,
+            virtueID: .patience,
+            context: .difficultSeason,
+            practice: practice,
+            duration: .oneWeek
+        )
+        cycle.status = .completed
+        cycle.completedAt = Date(timeIntervalSince1970: 1_700_000_000)
+
+        let request = VirtueFormationIntegration.echoRequest(for: cycle)
+        let event = VirtueFormationIntegration.completionEvent(for: cycle)
+        let requestJSON = String(
+            decoding: try BibleStudyHubEventCodec.encoder().encode(request),
+            as: UTF8.self
+        )
+        let eventJSON = String(
+            decoding: try BibleStudyHubEventCodec.encoder().encode(event),
+            as: UTF8.self
+        )
+
+        XCTAssertEqual(event.type, .virtueCycleCompleted)
+        XCTAssertEqual(event.entityID, cycle.id)
+        XCTAssertEqual(event.payload.virtueIDs, [.patience])
+        XCTAssertTrue(request.prompt.contains("Patience"))
+        XCTAssertFalse(requestJSON.contains("privateObservation"))
+        XCTAssertFalse(requestJSON.contains("nowObservation"))
+        XCTAssertFalse(eventJSON.contains(practice.instruction))
+        XCTAssertFalse(eventJSON.contains("privateObservation"))
+    }
 }

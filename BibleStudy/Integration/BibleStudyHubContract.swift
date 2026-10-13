@@ -140,6 +140,7 @@ struct BibleStudyHubEventType: RawRepresentable, Codable, Equatable, Hashable, S
     static let planAssignmentCompleted = Self(rawValue: "bible-study.plan.assignment-completed")
     static let learningItemCompleted = Self(rawValue: "bible-study.learning.item-completed")
     static let milestoneEarned = Self(rawValue: "bible-study.milestone.earned")
+    static let virtueCycleCompleted = Self(rawValue: "bible-study.virtue.cycle-completed")
 }
 
 /// Metadata only. Notes, annotations, reading history, and learning-body text are excluded.

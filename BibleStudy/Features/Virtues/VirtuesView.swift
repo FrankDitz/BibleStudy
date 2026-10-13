@@ -65,6 +65,15 @@ struct VirtuesView: View {
                     systemImage: "leaf"
                 )
             }
+            NavigationLink {
+                VirtueFormationRecordView()
+            } label: {
+                formationLink(
+                    title: "Formation Record",
+                    detail: "Review factual participation, reflections, and quiet milestones without a virtue score.",
+                    systemImage: "clock.arrow.circlepath"
+                )
+            }
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier("virtues-continuing-formation")

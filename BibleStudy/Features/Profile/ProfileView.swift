@@ -10,6 +10,9 @@ struct ProfileView: View {
                     LabeledContent("Reading days", value: "0")
                     LabeledContent("Current streak", value: "0 days")
                     LabeledContent("Plans completed", value: "0")
+                    NavigationLink("Virtue Formation Record") {
+                        VirtueFormationRecordView()
+                    }
                 }
 
                 Section("Integrations") {

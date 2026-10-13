@@ -246,6 +246,6 @@ struct VirtueRuleOfLifeView: View {
     }
 
     private func update(_ change: (inout VirtueFormationState) -> Void) {
-        try? VirtueFormationRepository(modelContext: modelContext).update(change)
+        _ = try? VirtueFormationRepository(modelContext: modelContext).update(change)
     }
 }
