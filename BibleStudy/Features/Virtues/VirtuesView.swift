@@ -54,7 +54,9 @@ struct VirtuesView: View {
     }
 
     private var latestProgress: VirtueCourseProgress? {
-        state.courseProgress.max { $0.updatedAt < $1.updatedAt }
+        state.courseProgress
+            .filter { VirtueStudyCatalog.lectureReadyCourseIDs.contains($0.courseID) }
+            .max { $0.updatedAt < $1.updatedAt }
     }
 
     private var currentCycle: VirtueFocusCycle? {
@@ -129,7 +131,7 @@ struct VirtuesView: View {
                         )
                     )
                 VStack(alignment: .leading, spacing: 10) {
-                    Label("START HERE", systemImage: "building.columns")
+                    Label("START HERE · FULL LECTURE COURSE", systemImage: "building.columns")
                         .font(.caption.bold())
                     Text(VirtueStudyCatalog.foundationCourse.title)
                         .font(.system(.title, design: .serif, weight: .bold))
@@ -215,20 +217,27 @@ struct VirtuesView: View {
                 spacing: AppSpacing.standard
             ) {
                 ForEach(courses) { course in
-                    NavigationLink {
-                        VirtueCourseView(course: course, openReading: openReading)
-                    } label: {
-                        courseCard(course)
+                    if VirtueStudyCatalog.isLectureReady(course) {
+                        NavigationLink {
+                            VirtueCourseView(course: course, openReading: openReading)
+                        } label: {
+                            courseCard(course, isReady: true)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityIdentifier(courseIdentifier(course))
+                    } else {
+                        courseCard(course, isReady: false)
+                            .accessibilityElement(children: .combine)
+                            .accessibilityLabel("\(course.title). Full lecture course in development.")
+                            .accessibilityIdentifier("\(courseIdentifier(course))-in-development")
                     }
-                    .buttonStyle(.plain)
-                    .accessibilityIdentifier(courseIdentifier(course))
                 }
             }
         }
         .accessibilityIdentifier(identifier)
     }
 
-    private func courseCard(_ course: VirtueStudyCourse) -> some View {
+    private func courseCard(_ course: VirtueStudyCourse, isReady: Bool) -> some View {
         FeatureCard {
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
@@ -248,11 +257,17 @@ struct VirtuesView: View {
                 Text(course.subtitle)
                     .foregroundStyle(AppTheme.supportingText)
                     .multilineTextAlignment(.leading)
-                Label("\(course.lessons.count) lessons", systemImage: "book.closed")
-                    .font(.caption.bold())
-                    .foregroundStyle(AppTheme.accent)
+                Label(
+                    isReady
+                        ? "\(course.lessons.count) full lessons"
+                        : "Full lecture course in development",
+                    systemImage: isReady ? "book.closed" : "hammer"
+                )
+                .font(.caption.bold())
+                .foregroundStyle(isReady ? AppTheme.accent : AppTheme.warning)
             }
         }
+        .opacity(isReady ? 1 : 0.76)
     }
 
     @ViewBuilder

@@ -1,8 +1,8 @@
 # Virtue Curriculum Review Packet
 
-**Curriculum status:** implemented in-app; qualified Catholic review pending  
+**Curriculum status:** progressive manuscript rewrite; qualified Catholic review pending
 **Content baseline:** 2026-10-14
-**Scope:** one orientation course, seven capital-sin counter-virtue courses, and four cardinal-virtue courses; 120 lessons total
+**Current reviewable scope:** ten-lesson orientation course only. Seven capital-sin counter-virtue courses and four cardinal-virtue courses retain their planned structure but remain unavailable prototypes pending full manuscripts.
 
 ## Purpose
 
@@ -18,9 +18,11 @@ The Virtues tab is a guided library for learning what virtue is, seeing it in Sc
 
 ## Course inventory
 
-- **Orientation:** *Becoming the Person God Calls You to Be* — 10 lessons.
-- **Counter-virtue track:** Humility against Pride; Charity and Generosity against Avarice; Kindness and Goodwill against Envy; Patience and Meekness against Wrath; Chastity against Lust; Temperance against Gluttony; Diligence and Perseverance against Sloth and Acedia — 10 lessons each.
-- **Cardinal track:** Prudence, Justice, Fortitude, and Temperance — 10 lessons each.
+- **Orientation:** *Becoming the Person God Calls You to Be* — 10 full lecture drafts available for owner inspection and qualified review.
+- **Counter-virtue track:** Humility against Pride; Charity and Generosity against Avarice; Kindness and Goodwill against Envy; Patience and Meekness against Wrath; Chastity against Lust; Temperance against Gluttony; Diligence and Perseverance against Sloth and Acedia — 10 planned lessons each, unavailable until rewritten.
+- **Cardinal track:** Prudence, Justice, Fortitude, and Temperance — 10 planned lessons each, unavailable until rewritten.
+
+The orientation's technical gate requires at least 800 words of instruction and 1,000 authored words overall in every lesson, three Scripture passages totaling at least 24 verses, eight distinct sections, five review prompts, and a time estimate derived from the real material. Passing that gate establishes depth and structure; it does not constitute theological approval.
 
 Temperance is one virtue encountered through two pedagogical lenses, not two different virtues. The gluttony course focuses on appetite and consumption; the cardinal course studies ordered pleasure and use of created goods more broadly.
 
@@ -55,4 +57,4 @@ The app omits dated rhetoric, stereotypes, culture-bound examples, and claims th
 
 | Reviewer | Qualification/role | Scope reviewed | Date | Result | Notes |
 | --- | --- | --- | --- | --- | --- |
-| Pending | Pending | Full curriculum | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Orientation course | Pending | Pending | No content is labeled reviewed until this row is completed. |

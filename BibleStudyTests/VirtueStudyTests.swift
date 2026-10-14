@@ -58,6 +58,38 @@ final class VirtueStudyTests: XCTestCase {
         }
     }
 
+    func testFoundationCourseMeetsFullLectureStandard() {
+        let course = VirtueStudyCatalog.foundationCourse
+
+        for lesson in course.lessons {
+            let metrics = VirtueLectureStandard.metrics(for: lesson)
+            let issues = VirtueLectureStandard.issues(for: lesson)
+
+            XCTAssertTrue(
+                issues.isEmpty,
+                "\(lesson.id) failed the lecture standard with \(issues.map(\.rawValue).sorted()); "
+                    + "instructional=\(metrics.instructionalWords), total=\(metrics.totalSectionWords), "
+                    + "passages=\(metrics.scripturePassages), verses=\(metrics.scriptureVerses), "
+                    + "review=\(metrics.reviewPrompts), minutes=\(metrics.estimatedMinutes)"
+            )
+        }
+    }
+
+    func testOnlyCoursesPassingTheLectureGateAreAvailable() {
+        XCTAssertEqual(VirtueStudyCatalog.lectureReadyCourseIDs, ["virtue-foundations"])
+
+        for course in VirtueStudyCatalog.courses {
+            let actuallyReady = course.lessons.allSatisfy {
+                VirtueLectureStandard.issues(for: $0).isEmpty
+            }
+            XCTAssertEqual(
+                VirtueStudyCatalog.isLectureReady(course),
+                actuallyReady,
+                course.id
+            )
+        }
+    }
+
     func testCardinalCoursesUseRickabyCatechismAndContemporaryChurchTeaching() {
         for course in VirtueStudyCatalog.cardinalCourses {
             let sourceIDs = Set(course.sources.map(\.id))

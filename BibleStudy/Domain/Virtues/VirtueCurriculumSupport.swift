@@ -416,6 +416,31 @@ enum VirtueCurriculumBuilder {
         )
     }
 
+    static func lectureLesson(
+        id: String,
+        title: String,
+        summary: String,
+        sections: [VirtueLessonSection],
+        scripture: [VirtueScriptureEncounter],
+        remember: [String],
+        sourceIDs: [String]
+    ) -> VirtueStudyLesson {
+        VirtueStudyLesson(
+            id: id,
+            title: title,
+            summary: summary,
+            estimatedMinutes: VirtueLectureStandard.estimatedMinutes(
+                sections: sections,
+                scripture: scripture,
+                reviewPrompts: remember
+            ),
+            sections: sections,
+            scriptureEncounters: scripture,
+            reflectionPrompts: remember,
+            sourceIDs: sourceIDs
+        )
+    }
+
     static func section(_ title: String, _ body: String) -> VirtueLessonSection {
         VirtueLessonSection(
             id: title.lowercased().replacingOccurrences(of: " ", with: "-"),

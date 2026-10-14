@@ -2,7 +2,7 @@
 
 **Phase:** 4A — Seven Virtues formation  
 **Current deliverable:** BS-0461–BS-0462 — extended Catholic virtue curriculum
-**Status:** Implemented and technically verified; qualified Catholic review pending
+**Status:** Content-depth remediation active; orientation lecture draft technically verified; qualified Catholic review pending
 **Started:** 2026-10-13
 **Verified:** 2026-10-14
 
@@ -33,13 +33,17 @@
 | BS-0458 | Privacy, accessibility, export/delete, and release acceptance | Not started |
 | BS-0459 | Curriculum architecture and source method | Complete |
 | BS-0460 | Textbook-like course library, preview, lesson reader, and resume | Complete |
-| BS-0461 | Orientation and four extended cardinal-virtue curricula | Complete as 50 source-checked draft lessons; Catholic review pending |
-| BS-0462 | Seven extended capital-sin counter-virtue curricula | Complete as 70 source-checked draft lessons; Catholic review pending |
+| BS-0461 | Orientation and four extended cardinal-virtue curricula | Orientation rewritten as 10 full lecture drafts and technically verified; four cardinal courses remain short prototypes and are unavailable pending rewrite |
+| BS-0462 | Seven extended capital-sin counter-virtue curricula | Course structure and research notes exist; all seven remain short prototypes and are unavailable pending full manuscript work |
 | BS-0463 | Practice bridge, persistence, accessibility, and acceptance | Complete |
 
 ## Learning-first curriculum pivot
 
-The Virtues tab now presents twelve courses and 120 lessons: one ten-lesson orientation, seven ten-lesson counter-virtue courses, and four ten-lesson cardinal-virtue courses. Every course exposes its full outline, estimated study time, purpose, source trail, and review status before the owner begins. Every lesson contains core teaching, a doctrinal distinction, a Catholic witness, a realistic case, concrete practice, prayer, a Catholic-canon Scripture route, three retrieval prompts, and exact source identifiers. Progress is local, reversible, backward-compatible with existing course and lesson identifiers, and expressed only as lessons completed.
+The curriculum still has a twelve-course, 120-lesson architecture, but the earlier implementation did not meet its own educational promise. Short paragraphs and one brief Scripture route were incorrectly presented with roughly twenty-minute estimates. Those drafts are now treated as prototypes rather than publishable courses.
+
+Only the ten-lesson orientation is currently available. Each orientation lesson now contains at least 800 words of actual instruction and 1,000 words overall, at least three contextual Scripture readings totaling 24 or more verses, a misconception check, a reasoned case, concrete practice, prayer, and five review prompts. Study time is calculated from the authored material, assigned Scripture, and review work rather than hard-coded. The seven counter-virtue and four cardinal courses remain visible as **Full lecture course in development** but cannot be opened until every lesson passes the same gate.
+
+Progress remains local, reversible, backward-compatible with existing course and lesson identifiers, and expressed only as lessons completed.
 
 The earlier Focus Cycle, practice library, thematic journey, Rule of Life, Formation Record, and Echo features remain available under **Live what you learn**. Existing data is preserved; these tools no longer dominate the tab or stand in for teaching.
 
@@ -78,9 +82,10 @@ The Formation Record presents only owner-recorded facts: cycles begun and closed
 - A focused macOS UI test and live accessibility inspection confirm the learning-first landing page, honest course preview, complete lesson outline, lesson reader, Scripture route, source trail, and practice bridge.
 - Strict Swift formatting and whitespace checks pass.
 - Seven-pathway library tests verify complete content, unique identifiers, official Vatican sources, Catholic-canon Scripture references, and fail-closed review state.
-- Extended-curriculum tests enforce twelve courses, exactly ten lessons per course, the seven approved vice–virtue pairings, source integrity, Rickaby's secondary-only role, and legacy progress identifiers.
+- Extended-curriculum tests enforce twelve course definitions, exactly ten lessons per course, the seven approved vice–virtue pairings, source integrity, Rickaby's secondary-only role, and legacy progress identifiers.
+- A separate lecture-quality gate rejects any course lesson below 800 instructional words, 1,000 total authored words, three Scripture passages, 24 assigned verses, eight sections, or five review prompts. It also rejects inaccurate time estimates. Only courses whose every lesson passes are available in the interface.
 - Each pathway detail provides an inspectable source trail and preserves the no-score, no-mastery formation boundary.
 
 ## Next deliverable
 
-Have a qualified Catholic reviewer use `docs/content/VIRTUE_CURRICULUM_REVIEW_PACKET.md` before changing the visible review state. The next engineering deliverable is the deferred BS-0458 export/delete and release-acceptance work.
+Have the owner inspect the rebuilt orientation course for educational depth, tone, pacing, and usability. If accepted, rewrite the four cardinal courses and then the seven counter-virtue courses to the same enforced standard, one reviewable course at a time. A qualified Catholic reviewer must use `docs/content/VIRTUE_CURRICULUM_REVIEW_PACKET.md` before any course changes from **Catholic review pending**.
