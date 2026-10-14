@@ -116,4 +116,22 @@ final class YouVersionReaderNavigatorTests: XCTestCase {
             edition.location(matching: invalidChapter)
         )
     }
+
+    func testLocationPreservesACompletePassageRange() throws {
+        let passage = try ScriptureReference(
+            versionID: 42,
+            bookID: "TOB",
+            chapter: 2,
+            verseStart: 1,
+            verseEnd: 8
+        )
+
+        let location = try XCTUnwrap(edition.location(matching: passage))
+
+        XCTAssertEqual(location.verse, 1)
+        XCTAssertEqual(location.verseEnd, 8)
+        XCTAssertEqual(location.canonicalReference, passage)
+        XCTAssertEqual(location.providerReference.verseStart, 1)
+        XCTAssertEqual(location.providerReference.verseEnd, 8)
+    }
 }

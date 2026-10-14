@@ -4,8 +4,24 @@ struct BibleTabView: View {
     let configuration: AppConfiguration
     let navigation: ScriptureNavigationController
     let catalogApproval: YouVersionCatalogApproval
+    let returnTitle: String?
+    let onReturn: (() -> Void)?
 
     @State private var isSearchPresented = false
+
+    init(
+        configuration: AppConfiguration,
+        navigation: ScriptureNavigationController,
+        catalogApproval: YouVersionCatalogApproval,
+        returnTitle: String? = nil,
+        onReturn: (() -> Void)? = nil
+    ) {
+        self.configuration = configuration
+        self.navigation = navigation
+        self.catalogApproval = catalogApproval
+        self.returnTitle = returnTitle
+        self.onReturn = onReturn
+    }
 
     var body: some View {
         NavigationStack {
@@ -26,6 +42,12 @@ struct BibleTabView: View {
             }
             .navigationTitle("Bible")
             .toolbar {
+                if let returnTitle, let onReturn {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button(returnTitle, systemImage: "chevron.backward", action: onReturn)
+                            .accessibilityIdentifier("bible-return-to-virtues")
+                    }
+                }
                 if approvedVersionID != nil {
                     ToolbarItem(placement: .primaryAction) {
                         Button("Search", systemImage: "magnifyingglass") {

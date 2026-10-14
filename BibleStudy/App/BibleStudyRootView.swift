@@ -9,6 +9,7 @@ struct BibleStudyRootView: View {
     @State private var didApplyLaunchRoute = false
     @State private var activePlanNavigationRequest = 0
     @State private var isPresentingProfile = false
+    @State private var presentedVirtueReading: ScriptureReference?
 
     var body: some View {
         Group {
@@ -44,6 +45,19 @@ struct BibleStudyRootView: View {
                 )
             }
         #endif
+        .sheet(item: $presentedVirtueReading) { _ in
+            BibleTabView(
+                configuration: dependencies.configuration,
+                navigation: scriptureNavigation,
+                catalogApproval: catalogApproval,
+                returnTitle: "Back to Virtues"
+            ) {
+                presentedVirtueReading = nil
+            }
+            #if os(macOS)
+                .frame(minWidth: 720, minHeight: 620)
+            #endif
+        }
         .task {
             guard !didApplyLaunchRoute else { return }
             didApplyLaunchRoute = true
@@ -108,7 +122,8 @@ struct BibleStudyRootView: View {
                 verseEnd: reference.verseEnd
             )
         else { return }
-        openScripture(scriptureReference)
+        scriptureNavigation.open(scriptureReference)
+        presentedVirtueReading = scriptureReference
     }
 
     private func openActivePlan() {

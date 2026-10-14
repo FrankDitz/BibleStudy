@@ -335,7 +335,8 @@ struct YouVersionBibleReaderView: View {
             versionID: edition.id,
             bookID: current.canonicalBookID,
             chapter: current.chapter,
-            verseStart: current.verse
+            verseStart: current.verse,
+            verseEnd: current.verseEnd
         )
         if let reference, let matched = edition.location(matching: reference) {
             move(to: matched)
