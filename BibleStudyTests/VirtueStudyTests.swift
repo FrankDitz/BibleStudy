@@ -4,11 +4,17 @@ import XCTest
 @testable import BibleStudy
 
 final class VirtueStudyTests: XCTestCase {
-    func testCatalogContainsFoundationFourCardinalAndSevenChristianCourses() {
+    func testCatalogContainsOrientationSevenCounterVirtueAndFourCardinalCourses() {
         XCTAssertEqual(VirtueStudyCatalog.courses.count, 12)
         XCTAssertEqual(VirtueStudyCatalog.cardinalCourses.count, 4)
         XCTAssertEqual(VirtueStudyCatalog.christianCourses.count, 7)
+        XCTAssertEqual(VirtueStudyCatalog.courses.reduce(0) { $0 + $1.lessons.count }, 120)
         XCTAssertEqual(Set(VirtueStudyCatalog.courses.map(\.id)).count, 12)
+        XCTAssertEqual(VirtueStudyCatalog.courses.first?.id, "virtue-foundations")
+        XCTAssertEqual(
+            Array(VirtueStudyCatalog.courses.dropFirst(1).prefix(7).map(\.collection)),
+            Array(repeating: .christian, count: 7)
+        )
         XCTAssertEqual(
             Set(VirtueStudyCatalog.cardinalCourses.compactMap(\.virtueID)),
             Set([.prudence, .justice, .fortitude, .cardinalTemperance])
@@ -21,19 +27,22 @@ final class VirtueStudyTests: XCTestCase {
 
     func testEveryCourseHasCompleteUniqueSourceBackedLessons() {
         for course in VirtueStudyCatalog.courses {
-            XCTAssertGreaterThanOrEqual(course.lessons.count, 4, course.id)
+            XCTAssertEqual(course.contentVersion, 2, course.id)
+            XCTAssertEqual(course.lessons.count, 10, course.id)
             XCTAssertFalse(course.overview.isEmpty, course.id)
             XCTAssertFalse(course.whyItMatters.isEmpty, course.id)
             XCTAssertFalse(course.sources.isEmpty, course.id)
+            XCTAssertEqual(course.review.state, .inReview, course.id)
+            XCTAssertEqual(course.review.reviewerRole, "Qualified Catholic reviewer pending", course.id)
             XCTAssertEqual(Set(course.lessons.map(\.id)).count, course.lessons.count, course.id)
             XCTAssertEqual(Set(course.sources.map(\.id)).count, course.sources.count, course.id)
 
             let availableSourceIDs = Set(course.sources.map(\.id))
             for lesson in course.lessons {
                 XCTAssertGreaterThan(lesson.estimatedMinutes, 0, lesson.id)
-                XCTAssertFalse(lesson.sections.isEmpty, lesson.id)
+                XCTAssertGreaterThanOrEqual(lesson.sections.count, 6, lesson.id)
                 XCTAssertFalse(lesson.scriptureEncounters.isEmpty, lesson.id)
-                XCTAssertFalse(lesson.reflectionPrompts.isEmpty, lesson.id)
+                XCTAssertGreaterThanOrEqual(lesson.reflectionPrompts.count, 3, lesson.id)
                 XCTAssertFalse(lesson.sourceIDs.isEmpty, lesson.id)
                 XCTAssertTrue(
                     Set(lesson.sourceIDs).isSubset(of: availableSourceIDs),
@@ -55,7 +64,57 @@ final class VirtueStudyTests: XCTestCase {
             XCTAssertTrue(sourceIDs.contains("rickaby-four-square"), course.id)
             XCTAssertTrue(sourceIDs.contains("ccc-human-virtues-study"), course.id)
             XCTAssertTrue(course.sources.contains(where: { $0.sourceClass == .universalChurch }), course.id)
-            XCTAssertTrue(course.sources.contains(where: { $0.sourceClass == .scripture }), course.id)
+            XCTAssertEqual(
+                course.sources.first(where: { $0.id == "rickaby-four-square" })?.sourceClass,
+                .reviewedSecondary,
+                course.id
+            )
+            XCTAssertGreaterThan(course.sources.count, 1, course.id)
+        }
+    }
+
+    func testCounterVirtueCoursesUseTheExactCatholicPairs() {
+        let expected: [(VirtueIdentifier, String)] = [
+            (.humility, "Humility against Pride"),
+            (.charity, "Charity and Generosity against Avarice"),
+            (.kindness, "Kindness and Goodwill against Envy"),
+            (.patience, "Patience and Meekness against Wrath"),
+            (.chastity, "Chastity against Lust"),
+            (.temperance, "Temperance against Gluttony"),
+            (.diligence, "Diligence and Perseverance against Sloth and Acedia"),
+        ]
+
+        XCTAssertEqual(VirtueStudyCatalog.christianCourses.compactMap(\.virtueID), expected.map(\.0))
+        XCTAssertEqual(VirtueStudyCatalog.christianCourses.map(\.title), expected.map(\.1))
+        for course in VirtueStudyCatalog.christianCourses {
+            XCTAssertTrue(course.sources.contains(where: { $0.id == "ccc-capital-sins-study" }))
+            XCTAssertFalse(course.sources.contains(where: { $0.id == "rickaby-four-square" }))
+        }
+    }
+
+    func testLegacyCourseAndLessonIdentifiersRemainAvailable() {
+        XCTAssertNotNil(VirtueStudyCatalog.course(id: "virtue-foundations"))
+        XCTAssertNotNil(VirtueStudyCatalog.course(id: "cardinal-prudence"))
+        XCTAssertNotNil(VirtueStudyCatalog.course(id: "cardinal-justice"))
+        XCTAssertNotNil(VirtueStudyCatalog.course(id: "cardinal-fortitude"))
+        XCTAssertNotNil(VirtueStudyCatalog.course(id: "cardinal-temperance"))
+
+        for course in VirtueStudyCatalog.christianCourses {
+            guard let virtueID = course.virtueID else {
+                XCTFail("Missing virtue identifier for \(course.id)")
+                continue
+            }
+            XCTAssertEqual(
+                course.id,
+                "christian-\(virtueID.rawValue.replacingOccurrences(of: ".", with: "-"))"
+            )
+            let legacySuffixes = ["meaning", "distortions", "scripture", "practice"]
+            for suffix in legacySuffixes {
+                XCTAssertNotNil(
+                    course.lessons.first { $0.id == "\(virtueID.rawValue)-\(suffix)" },
+                    "Missing legacy lesson \(virtueID.rawValue)-\(suffix)"
+                )
+            }
         }
     }
 

@@ -9,7 +9,7 @@ enum VirtueStudyCollection: String, Codable, CaseIterable, Sendable {
         switch self {
         case .foundations: "Begin here"
         case .cardinal: "The cardinal virtues"
-        case .christian: "Christian virtues for daily life"
+        case .christian: "Seven virtues against the capital sins"
         }
     }
 }
