@@ -8,7 +8,7 @@ final class VirtueStudyTests: XCTestCase {
         XCTAssertEqual(VirtueStudyCatalog.courses.count, 12)
         XCTAssertEqual(VirtueStudyCatalog.cardinalCourses.count, 4)
         XCTAssertEqual(VirtueStudyCatalog.christianCourses.count, 7)
-        XCTAssertEqual(VirtueStudyCatalog.courses.reduce(0) { $0 + $1.lessons.count }, 120)
+        XCTAssertEqual(VirtueStudyCatalog.courses.reduce(0) { $0 + $1.lessons.count }, 121)
         XCTAssertEqual(Set(VirtueStudyCatalog.courses.map(\.id)).count, 12)
         XCTAssertEqual(VirtueStudyCatalog.courses.first?.id, "virtue-foundations")
         XCTAssertEqual(
@@ -27,8 +27,8 @@ final class VirtueStudyTests: XCTestCase {
 
     func testEveryCourseHasCompleteUniqueSourceBackedLessons() {
         for course in VirtueStudyCatalog.courses {
-            XCTAssertEqual(course.contentVersion, 2, course.id)
-            XCTAssertEqual(course.lessons.count, 10, course.id)
+            XCTAssertEqual(course.contentVersion, course.id == "virtue-foundations" ? 3 : 2, course.id)
+            XCTAssertEqual(course.lessons.count, course.id == "virtue-foundations" ? 11 : 10, course.id)
             XCTAssertFalse(course.overview.isEmpty, course.id)
             XCTAssertFalse(course.whyItMatters.isEmpty, course.id)
             XCTAssertFalse(course.sources.isEmpty, course.id)
@@ -73,15 +73,47 @@ final class VirtueStudyTests: XCTestCase {
                     + "review=\(metrics.reviewPrompts), minutes=\(metrics.estimatedMinutes)"
             )
         }
+
+        XCTAssertTrue(VirtueCourseLearningStandard.issues(for: course).isEmpty)
+        XCTAssertGreaterThanOrEqual(
+            course.lessons.filter { $0.formationSupport?.knowledgeChecks.isEmpty == false }.count,
+            3
+        )
+        XCTAssertFalse(course.lessons.last?.formationSupport?.knowledgeChecks.isEmpty ?? true)
+    }
+
+    func testFoundationCourseHasConscienceAndFormationSupports() throws {
+        let course = VirtueStudyCatalog.foundationCourse
+        let conscience = try XCTUnwrap(
+            course.lessons.first { $0.id == "foundations-conscience" }
+        )
+
+        XCTAssertTrue(conscience.sourceIDs.contains("ccc-moral-acts-study"))
+        XCTAssertTrue(conscience.sourceIDs.contains("ccc-conscience-study"))
+        XCTAssertGreaterThanOrEqual(conscience.scriptureEncounters.count, 3)
+
+        for lesson in course.lessons {
+            let support = try XCTUnwrap(lesson.formationSupport, lesson.id)
+            XCTAssertGreaterThanOrEqual(support.selfExaminationPrompts.count, 9, lesson.id)
+            XCTAssertFalse(support.workedCaseAnalysis.isEmpty, lesson.id)
+            XCTAssertFalse(support.scriptureSynthesis.isEmpty, lesson.id)
+            XCTAssertFalse(support.scriptureTransferQuestion.isEmpty, lesson.id)
+            XCTAssertFalse(support.witnessBody.isEmpty, lesson.id)
+            XCTAssertTrue(
+                Set(support.supportingSourceIDs).isSubset(of: Set(lesson.sourceIDs)),
+                lesson.id
+            )
+        }
     }
 
     func testOnlyCoursesPassingTheLectureGateAreAvailable() {
         XCTAssertEqual(VirtueStudyCatalog.lectureReadyCourseIDs, ["virtue-foundations"])
 
         for course in VirtueStudyCatalog.courses {
-            let actuallyReady = course.lessons.allSatisfy {
-                VirtueLectureStandard.issues(for: $0).isEmpty
-            }
+            let actuallyReady =
+                course.lessons.allSatisfy {
+                    VirtueLectureStandard.issues(for: $0).isEmpty
+                } && VirtueCourseLearningStandard.issues(for: course).isEmpty
             XCTAssertEqual(
                 VirtueStudyCatalog.isLectureReady(course),
                 actuallyReady,
@@ -187,6 +219,46 @@ final class VirtueStudyTests: XCTestCase {
         XCTAssertEqual(progress.completedLessonCount(in: course), 0)
     }
 
+    func testPrivateCourseAndLessonReflectionsAreReversibleAndBackwardCompatible() throws {
+        let course = VirtueStudyCatalog.foundationCourse
+        let lesson = try XCTUnwrap(course.lessons.first)
+        var state = VirtueFormationState.empty
+
+        try VirtueStudyEngine.saveCourseReflection(
+            courseID: course.id,
+            stage: .beginning,
+            text: "  I think virtue is mostly self-control.  ",
+            in: &state
+        )
+        try VirtueStudyEngine.saveCourseReflection(
+            courseID: course.id,
+            stage: .ending,
+            text: "I now see grace, relationship, and ordered love.",
+            in: &state
+        )
+        try VirtueStudyEngine.saveLessonReflection(
+            courseID: course.id,
+            lessonID: lesson.id,
+            text: "  A private examination.  ",
+            in: &state
+        )
+
+        XCTAssertEqual(state.courseProgress.first?.beginningReflection, "I think virtue is mostly self-control.")
+        XCTAssertEqual(
+            state.courseProgress.first?.endingReflection,
+            "I now see grace, relationship, and ordered love."
+        )
+        XCTAssertEqual(state.lessonReflections.first?.response, "A private examination.")
+
+        try VirtueStudyEngine.saveLessonReflection(
+            courseID: course.id,
+            lessonID: lesson.id,
+            text: " ",
+            in: &state
+        )
+        XCTAssertTrue(state.lessonReflections.isEmpty)
+    }
+
     func testLegacyFormationPayloadDecodesWithNoCourseProgress() throws {
         let state = try JSONDecoder().decode(
             VirtueFormationState.self,
@@ -194,6 +266,33 @@ final class VirtueStudyTests: XCTestCase {
         )
 
         XCTAssertTrue(state.courseProgress.isEmpty)
+        XCTAssertTrue(state.lessonReflections.isEmpty)
+    }
+
+    func testLegacyCourseProgressDecodesWithoutPrivateReflections() throws {
+        let state = try JSONDecoder().decode(
+            VirtueFormationState.self,
+            from: Data(
+                #"""
+                {
+                  "cycles": [],
+                  "checkIns": [],
+                  "courseProgress": [{
+                    "courseID": "virtue-foundations",
+                    "startedAt": 0,
+                    "completedLessonIDs": ["foundations-happiness"],
+                    "lastOpenedLessonID": "foundations-happiness",
+                    "updatedAt": 10
+                  }]
+                }
+                """#.utf8
+            )
+        )
+
+        let progress = try XCTUnwrap(state.courseProgress.first)
+        XCTAssertNil(progress.beginningReflection)
+        XCTAssertNil(progress.endingReflection)
+        XCTAssertTrue(state.lessonReflections.isEmpty)
     }
 
     func testUnknownCourseAndLessonFailClosed() throws {

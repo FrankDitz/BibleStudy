@@ -91,6 +91,7 @@ struct VirtueFormationState: Codable, Equatable, Sendable {
     var rulePractices: [VirtueRulePractice]
     var ruleRevisions: [VirtueRuleRevision]
     var courseProgress: [VirtueCourseProgress]
+    var lessonReflections: [VirtueLessonReflection]
 
     init(
         cycles: [VirtueFocusCycle] = [],
@@ -98,7 +99,8 @@ struct VirtueFormationState: Codable, Equatable, Sendable {
         reviews: [VirtueCycleReview] = [],
         rulePractices: [VirtueRulePractice] = [],
         ruleRevisions: [VirtueRuleRevision] = [],
-        courseProgress: [VirtueCourseProgress] = []
+        courseProgress: [VirtueCourseProgress] = [],
+        lessonReflections: [VirtueLessonReflection] = []
     ) {
         self.cycles = cycles
         self.checkIns = checkIns
@@ -106,6 +108,7 @@ struct VirtueFormationState: Codable, Equatable, Sendable {
         self.rulePractices = rulePractices
         self.ruleRevisions = ruleRevisions
         self.courseProgress = courseProgress
+        self.lessonReflections = lessonReflections
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -115,6 +118,7 @@ struct VirtueFormationState: Codable, Equatable, Sendable {
         case rulePractices
         case ruleRevisions
         case courseProgress
+        case lessonReflections
     }
 
     init(from decoder: Decoder) throws {
@@ -128,6 +132,8 @@ struct VirtueFormationState: Codable, Equatable, Sendable {
             try container.decodeIfPresent([VirtueRuleRevision].self, forKey: .ruleRevisions) ?? []
         courseProgress =
             try container.decodeIfPresent([VirtueCourseProgress].self, forKey: .courseProgress) ?? []
+        lessonReflections =
+            try container.decodeIfPresent([VirtueLessonReflection].self, forKey: .lessonReflections) ?? []
     }
 
     static let empty = VirtueFormationState()

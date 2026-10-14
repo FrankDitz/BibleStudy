@@ -234,6 +234,99 @@ extension OrientationVirtueLectures {
             sourceIDs: [sources.catechismFreedom.id, sources.catechismHumanVirtues.id]
         ),
         lecture(
+            id: "foundations-conscience",
+            title: "Forming conscience and choosing the good",
+            summary: "Learn how conscience judges a concrete act and why it must be formed throughout life.",
+            opening:
+                "Recall a time when saying “my conscience tells me” ended a conversation. What would distinguish a serious judgment of conscience from a strong preference, fear, impulse, or desire to be left alone?",
+            goal:
+                "By the end, you should be able to describe conscience as a judgment rather than a feeling, evaluate an act through its object, intention, and circumstances, explain why a good end cannot justify an evil means, and identify trustworthy ways to form conscience.",
+            terms: [
+                "Conscience — a judgment of reason by which a person recognizes the moral quality of a concrete act to be done, being performed, or already completed.",
+                "Moral object — what the will actually chooses to do here and now, not merely the physical movement or hoped-for result.",
+                "Intention — the purpose for which the acting person chooses the act.",
+                "Circumstances — relevant features such as consequences, pressure, time, place, means, and people affected; they can increase or diminish goodness, harm, and responsibility.",
+                "Formation — the lifelong education of moral judgment through truth, Scripture, prayer, Church teaching, practice, wise counsel, and honest attention to reality.",
+            ],
+            chapters: [
+                (
+                    "Lecture I — Conscience is a judgment, not a private permission slip",
+                    """
+                    The Catholic tradition speaks of conscience with great dignity. In conscience a person stands before God and must not be forced to act against a certain judgment. But dignity does not make conscience an infallible inner voice that automatically approves whatever feels sincere. Conscience is an act of practical reason: it takes moral truth and applies it to a concrete choice. It can judge before action, accompany action, and evaluate action afterward. Because human understanding is limited and can be distorted, conscience can also be mistaken.
+
+                    This distinction protects both freedom and truth. If conscience were only obedience to an external command, the person would not truly perceive or choose the good. If conscience were only personal preference, it could never be corrected by facts, revelation, duties, or another person's rights. A formed conscience does not ask merely, “Can I live with this?” It asks, “What is true? What good is at stake? What am I actually choosing? What do I owe God and neighbor? Which facts am I avoiding? What would faithful love require?”
+
+                    One must follow a certain conscience, yet one also has a duty to form it. Those truths belong together. Certainty alone proves neither maturity nor correctness; people can become confidently mistaken through ignorance, repetition, ideology, fear, resentment, or convenience. Formation therefore continues across the whole Christian life. It is not manipulation into someone else's preference. It is the patient liberation of judgment from blindness so the person can recognize and choose the good more truthfully.
+                    """
+                ),
+                (
+                    "Lecture II — Object, intention, and circumstances",
+                    """
+                    Catholic moral analysis considers three sources: the chosen object, the intention of the acting person, and the circumstances. The object asks what kind of act is actually being chosen. The intention asks what purpose the person seeks. Circumstances ask about conditions and consequences that can alter responsibility or the seriousness of an act. A morally good human act requires the goodness of all three. This prevents moral reasoning from collapsing into either rule citation or outcome calculation.
+
+                    Consider speech. The physical action “saying words” does not yet identify the moral object. Is the person bearing truthful witness, disclosing a confidence without right, deliberately deceiving, correcting an error, comforting, or humiliating? Intention then matters: a true statement can be weaponized to injure, while a difficult correction can be offered to protect. Circumstances matter too: who has a right to know, what danger exists, whether the facts are verified, and whether another means is available. Moral discernment names each level rather than hiding the chosen act beneath a desirable goal.
+
+                    Intention cannot transform an intrinsically wrong means into a good act. Wanting peace does not make deliberate false accusation good; wanting money for one's family does not make theft just; wanting to protect an institution does not make concealing abuse loving. Conversely, a good object can be spoiled by an evil intention, as when almsgiving is chosen chiefly to humiliate or purchase admiration. Circumstances can increase or reduce harm and responsibility, but they cannot make every kind of act permissible.
+                    """
+                ),
+                (
+                    "Lecture III — Error, responsibility, and mercy",
+                    """
+                    A mistaken conscience is not handled by one crude rule. Sometimes ignorance is invincible: a person could not reasonably have overcome it, and personal culpability may be reduced or absent. At other times ignorance is vincible because a person neglected available truth, avoided questions, silenced witnesses, or cultivated habits that made honest judgment unwelcome. The objective character and effects of an act also remain important even when personal responsibility is diminished. Harm may require protection, treatment, restitution, or repair without outsiders pretending to know the soul completely.
+
+                    Fear, duress, habit, inordinate attachment, psychological difficulty, social pressure, and incomplete knowledge can reduce freedom. They should be taken seriously, especially in cases involving trauma, compulsion, addiction, abuse, or mental illness. Mercy refuses to reduce a person to the worst action or assume equal culpability in unequal circumstances. Truth refuses to call harm good simply because responsibility is complicated. The two belong together.
+
+                    An app can teach moral principles and offer questions. It cannot declare whether someone has committed mortal sin, diagnose scrupulosity, determine state of grace, replace Confession, or settle a dangerous personal case. A person trapped between panic and repeated self-accusation may need a steady confessor or qualified mental-health professional rather than more checking. A person facing abuse, illegality, or danger may need immediate protective and professional help. Humility about the limits of self-guided material is itself part of a well-formed response.
+                    """
+                ),
+                (
+                    "Lecture IV — How conscience is formed",
+                    """
+                    CCC 1783 calls the education of conscience indispensable and describes it as a lifelong task. Formation begins with a willingness to know truth even when truth is inconvenient. God's Word supplies light and a standard for conduct; prayer places the person before God without performance; the Church's teaching preserves wisdom that no individual invents alone; the lives of Christ and the saints give truth a human shape; prudent counsel tests blind spots; repeated good action trains perception; and examination after action converts experience into learning.
+
+                    Formation also requires intellectual honesty. Read enough context to understand a teaching. Distinguish doctrine from personal custom and authoritative judgment from online confidence. Verify facts. Listen to people affected by the decision. Notice whether fear, appetite, loyalty, anger, or the desire for approval is selecting evidence in advance. Ask whether the proposed means respects every person's dignity. When competent authorities disagree about prudential application, do not pretend uncertainty is certainty; identify the fixed moral principles and deliberate responsibly about the facts.
+
+                    The aim is not endless analysis. Conscience must finally judge and act. Romans 12 connects renewal of mind with concrete love; Hebrews describes perception trained by practice; First John directs troubled hearts toward a God greater than the heart while insisting on love in deed and truth. A formed conscience becomes capable of prompt, peaceful obedience, but peace is not always immediate. Sometimes fidelity carries fear and cost. The mature person acts on the best truthful judgment available, remains teachable, seeks mercy after sin, makes repair, and continues formation.
+                    """
+                ),
+            ],
+            misconception:
+                "“Follow your conscience” does not mean “do whatever feels authentic,” and “form your conscience” does not mean surrender reason to pressure or let another person control private decisions. Formation seeks truth and freedom together. It respects legitimate authority, asks questions honestly, rejects coercion and abuse, and remains open to correction. A tender conscience is not the same as chronic self-accusation; persistent scrupulous fear deserves stable pastoral guidance and, when appropriate, clinical support.",
+            caseStudy:
+                "An employee is told to alter a safety report because an honest report may delay production and threaten coworkers' jobs. The manager says the good result justifies the change, and the employee fears retaliation. Identify the chosen act, the employee's intention, and the morally relevant circumstances. Which factors may diminish responsibility? Which facts and duties cannot be ignored? What truthful alternatives, safeguards, counsel, or professional help should be considered?",
+            practice:
+                "Use one ordinary decision—not a crisis—to practice the framework. Write the concrete act being considered, your intention, the relevant circumstances, each person with a legitimate claim, and the sources forming your judgment. Name one fact you still need and one trustworthy person or Church source that could correct a blind spot. Then decide and act without repeatedly reopening the question merely to chase emotional certainty.",
+            prayer:
+                "God of truth and mercy, form my conscience by your Word, free me from fear and self-deception, give me courage to choose good means for good ends, and make me teachable when I am mistaken.",
+            scripture: [
+                build.encounter(
+                    "foundations-renewed-mind", "Primary reading — Discernment embodied in love",
+                    "Notice how renewal of mind and discerning God's will lead immediately into humility, gifts, truthful love, patience, peace, and overcoming evil with good.",
+                    "ROM", 12, 1, 21),
+                build.encounter(
+                    "foundations-trained-discernment", "Second reading — Perception trained by practice",
+                    "Attend to the relationship between maturity, nourishment, habit, and the practical ability to distinguish good from evil.",
+                    "HEB", 5, 11, 14),
+                build.encounter(
+                    "foundations-heart-before-god", "Further reading — Conscience before the God who is greater",
+                    "Hold together love in deed and truth, the accusations of the heart, confidence before God, obedience, and the gift of the Spirit.",
+                    "1JOHN", 3, 18, 24),
+            ],
+            remember: [
+                "Why is conscience a judgment rather than a feeling or private preference?",
+                "What are the object, intention, and circumstances of a human act?",
+                "Why can a good intention not make an evil means good?",
+                "How can responsibility be diminished while objective harm and the need for repair remain real?",
+                "Which practices form conscience, and which judgments must this app never claim to make?",
+            ],
+            sourceIDs: [
+                sources.catechismMoralActs.id,
+                sources.catechismConscience.id,
+                sources.catechismFreedom.id,
+                sources.gaudete.id,
+            ]
+        ),
+        lecture(
             id: "foundations-passions",
             title: "Feelings, temptation, and consent",
             summary: "Treat emotional life truthfully without confusing it with moral guilt.",

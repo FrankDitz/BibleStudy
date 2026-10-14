@@ -15,6 +15,7 @@ enum VirtueStudyCatalog {
     static let lectureReadyCourseIDs = Set(
         courses.compactMap { course in
             course.lessons.allSatisfy { VirtueLectureStandard.issues(for: $0).isEmpty }
+                && VirtueCourseLearningStandard.issues(for: course).isEmpty
                 ? course.id : nil
         }
     )

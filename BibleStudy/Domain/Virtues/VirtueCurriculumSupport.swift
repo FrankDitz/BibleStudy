@@ -65,6 +65,24 @@ enum VirtueCurriculumSources {
         sourceClass: .catechism
     )
 
+    static let catechismMoralActs = source(
+        id: "ccc-moral-acts-study",
+        title: "Catechism of the Catholic Church - The Morality of Human Acts",
+        url:
+            "https://www.vatican.va/content/catechism/en/part_three/section_one/chapter_one/article_4/i_the_sources_of_morality.index.html",
+        locator: "CCC 1749-1761",
+        sourceClass: .catechism
+    )
+
+    static let catechismConscience = source(
+        id: "ccc-conscience-study",
+        title: "Catechism of the Catholic Church - Moral Conscience",
+        url:
+            "https://www.vatican.va/content/catechism/en/part_three/section_one/chapter_one/article_6/ii_the_formation_of_conscience.html",
+        locator: "CCC 1776-1802, especially 1783-1785",
+        sourceClass: .catechism
+    )
+
     static let catechismPassions = source(
         id: "ccc-passions-study",
         title: "Catechism of the Catholic Church - Passions and Moral Life",
@@ -197,6 +215,42 @@ enum VirtueCurriculumSources {
         url:
             "https://www.vatican.va/content/benedict-xvi/en/encyclicals/documents/hf_ben-xvi_enc_20051225_deus-caritas-est.html",
         locator: "Sections 1-18 and 25-39",
+        sourceClass: .universalChurch
+    )
+
+    static let saintAugustine = source(
+        id: "vatican-saint-augustine-restless-heart",
+        title: "Pope Benedict XVI - Saint Augustine of Hippo",
+        url:
+            "https://www.vatican.va/content/benedict-xvi/en/audiences/2008/documents/hf_ben-xvi_aud_20080130.html",
+        locator: "General Audience, 30 January 2008",
+        sourceClass: .universalChurch
+    )
+
+    static let saintThomasMore = source(
+        id: "vatican-saint-thomas-more-conscience",
+        title: "Saint John Paul II - Saint Thomas More, Patron of Statesmen",
+        url:
+            "https://www.vatican.va/content/john-paul-ii/en/motu_proprio/documents/hf_jp-ii_motu-proprio_20001031_thomas-more.html",
+        locator: "Apostolic Letter, 31 October 2000, sections 1-4",
+        sourceClass: .universalChurch
+    )
+
+    static let saintTherese = source(
+        id: "vatican-saint-therese-little-way",
+        title: "Pope Francis - C'est la confiance on Saint Thérèse of Lisieux",
+        url:
+            "https://www.vatican.va/content/francesco/en/apost_exhortations/documents/20231015-santateresa-delbambinogesu.html",
+        locator: "Apostolic Exhortation, 15 October 2023, especially 1-29",
+        sourceClass: .universalChurch
+    )
+
+    static let saintBakhita = source(
+        id: "vatican-saint-bakhita-forgiveness",
+        title: "Pope Francis - Saint Josephine Bakhita and Christ's Forgiveness",
+        url:
+            "https://www.vatican.va/content/francesco/en/audiences/2023/documents/20231011-udienza-generale.html",
+        locator: "General Audience, 11 October 2023",
         sourceClass: .universalChurch
     )
 
@@ -356,6 +410,7 @@ enum VirtueCurriculumBuilder {
         overview: String,
         whyItMatters: String,
         systemImage: String,
+        contentVersion: Int = 2,
         lessons: [VirtueStudyLesson],
         sources: [VirtueContentSource]
     ) -> VirtueStudyCourse {
@@ -368,7 +423,7 @@ enum VirtueCurriculumBuilder {
             overview: overview,
             whyItMatters: whyItMatters,
             systemImage: systemImage,
-            contentVersion: 2,
+            contentVersion: contentVersion,
             lessons: lessons,
             sources: sources,
             review: draftReview
@@ -423,7 +478,8 @@ enum VirtueCurriculumBuilder {
         sections: [VirtueLessonSection],
         scripture: [VirtueScriptureEncounter],
         remember: [String],
-        sourceIDs: [String]
+        sourceIDs: [String],
+        formationSupport: VirtueLessonFormationSupport? = nil
     ) -> VirtueStudyLesson {
         VirtueStudyLesson(
             id: id,
@@ -432,12 +488,14 @@ enum VirtueCurriculumBuilder {
             estimatedMinutes: VirtueLectureStandard.estimatedMinutes(
                 sections: sections,
                 scripture: scripture,
-                reviewPrompts: remember
+                reviewPrompts: remember,
+                formationSupport: formationSupport
             ),
             sections: sections,
             scriptureEncounters: scripture,
             reflectionPrompts: remember,
-            sourceIDs: sourceIDs
+            sourceIDs: sourceIDs,
+            formationSupport: formationSupport
         )
     }
 
