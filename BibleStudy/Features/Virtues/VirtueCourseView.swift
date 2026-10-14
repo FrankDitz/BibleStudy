@@ -87,7 +87,7 @@ struct VirtueCourseView: View {
                     .font(.headline)
                     .foregroundStyle(AppTheme.warning)
                 Text(
-                    "This course synthesizes official Catholic sources and a historical Jesuit text. It remains visibly marked as a draft until a qualified Catholic reviewer signs and dates it."
+                    "This course synthesizes Scripture, the Catechism, and current universal-Church teaching. Historical sources appear only where relevant and never govern doctrine. It remains visibly marked as a draft until a qualified Catholic reviewer signs and dates it."
                 )
                 .font(.subheadline)
                 .foregroundStyle(AppTheme.supportingText)

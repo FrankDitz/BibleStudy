@@ -20,22 +20,23 @@ struct VirtuesView: View {
                     continueLearning
                     foundationCourse
                     formationJourney
+                    privacyNote
                     courseCollection(
-                        title: "The four cardinal virtues",
+                        title: "Seven virtues against the capital sins",
                         detail:
-                            "The four hinges of moral life: sound judgment, right relationship, steadfast courage, and ordered desire.",
-                        courses: VirtueStudyCatalog.cardinalCourses,
-                        identifier: "virtues-cardinal-courses"
-                    )
-                    courseCollection(
-                        title: "Seven virtues for daily life",
-                        detail:
-                            "Study the Christian virtues one at a time through Catholic teaching, Scripture, reflection, and concrete practice.",
+                            "Learn how pride, avarice, envy, wrath, lust, gluttony, and sloth distort good desires—and how Catholic virtue heals and redirects them.",
                         courses: VirtueStudyCatalog.christianCourses,
                         identifier: "virtues-christian-courses"
                     )
+                    courseCollection(
+                        title: "The four cardinal virtues",
+                        detail:
+                            "Study the four hinges of moral life: prudent judgment, justice in relationship, courageous steadfastness, and temperate freedom.",
+                        courses: VirtueStudyCatalog.cardinalCourses,
+                        identifier: "virtues-cardinal-courses"
+                    )
+                    doctrinalMap
                     practiceCompanion
-                    privacyNote
                 }
                 .padding()
                 .frame(maxWidth: 980)
@@ -65,7 +66,7 @@ struct VirtuesView: View {
             Text("Learn the good. Practice it with grace.")
                 .font(.system(.largeTitle, design: .serif, weight: .bold))
             Text(
-                "A guided Catholic study of the cardinal virtues and seven virtues for daily life—built to deepen understanding, open Scripture, and inspire faithful action."
+                "A guided Catholic school of character: learn the seven capital sins and their healing virtues, then study the four cardinal virtues in depth through Scripture, doctrine, reflection, and practice."
             )
             .font(AppTypography.screenIntroduction)
             .foregroundStyle(AppTheme.supportingText)
@@ -162,8 +163,9 @@ struct VirtuesView: View {
                 )
                 journeyRow(
                     number: 2,
-                    title: "Choose a virtue",
-                    detail: "Preview the complete outline, then work through concise lessons at your own pace."
+                    title: "Choose a learning track",
+                    detail:
+                        "Study a virtue against a capital sin, or deepen the cardinal virtues that guide every moral choice. Preview all ten lessons before beginning."
                 )
                 journeyRow(
                     number: 3,
@@ -172,7 +174,7 @@ struct VirtuesView: View {
                         "Open Scripture and use an optional Focus Cycle only after the teaching gives the practice meaning."
                 )
                 Label(
-                    "The 1908 Rickaby text is treated as a historical formation source and read alongside the current Catechism and contemporary Church teaching.",
+                    "The Catechism and current universal-Church teaching govern the courses. Joseph Rickaby's 1908 work is used only as a historical guide to the cardinal virtues.",
                     systemImage: "checkmark.shield"
                 )
                 .font(.footnote)
@@ -180,6 +182,20 @@ struct VirtuesView: View {
             }
         }
         .accessibilityIdentifier("virtues-formation-journey")
+    }
+
+    private var doctrinalMap: some View {
+        FeatureCard {
+            VStack(alignment: .leading, spacing: 10) {
+                Label("One virtue, two ways of studying it", systemImage: "arrow.triangle.branch")
+                    .font(.headline)
+                Text(
+                    "Temperance appears in both tracks because it is the same cardinal virtue viewed at two levels. “Temperance against Gluttony” applies it closely to appetite and consumption; the cardinal course studies its wider work across created goods and pleasure. It is not counted as a twelfth virtue."
+                )
+                .foregroundStyle(AppTheme.supportingText)
+            }
+        }
+        .accessibilityIdentifier("virtues-doctrinal-map")
     }
 
     private func courseCollection(

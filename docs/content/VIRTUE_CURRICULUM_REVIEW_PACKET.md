@@ -1,8 +1,8 @@
 # Virtue Curriculum Review Packet
 
 **Curriculum status:** implemented in-app; qualified Catholic review pending  
-**Content baseline:** 2026-10-13  
-**Scope:** one foundation course, four cardinal-virtue courses, and seven Christian-virtue courses
+**Content baseline:** 2026-10-14
+**Scope:** one orientation course, seven capital-sin counter-virtue courses, and four cardinal-virtue courses; 120 lessons total
 
 ## Purpose
 
@@ -10,11 +10,19 @@ The Virtues tab is a guided library for learning what virtue is, seeing it in Sc
 
 ## Source method
 
-1. Joseph Rickaby's *Four-Square; or, The Cardinal Virtues* supplies the historical teaching sequence and many conceptual distinctions.
-2. The *Catechism of the Catholic Church* is the doctrinal baseline, especially paragraphs 1803–1829 on human and theological virtues.
+1. Scripture, the *Catechism of the Catholic Church*, ecumenical-council teaching, and current universal-Church teaching govern doctrine and pastoral framing.
+2. Joseph Rickaby's *Four-Square; or, The Cardinal Virtues* is a historical secondary guide for the orientation and cardinal courses only. It never governs doctrine and is not a source for the seven counter-virtue courses.
 3. Scripture encounters use references in the Catholic canon and open in the app's licensed Bible reader; the curriculum does not reproduce unlicensed translation text.
 4. Pope Francis's 2024 general-audience catecheses on the virtues provide current pastoral language and practical emphasis.
 5. Every lesson names its sources and remains visibly marked “Catholic review pending” until approved by a qualified reviewer.
+
+## Course inventory
+
+- **Orientation:** *Becoming the Person God Calls You to Be* — 10 lessons.
+- **Counter-virtue track:** Humility against Pride; Charity and Generosity against Avarice; Kindness and Goodwill against Envy; Patience and Meekness against Wrath; Chastity against Lust; Temperance against Gluttony; Diligence and Perseverance against Sloth and Acedia — 10 lessons each.
+- **Cardinal track:** Prudence, Justice, Fortitude, and Temperance — 10 lessons each.
+
+Temperance is one virtue encountered through two pedagogical lenses, not two different virtues. The gluttony course focuses on appetite and consumption; the cardinal course studies ordered pleasure and use of created goods more broadly.
 
 ## Historical-source guardrails
 
@@ -29,31 +37,6 @@ Rickaby's 1908 work is treated as a valuable historical source, not as the sole 
 - acquired habits and the infused life of grace must be distinguished and held together.
 
 The app omits dated rhetoric, stereotypes, culture-bound examples, and claims that require a contemporary doctrinal or pastoral qualification. Where Rickaby's framing and current sources differ in emphasis, the Catechism and current magisterial teaching govern the lesson.
-
-## Course inventory
-
-### Start Here
-
-- **How a Virtuous Life Grows** — six lessons on the good life, stable habits, freedom and responsibility, the four hinges, grace, and a sustainable rule of practice.
-
-### Cardinal Virtues
-
-- **Prudence** — five lessons on practical wisdom, counsel, judgment, action, and prayerful discernment.
-- **Justice** — five lessons on what is due, truth and promises, restitution, religion, and justice fulfilled by charity.
-- **Fortitude** — five lessons on fear, courage, endurance, patience, and perseverance.
-- **Temperance** — five lessons on ordered desire, created goods, restraint, freedom, and integration.
-
-### Seven Christian Virtues
-
-- **Chastity**
-- **Temperance**
-- **Charity**
-- **Diligence**
-- **Patience**
-- **Kindness**
-- **Humility**
-
-Each Christian-virtue course contains four lessons adapted from the existing source-checked pathway: meaning, Scripture, practice, and continued growth.
 
 ## Reviewer checklist
 
