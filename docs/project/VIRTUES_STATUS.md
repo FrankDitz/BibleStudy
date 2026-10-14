@@ -1,8 +1,8 @@
 # Virtue Study and Formation Status
 
 **Phase:** 4A — Seven Virtues formation  
-**Current deliverable:** BS-0461–BS-0462 — extended Catholic virtue curriculum
-**Status:** Content-depth remediation active; orientation lecture draft technically verified; qualified Catholic review pending
+**Current deliverable:** BS-0461 — extended cardinal-virtue curriculum, one course at a time
+**Status:** Foundation and Prudence lecture drafts technically verified; qualified Catholic review pending
 **Started:** 2026-10-13
 **Verified:** 2026-10-14
 
@@ -13,7 +13,7 @@
 - Completing the seven Foundations pathways is an introduction, not an endpoint. Continuing formation uses repeatable Focus Cycles and an owner-selected Rule of Life.
 - Progress reports factual participation and owner-written observations. The app never computes virtue scores, ranks, mastery, inferred weaknesses, or moral judgments.
 - Learning owns Catholic rituals, sacraments and initiation, prayer, liturgical seasons and holy days, devotions, and practical participation in Church life.
-- The primary Virtues experience is now learning-first: a ten-lesson orientation, seven ten-lesson counter-virtue courses, and four ten-lesson cardinal-virtue courses. Focus Cycles and the Rule of Life are secondary application tools.
+- The primary Virtues experience is now learning-first: an eleven-lesson orientation, seven ten-lesson counter-virtue courses, and four ten-lesson cardinal-virtue courses. Focus Cycles and the Rule of Life are secondary application tools.
 - The counter-virtue track uses the exact formation pairs approved for this app: Humility/Pride, Charity and Generosity/Avarice, Kindness and Goodwill/Envy, Patience and Meekness/Wrath, Chastity/Lust, Temperance/Gluttony, and Diligence and Perseverance/Sloth or Acedia.
 - Temperance appears in two courses but is one virtue: the counter-virtue course applies it to gluttony, while the cardinal course teaches its wider moral scope.
 - Course completion records lessons studied. It never represents virtue mastery, holiness, culpability, or moral worth.
@@ -33,15 +33,17 @@
 | BS-0458 | Privacy, accessibility, export/delete, and release acceptance | Not started |
 | BS-0459 | Curriculum architecture and source method | Complete |
 | BS-0460 | Textbook-like course library, preview, lesson reader, and resume | Complete |
-| BS-0461 | Orientation and four extended cardinal-virtue curricula | Orientation rewritten as 10 full lecture drafts and technically verified; four cardinal courses remain short prototypes and are unavailable pending rewrite |
+| BS-0461 | Orientation and four extended cardinal-virtue curricula | Orientation and Prudence rewritten as full lecture drafts and technically verified; Justice, Fortitude, and Temperance remain short prototypes and are unavailable pending rewrite |
 | BS-0462 | Seven extended capital-sin counter-virtue curricula | Course structure and research notes exist; all seven remain short prototypes and are unavailable pending full manuscript work |
 | BS-0463 | Practice bridge, persistence, accessibility, and acceptance | Complete |
 
 ## Learning-first curriculum pivot
 
-The curriculum still has a twelve-course, 120-lesson architecture, but the earlier implementation did not meet its own educational promise. Short paragraphs and one brief Scripture route were incorrectly presented with roughly twenty-minute estimates. Those drafts are now treated as prototypes rather than publishable courses.
+The curriculum has a twelve-course, 121-lesson architecture, but the earlier implementation did not meet its own educational promise. Short paragraphs and one brief Scripture route were incorrectly presented with roughly twenty-minute estimates. Those drafts are now treated as prototypes rather than publishable courses.
 
-Only the ten-lesson orientation is currently available. Each orientation lesson now contains at least 800 words of actual instruction and 1,000 words overall, at least three contextual Scripture readings totaling 24 or more verses, a misconception check, a reasoned case, concrete practice, prayer, and five review prompts. Study time is calculated from the authored material, assigned Scripture, and review work rather than hard-coded. The seven counter-virtue and four cardinal courses remain visible as **Full lecture course in development** but cannot be opened until every lesson passes the same gate.
+The eleven-lesson foundation course and ten-lesson Prudence course are currently available. Every available lesson contains at least 800 words of actual instruction and 1,000 words overall, at least three contextual Scripture readings totaling 24 or more verses, a misconception check, a reasoned case, guided self-examination, concrete practice, prayer, and five review prompts. Study time is calculated from the authored material, assigned Scripture, formation support, and review work rather than hard-coded. The seven counter-virtue courses and remaining three cardinal courses remain visible as **Full lecture course in development** but cannot be opened until every lesson passes the same gate.
+
+Prudence preserves its ten existing lesson identifiers and now teaches a complete sequence: the true good; attention to reality; memory, docility, and counsel; formation of conscience; proportionate deliberation; command and action; foresight and timing; prayerful discernment; counterfeit forms of prudence; and a capstone discernment. Three ungraded checkpoints provide cumulative recall, and the final lesson rehearses the whole process without assigning a virtue score or judging culpability.
 
 Progress remains local, reversible, backward-compatible with existing course and lesson identifiers, and expressed only as lessons completed.
 
@@ -88,4 +90,4 @@ The Formation Record presents only owner-recorded facts: cycles begun and closed
 
 ## Next deliverable
 
-Have the owner inspect the rebuilt orientation course for educational depth, tone, pacing, and usability. If accepted, rewrite the four cardinal courses and then the seven counter-virtue courses to the same enforced standard, one reviewable course at a time. A qualified Catholic reviewer must use `docs/content/VIRTUE_CURRICULUM_REVIEW_PACKET.md` before any course changes from **Catholic review pending**.
+Have the owner inspect the rebuilt Prudence course for educational depth, tone, pacing, Scripture integration, and usability. If accepted, rewrite Justice next, followed by Fortitude, cardinal Temperance, and then the seven counter-virtue courses to the same enforced standard. A qualified Catholic reviewer must use `docs/content/VIRTUE_CURRICULUM_REVIEW_PACKET.md` before any course changes from **Catholic review pending**.
