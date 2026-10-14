@@ -114,7 +114,15 @@ enum VirtueLectureStandard {
         {
             issues.insert(.missingScriptureSynthesis)
         }
-        if support.selfExaminationPrompts.count < 9 {
+        if wordCount(in: support.selfExaminationIntroduction) < 20
+            || wordCount(in: support.selfExaminationExample) < 25
+            || support.selfExaminationSteps.count < 9
+            || support.selfExaminationSteps.contains(where: {
+                $0.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    || wordCount(in: $0.question) < 5
+                    || wordCount(in: $0.guidance) < 12
+            })
+        {
             issues.insert(.missingSelfExamination)
         }
         if wordCount(in: support.witnessBody) < 55
@@ -160,17 +168,27 @@ enum VirtueLectureStandard {
         let teachingMinutes = Int(ceil(Double(sectionWords) / 165.0))
         let scriptureMinutes = Int(ceil(Double(scriptureVerses) / 10.0))
         let reviewMinutes = max(3, Int(ceil(Double(reviewPrompts) * 0.75)))
-        let supportWords =
-            formationSupport.map {
-                wordCount(in: $0.workedCaseAnalysis)
-                    + wordCount(in: $0.scriptureSynthesis)
-                    + wordCount(in: $0.scriptureTransferQuestion)
-                    + wordCount(in: $0.witnessBody)
-                    + $0.selfExaminationPrompts.reduce(0) { $0 + wordCount(in: $1) }
-                    + $0.knowledgeChecks.reduce(0) {
-                        $0 + wordCount(in: $1.prompt) + wordCount(in: $1.explanation)
-                    }
-            } ?? 0
+        let supportWords: Int
+        if let formationSupport {
+            let teachingSupportWords =
+                wordCount(in: formationSupport.workedCaseAnalysis)
+                + wordCount(in: formationSupport.scriptureSynthesis)
+                + wordCount(in: formationSupport.scriptureTransferQuestion)
+                + wordCount(in: formationSupport.witnessBody)
+            let examinationWords =
+                wordCount(in: formationSupport.selfExaminationIntroduction)
+                + wordCount(in: formationSupport.selfExaminationExample)
+                + formationSupport.selfExaminationSteps.reduce(0) {
+                    $0 + wordCount(in: $1.title) + wordCount(in: $1.question)
+                        + wordCount(in: $1.guidance)
+                }
+            let checkWords = formationSupport.knowledgeChecks.reduce(0) {
+                $0 + wordCount(in: $1.prompt) + wordCount(in: $1.explanation)
+            }
+            supportWords = teachingSupportWords + examinationWords + checkWords
+        } else {
+            supportWords = 0
+        }
         let formationMinutes = Int(ceil(Double(supportWords) / 145.0))
         return max(1, teachingMinutes + scriptureMinutes + reviewMinutes + formationMinutes)
     }

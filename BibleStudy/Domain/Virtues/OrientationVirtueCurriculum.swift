@@ -15,7 +15,7 @@ enum OrientationVirtueCurriculum {
         whyItMatters:
             "Without a foundation, virtue can sound like rule keeping, personality improvement, or a contest in self-control. Catholic formation is larger: God calls a free, embodied, social person into beatitude and teaches that person to love reliably through grace-supported habits.",
         systemImage: "building.columns",
-        contentVersion: 3,
+        contentVersion: 4,
         lessons: OrientationVirtueLectures.lessons,
         sources: [
             sources.catechismBeatitude,

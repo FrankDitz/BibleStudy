@@ -14,6 +14,8 @@ enum OrientationLessonLearningSupport {
         witnessTitle: String,
         witnessBody: String,
         sourceIDs: [String] = [],
+        examenIntroduction: String,
+        examenExample: String,
         specificExamen: String,
         checks: [VirtueKnowledgeCheck] = []
     ) -> VirtueLessonFormationSupport {
@@ -24,17 +26,72 @@ enum OrientationLessonLearningSupport {
             witnessTitle: witnessTitle,
             witnessBody: witnessBody,
             supportingSourceIDs: sourceIDs,
-            selfExaminationPrompts: [
-                "What actually happened? Separate what you know from what you assume.",
-                "What real or apparent good was I seeking—security, relief, approval, justice, pleasure, belonging, control, or something else?",
-                "What feeling, fear, desire, wound, pressure, or habit was active? A feeling is information, not yet a verdict about guilt.",
-                "What story was I telling myself about God, myself, or the other person? Was it true and charitable?",
-                "What did I freely choose? Consider the act itself, what I intended, and the circumstances without trying to read anyone else's soul.",
-                "What effects did the choice have on God-given goods, promises, other people, and the person I am becoming?",
-                "Which virtue could clarify or strengthen the next faithful step?",
-                "Is repair needed—truth-telling, apology, restitution, a boundary, Confession, or qualified help?",
-                "What grace and concrete human help will I ask for rather than relying on willpower alone?",
-                specificExamen,
+            selfExaminationIntroduction: examenIntroduction,
+            selfExaminationExample: examenExample,
+            selfExaminationSteps: [
+                VirtueSelfExaminationStep(
+                    id: "facts",
+                    title: "Name the facts",
+                    question: "What happened, in the order it happened?",
+                    guidance:
+                        "Write only what you directly observed, said, did, or reliably know. Set aside labels such as 'always,' 'selfish,' or 'they meant to' until you can distinguish fact from interpretation."
+                ),
+                VirtueSelfExaminationStep(
+                    id: "desired-good",
+                    title: "Name the good you wanted",
+                    question: "What were you trying to gain, protect, avoid, or restore?",
+                    guidance:
+                        "Consider security, relief, approval, justice, pleasure, belonging, control, or another good. Naming a real desire makes the choice understandable; it does not automatically justify the means used."
+                ),
+                VirtueSelfExaminationStep(
+                    id: "inner-movement",
+                    title: "Notice what moved you",
+                    question: "Which feeling, fear, desire, wound, pressure, or habit was active?",
+                    guidance:
+                        "A feeling is important information, not a verdict about guilt and not permission to act. Notice where a free response became possible without condemning an involuntary first reaction."
+                ),
+                VirtueSelfExaminationStep(
+                    id: "interpretation",
+                    title: "Test your interpretation",
+                    question: "What story were you telling about God, yourself, or another person?",
+                    guidance:
+                        "Ask what evidence supports the story, what facts may be missing, and whether your interpretation is both truthful and charitable. Do not attempt to judge another person's conscience."
+                ),
+                VirtueSelfExaminationStep(
+                    id: "choice",
+                    title: "Name your choice",
+                    question: "What concrete act did you freely choose, and what did you intend by it?",
+                    guidance:
+                        "Describe the act precisely, then consider your intention and the circumstances. Avoid vague conclusions about being a 'good' or 'bad' person; examine the particular choice."
+                ),
+                VirtueSelfExaminationStep(
+                    id: "effects",
+                    title: "Trace the effects and duties",
+                    question: "What goods, people, promises, or responsibilities did the choice affect?",
+                    guidance:
+                        "Include effects you did not intend as well as obligations that existed before the moment. This keeps reflection connected to justice and relationship rather than private feeling alone."
+                ),
+                VirtueSelfExaminationStep(
+                    id: "lesson-connection",
+                    title: "Connect this lesson",
+                    question: specificExamen,
+                    guidance:
+                        "Use the central distinction from this lesson to see the situation more clearly. The purpose is understanding and a truthful next step—not producing a perfect answer."
+                ),
+                VirtueSelfExaminationStep(
+                    id: "next-step",
+                    title: "Choose the next faithful step",
+                    question: "Which virtue would strengthen the smallest honest action you can take next?",
+                    guidance:
+                        "Make the action specific enough to do: tell one truth, keep one promise, pause before replying, seek counsel, change an environment, pray, or perform another fitting act."
+                ),
+                VirtueSelfExaminationStep(
+                    id: "repair-and-help",
+                    title: "Repair and receive help",
+                    question: "What repair, grace, or human help does this situation call for?",
+                    guidance:
+                        "Repair may include an apology, restitution, truth-telling, or a boundary. Help may include prayer, Confession, wise counsel, or qualified professional care. Not every situation requires every response."
+                ),
             ],
             knowledgeChecks: checks
         )
@@ -68,6 +125,10 @@ enum OrientationLessonLearningSupport {
             witnessBody:
                 "Saint Augustine pursued learning, achievement, relationships, and public success before recognizing that no created good could bear the whole weight of his desire. Pope Benedict XVI describes Augustine's conversion not as flight from humanity but as a return to God and therefore to his deepest self. His witness does not make earthly goods worthless. It shows why the heart remains restless when it asks any finite success to become its final home.",
             sourceIDs: [VirtueCurriculumSources.saintAugustine.id],
+            examenIntroduction:
+                "Choose one current decision in which two genuine goods compete—for example, work and family, financial security and honesty, or rest and a promise. Use one specific moment rather than evaluating your whole life.",
+            examenExample:
+                "Example: A promotion offers useful work, income, and recognition, but seems to require misleading clients and repeatedly breaking a family commitment. The examination would name every real good, test whether the suspected requirement is factual, and ask which ordering of goods respects truth and one's actual duties.",
             specificExamen: "Where am I treating a gift as though losing it would make my life meaningless?"
         ),
         "foundations-meaning": make(
@@ -81,6 +142,10 @@ enum OrientationLessonLearningSupport {
             witnessBody:
                 "Saint Thérèse of Lisieux taught a 'little way' of trust and love. Its smallness was not spiritual minimalism. It relocated holiness from impressive self-display to ordinary acts offered in dependence on God's mercy. Her witness helps distinguish stable virtue from a dramatic performance: repeated, hidden love can form the person more deeply than one admired gesture, precisely because it is not sustained by applause.",
             sourceIDs: [VirtueCurriculumSources.saintTherese.id],
+            examenIntroduction:
+                "Choose one recent contrast between the person you appeared to be and the person your quiet actions were forming. This is not an invitation to dismiss visible good deeds; it is a way to test whether public and hidden conduct are becoming coherent.",
+            examenExample:
+                "Example: Someone volunteers generously at a public event but has repeatedly delayed an ordinary promise at home. The examination would honor the service, name the neglected duty without excuses, and identify one act of repair and one repeated practice that could make generosity more stable.",
             specificExamen:
                 "Which hidden obligation would reveal more about my character than the good deeds others notice?"
         ),
@@ -95,6 +160,10 @@ enum OrientationLessonLearningSupport {
             witnessBody:
                 "Saint Josephine Bakhita endured kidnapping and enslavement, realities that gravely violated freedom and cannot be spiritualized away. Pope Francis presents her later forgiveness and service as fruits of the freedom she received in Christ, not as approval of what was done to her. Her witness distinguishes coerced servitude from a free gift of self and shows that Christian forgiveness can resist hatred without denying injustice or removing the need for protection.",
             sourceIDs: [VirtueCurriculumSources.saintBakhita.id],
+            examenIntroduction:
+                "Choose one commitment or limit that currently feels restrictive. Examine whether it protects a good you freely promised, should be honestly renegotiated, or is an unjust demand that calls for a boundary or help.",
+            examenExample:
+                "Example: You want to cancel a weekly responsibility because you are tired. The examination would distinguish ordinary reluctance from genuine incapacity, ask what was promised and to whom, and check whether the demand is safe and just before deciding to keep it, renegotiate it, or seek support.",
             specificExamen:
                 "What commitment currently feels restrictive because it protects a good I genuinely want to love?"
         ),
@@ -109,6 +178,10 @@ enum OrientationLessonLearningSupport {
             witnessBody:
                 "Saint Thomas More is remembered for fidelity to conscience under political pressure, but his example should not be reduced to 'follow whatever feels right.' Saint John Paul II emphasized More's disciplined search for truth, life of prayer, public service, and willingness to accept personal cost rather than make power the measure of good. His witness joins conscience to truth, responsibility, humility, and respect for others—not to stubborn self-assertion.",
             sourceIDs: [VirtueCurriculumSources.saintThomasMore.id],
+            examenIntroduction:
+                "Choose one decision in which you felt morally uncertain, pressured, or unusually certain. Reconstruct the decision so you can see what informed your conscience and what still needs verification or counsel.",
+            examenExample:
+                "Example: A supervisor asks you to omit an important fact to avoid conflict. The examination would identify exactly what would be stated or concealed, the good you hope to protect, the people affected, and which trustworthy sources or advisers can test your first judgment.",
             specificExamen:
                 "Which source is forming my conscience most strongly right now: Scripture and Church teaching, prayer and wise counsel, fear, habit, convenience, or the approval of my group?",
             checks: [
@@ -158,6 +231,10 @@ enum OrientationLessonLearningSupport {
             witnessTitle: "Christ in Gethsemane",
             witnessBody:
                 "Jesus does not perform emotional numbness in Gethsemane. He names sorrow, asks his friends to remain near, prays honestly, and freely entrusts himself to the Father. His sinless humanity shows that intense feeling is not itself moral failure. The pattern is integration: emotion is neither denied nor enthroned, but carried within relationship, truth, prayer, and faithful action.",
+            examenIntroduction:
+                "Choose one recent moment when a strong emotion arrived before you had time to decide what to do. Focus on the movement from first reaction to consent and action, not on shaming yourself for having a feeling.",
+            examenExample:
+                "Example: An unfair email produces immediate anger and an urge to send a cutting reply. The examination would separate the involuntary surge from the decision to draft, pause, verify the facts, seek advice, or respond; it would also ask whether a real injustice needs a firm but fitting answer.",
             specificExamen:
                 "Which part of my emotional response was involuntary, and at what point did a genuinely free next choice become available?"
         ),
@@ -172,6 +249,10 @@ enum OrientationLessonLearningSupport {
             witnessBody:
                 "The little way of Saint Thérèse combines serious love with confidence in mercy. Small acts matter, yet they are not spiritual currency by which a person purchases God's love. Her witness offers a sane approach to habit: accept creaturely weakness, use the next ordinary opportunity, and begin again in trust. That posture resists both perfectionism and indifference.",
             sourceIDs: [VirtueCurriculumSources.saintTherese.id],
+            examenIntroduction:
+                "Choose one repeated pattern you want to understand, preferably a recent and ordinary instance. Study the cue, environment, response, and consequence so the next attempt depends on more than a vague promise to try harder.",
+            examenExample:
+                "Example: Late-night scrolling repeatedly displaces prayer and sleep. The examination would identify when the phone is picked up, what relief or stimulation is sought, which environmental cue keeps the loop available, and one realistic change—such as charging the phone elsewhere—paired with prayer and accountability.",
             specificExamen:
                 "What cue begins the pattern I want to change, and what one environmental support could interrupt it earlier?"
         ),
@@ -185,6 +266,10 @@ enum OrientationLessonLearningSupport {
             witnessTitle: "Solomon's request for a listening heart",
             witnessBody:
                 "Solomon's early prayer asks not first for dominance or long life but for an understanding heart able to discern and govern justly. His later failures also warn that an initial gift does not remove the need for continued fidelity. The biblical witness holds two truths together: practical wisdom is a gift worth seeking, and no past insight excuses present disorder.",
+            examenIntroduction:
+                "Choose one decision in which a response looks courageous, fair, restrained, or clever at first glance. Then test whether all four cardinal virtues are needed to keep that response ordered to the good.",
+            examenExample:
+                "Example: Confronting a coworker about harmful conduct may require justice for those affected and fortitude to speak. Prudence still asks when, where, and with what evidence to act, while temperance keeps anger or the desire to look heroic from taking control.",
             specificExamen:
                 "Which of prudence, justice, fortitude, or temperance is missing from the way I am framing this situation?"
         ),
@@ -198,6 +283,10 @@ enum OrientationLessonLearningSupport {
             witnessTitle: "Mary's receiving faith",
             witnessBody:
                 "At the Annunciation, Mary asks a real question, receives God's word, and consents to a future she cannot control. Her faith is neither credulity nor possession of a full plan. Her hope rests in God's fidelity, and her charity becomes embodied service. Mary shows the theological virtues as relationship and gift before they become heroic-looking action.",
+            examenIntroduction:
+                "Choose one good action that has become anxious, resentful, self-reliant, or dependent on recognition. Ask how faith, hope, and charity would change its source and direction rather than merely adding more effort.",
+            examenExample:
+                "Example: Regular service begins with love but gradually becomes a search for praise, and disappointment turns into resentment. The examination would preserve the real good being done while asking how trust in God, hope beyond visible results, and love for the actual people served could purify the action.",
             specificExamen:
                 "Am I trying to produce faith, hope, or charity as a performance, or am I asking God to deepen his gift and responding to it?"
         ),
@@ -211,6 +300,10 @@ enum OrientationLessonLearningSupport {
             witnessTitle: "Peter: received, restored, and sent",
             witnessBody:
                 "Peter's story includes sincere love, proud confidence, fear, denial, tears, forgiveness, and renewed mission. Christ does not treat Peter's failure as the final truth about him, nor does restoration erase responsibility. Peter becomes a witness that grace is not denial of weakness: it meets a real sinner, restores communion, and entrusts concrete love and service again.",
+            examenIntroduction:
+                "Choose one area of genuine growth or one setback after growth. Look for both God's prior gifts and your real response so that gratitude does not become passivity and effort does not become self-congratulation.",
+            examenExample:
+                "Example: A harmful pattern improves through prayer, the sacraments, therapy, a friend's support, environmental changes, and repeated choices. The examination would name every form of help with gratitude, accept responsibility for the choices made, and plan the next act without claiming sole credit or denying progress.",
             specificExamen:
                 "What gift, person, sacrament, or circumstance has helped me grow that I have been treating as though it were my achievement alone?",
             checks: [
@@ -260,6 +353,10 @@ enum OrientationLessonLearningSupport {
             witnessTitle: "The first Christian community",
             witnessBody:
                 "Acts does not present the first believers as a flawless society. It presents a community gathered around apostolic teaching, prayer, shared life, the breaking of bread, and care for need. Later conflicts in Acts reveal that communion requires truth and repair. Their witness is not nostalgia; it is a pattern showing that doctrine, worship, material responsibility, and relationship belong together.",
+            examenIntroduction:
+                "Choose one part of Catholic formation you are attempting alone or one painful community experience that now shapes your participation. Examine what can rightly remain personal, what requires the Church, and what safety or repair may be needed.",
+            examenExample:
+                "Example: After one hurtful parish interaction, a person avoids every form of parish life while still longing for sacramental and communal formation. The examination would not excuse the harm or demand unsafe contact; it would distinguish that event from the Church's gifts and identify one trustworthy, bounded way to seek support or participate.",
             specificExamen:
                 "Where do I need to receive from the Church, and where am I being called to contribute rather than remain a spectator?"
         ),
@@ -273,6 +370,10 @@ enum OrientationLessonLearningSupport {
             witnessTitle: "Jesus Christ, measure and teacher of every virtue",
             witnessBody:
                 "Christ does not merely deliver a catalogue of traits. In him truth, justice, courage, self-command, mercy, humility, faithfulness, and charity form one life of love for the Father and self-gift for others. The saints matter because they receive and refract this life in different circumstances. Christian formation remains personal: learn Christ, receive his grace, imitate his love, repent when you fail, and remain with him.",
+            examenIntroduction:
+                "Choose one spiritual practice, discipline, or virtue goal that matters to you. Examine whether it is making love of God and neighbor more concrete or mainly strengthening an ideal image of yourself.",
+            examenExample:
+                "Example: A strict prayer and study schedule looks impressive but regularly produces impatience toward family interruptions. The examination would honor the desire for discipline while asking whether the schedule serves communion with Christ, duties of love, health, and vocation—or needs to be revised so the practice remains a servant of love.",
             specificExamen:
                 "If someone saw only my ordinary treatment of inconvenient people, what would they learn about the Christ I claim to follow?",
             checks: [

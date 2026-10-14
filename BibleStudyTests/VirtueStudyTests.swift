@@ -27,7 +27,7 @@ final class VirtueStudyTests: XCTestCase {
 
     func testEveryCourseHasCompleteUniqueSourceBackedLessons() {
         for course in VirtueStudyCatalog.courses {
-            XCTAssertEqual(course.contentVersion, course.id == "virtue-foundations" ? 3 : 2, course.id)
+            XCTAssertEqual(course.contentVersion, course.id == "virtue-foundations" ? 4 : 2, course.id)
             XCTAssertEqual(course.lessons.count, course.id == "virtue-foundations" ? 11 : 10, course.id)
             XCTAssertFalse(course.overview.isEmpty, course.id)
             XCTAssertFalse(course.whyItMatters.isEmpty, course.id)
@@ -94,7 +94,15 @@ final class VirtueStudyTests: XCTestCase {
 
         for lesson in course.lessons {
             let support = try XCTUnwrap(lesson.formationSupport, lesson.id)
-            XCTAssertGreaterThanOrEqual(support.selfExaminationPrompts.count, 9, lesson.id)
+            XCTAssertGreaterThanOrEqual(support.selfExaminationIntroduction.split(separator: " ").count, 20, lesson.id)
+            XCTAssertGreaterThanOrEqual(support.selfExaminationExample.split(separator: " ").count, 25, lesson.id)
+            XCTAssertGreaterThanOrEqual(support.selfExaminationSteps.count, 9, lesson.id)
+            XCTAssertTrue(
+                support.selfExaminationSteps.allSatisfy {
+                    !$0.title.isEmpty && !$0.question.isEmpty && !$0.guidance.isEmpty
+                },
+                lesson.id
+            )
             XCTAssertFalse(support.workedCaseAnalysis.isEmpty, lesson.id)
             XCTAssertFalse(support.scriptureSynthesis.isEmpty, lesson.id)
             XCTAssertFalse(support.scriptureTransferQuestion.isEmpty, lesson.id)

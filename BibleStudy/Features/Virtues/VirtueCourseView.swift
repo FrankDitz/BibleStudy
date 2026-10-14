@@ -17,6 +17,7 @@ struct VirtueCourseView: View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: AppSpacing.spacious) {
                 header
+                courseProgress
                 reviewNotice
                 overview
                 courseReflection
@@ -59,6 +60,25 @@ struct VirtueCourseView: View {
             ?? course.lessons.first
     }
 
+    private var completedLessonCount: Int {
+        progress?.completedLessonCount(in: course) ?? 0
+    }
+
+    private var courseProgressTitle: String {
+        guard let progress else { return "Not started" }
+        return progress.isComplete(course) ? "Course complete" : "In progress"
+    }
+
+    private var courseProgressSymbol: String {
+        guard let progress else { return "circle" }
+        return progress.isComplete(course) ? "checkmark.seal.fill" : "circle.dotted"
+    }
+
+    private var courseProgressColor: Color {
+        guard let progress else { return AppTheme.supportingText }
+        return progress.isComplete(course) ? AppTheme.success : AppTheme.accent
+    }
+
     private var header: some View {
         VStack(alignment: .leading, spacing: 14) {
             Image(systemName: course.systemImage)
@@ -82,6 +102,38 @@ struct VirtueCourseView: View {
             .font(.subheadline)
             .foregroundStyle(AppTheme.supportingText)
         }
+    }
+
+    private var courseProgress: some View {
+        FeatureCard {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(alignment: .top, spacing: 12) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("COURSE PROGRESS")
+                            .font(.caption.bold())
+                            .foregroundStyle(AppTheme.supportingText)
+                        Text("\(completedLessonCount) of \(course.lessons.count) lessons completed")
+                            .font(.headline)
+                    }
+                    Spacer(minLength: 12)
+                    Label(courseProgressTitle, systemImage: courseProgressSymbol)
+                        .font(.subheadline.bold())
+                        .foregroundStyle(courseProgressColor)
+                }
+
+                ProgressView(value: Double(completedLessonCount), total: Double(course.lessons.count))
+                    .tint(AppTheme.success)
+
+                Text(
+                    progress?.isComplete(course) == true
+                        ? "Every lesson is checked off. You can revisit any lesson without losing completion."
+                        : "Completed lessons are checked and highlighted in the course outline below."
+                )
+                .font(.footnote)
+                .foregroundStyle(AppTheme.supportingText)
+            }
+        }
+        .accessibilityIdentifier("virtue-course-progress")
     }
 
     private var reviewNotice: some View {
@@ -219,6 +271,11 @@ struct VirtueCourseView: View {
                                 Label("\(lesson.estimatedMinutes) min", systemImage: "clock")
                                     .font(.caption)
                                     .foregroundStyle(AppTheme.supportingText)
+                                if lessonIsCompleted(lesson) {
+                                    Label("Completed", systemImage: "checkmark.circle.fill")
+                                        .font(.caption.bold())
+                                        .foregroundStyle(AppTheme.success)
+                                }
                             }
                             Spacer(minLength: 8)
                             Image(systemName: "chevron.right")
@@ -226,9 +283,17 @@ struct VirtueCourseView: View {
                                 .accessibilityHidden(true)
                         }
                     }
+                    .overlay {
+                        if lessonIsCompleted(lesson) {
+                            RoundedRectangle(cornerRadius: AppCornerRadius.card)
+                                .stroke(AppTheme.success.opacity(0.65), lineWidth: 2)
+                                .accessibilityHidden(true)
+                        }
+                    }
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("virtue-lesson-row-\(lesson.id)")
+                .accessibilityValue(lessonIsCompleted(lesson) ? "Completed" : "Not completed")
             }
         }
         .accessibilityIdentifier("virtue-course-outline")
@@ -236,7 +301,7 @@ struct VirtueCourseView: View {
 
     private func lessonStatus(_ lesson: VirtueStudyLesson, number: Int) -> some View {
         Group {
-            if progress?.completedLessonIDs.contains(lesson.id) == true {
+            if lessonIsCompleted(lesson) {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundStyle(AppTheme.success)
                     .accessibilityLabel("Completed")
@@ -249,10 +314,14 @@ struct VirtueCourseView: View {
         .font(.headline)
         .frame(width: 34, height: 34)
         .background(
-            progress?.completedLessonIDs.contains(lesson.id) == true
+            lessonIsCompleted(lesson)
                 ? AppTheme.success.opacity(0.12) : AppTheme.accent,
             in: Circle()
         )
+    }
+
+    private func lessonIsCompleted(_ lesson: VirtueStudyLesson) -> Bool {
+        progress?.completedLessonIDs.contains(lesson.id) == true
     }
 
     private var sources: some View {
@@ -368,7 +437,7 @@ struct VirtueLessonView: View {
             .frame(maxWidth: .infinity)
         }
         .background(AppTheme.warmSurface.opacity(0.35))
-        .navigationTitle(lesson.title)
+        .navigationTitle("Lesson \(lessonNumber) of \(course.lessons.count)")
         .onAppear(perform: recordOpened)
         .accessibilityIdentifier("virtue-lesson-\(lesson.id)")
         .alert("Lesson could not be updated", isPresented: errorBinding) {
@@ -395,6 +464,10 @@ struct VirtueLessonView: View {
         return course.lessons[index + 1]
     }
 
+    private var lessonNumber: Int {
+        (course.lessons.firstIndex(where: { $0.id == lesson.id }) ?? 0) + 1
+    }
+
     private var lessonHeader: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(course.title.uppercased())
@@ -408,6 +481,16 @@ struct VirtueLessonView: View {
             Label("About \(lesson.estimatedMinutes) minutes", systemImage: "clock")
                 .font(.subheadline)
                 .foregroundStyle(AppTheme.supportingText)
+            HStack(spacing: 16) {
+                Label("Lesson \(lessonNumber) of \(course.lessons.count)", systemImage: "list.number")
+                Label(
+                    isCompleted ? "Completed" : "In progress",
+                    systemImage: isCompleted ? "checkmark.circle.fill" : "circle.dotted"
+                )
+                .foregroundStyle(isCompleted ? AppTheme.success : AppTheme.accent)
+                .accessibilityIdentifier("virtue-lesson-status")
+            }
+            .font(.subheadline.bold())
         }
     }
 
@@ -533,22 +616,48 @@ struct VirtueLessonView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     Label("Examine one real situation", systemImage: "heart.text.square")
                         .font(AppTypography.sectionTitle)
+                    Text(support.selfExaminationIntroduction)
+                        .font(.system(.body, design: .serif))
+                        .lineSpacing(4)
+
+                    VStack(alignment: .leading, spacing: 6) {
+                        Label("Illustrative example", systemImage: "lightbulb")
+                            .font(.subheadline.bold())
+                            .foregroundStyle(AppTheme.accent)
+                        Text(support.selfExaminationExample)
+                            .font(.subheadline)
+                            .foregroundStyle(AppTheme.supportingText)
+                    }
+                    .padding(12)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(AppTheme.warmSurface, in: RoundedRectangle(cornerRadius: 12))
+
                     Text(
-                        "Move slowly. This is an aid to honest prayer and practical judgment, not a diagnosis, an examination of another person's soul, or a substitute for Confession or qualified help."
+                        "Now apply the steps to your own situation. Move slowly; this is an aid to honest prayer and practical judgment, not a diagnosis, a judgment of another person's soul, or a substitute for Confession or qualified help."
                     )
                     .font(.subheadline)
                     .foregroundStyle(AppTheme.supportingText)
 
-                    ForEach(Array(support.selfExaminationPrompts.enumerated()), id: \.offset) {
-                        index, prompt in
-                        HStack(alignment: .top, spacing: 10) {
+                    ForEach(Array(support.selfExaminationSteps.enumerated()), id: \.element.id) {
+                        index, step in
+                        HStack(alignment: .top, spacing: 12) {
                             Text("\(index + 1)")
                                 .font(.caption.bold())
                                 .foregroundStyle(.white)
-                                .frame(width: 24, height: 24)
+                                .frame(width: 26, height: 26)
                                 .background(AppTheme.accent, in: Circle())
-                            Text(prompt)
+                                .accessibilityHidden(true)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(step.title)
+                                    .font(.headline)
+                                Text(step.question)
+                                    .font(.body)
+                                Text(step.guidance)
+                                    .font(.subheadline)
+                                    .foregroundStyle(AppTheme.supportingText)
+                            }
                         }
+                        .accessibilityElement(children: .combine)
                     }
 
                     TextField(

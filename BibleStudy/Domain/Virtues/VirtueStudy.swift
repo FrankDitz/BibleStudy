@@ -28,6 +28,13 @@ struct VirtueKnowledgeCheck: Identifiable, Codable, Equatable, Sendable {
     let explanation: String
 }
 
+struct VirtueSelfExaminationStep: Identifiable, Codable, Equatable, Sendable {
+    let id: String
+    let title: String
+    let question: String
+    let guidance: String
+}
+
 /// Qualitative learning supports that turn a lecture into a repeatable formation loop.
 /// They remain authored content: the app never infers a learner's conscience or moral state.
 struct VirtueLessonFormationSupport: Codable, Equatable, Sendable {
@@ -37,7 +44,9 @@ struct VirtueLessonFormationSupport: Codable, Equatable, Sendable {
     let witnessTitle: String
     let witnessBody: String
     let supportingSourceIDs: [String]
-    let selfExaminationPrompts: [String]
+    let selfExaminationIntroduction: String
+    let selfExaminationExample: String
+    let selfExaminationSteps: [VirtueSelfExaminationStep]
     let knowledgeChecks: [VirtueKnowledgeCheck]
 }
 
