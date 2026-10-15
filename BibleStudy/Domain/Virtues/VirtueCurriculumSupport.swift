@@ -29,6 +29,15 @@ enum VirtueCurriculumSources {
         sourceClass: .catechism
     )
 
+    static let catechismHope = source(
+        id: "ccc-hope-study",
+        title: "Catechism of the Catholic Church - Hope",
+        url:
+            "https://www.vatican.va/content/catechism/en/part_three/section_one/chapter_one/article_7/ii_the_theological_virtues.index.html",
+        locator: "CCC 1817-1821",
+        sourceClass: .catechism
+    )
+
     static let catechismGiftsAndFruits = source(
         id: "ccc-gifts-fruits-study",
         title: "Catechism of the Catholic Church - Gifts and Fruits of the Holy Spirit",
@@ -218,6 +227,15 @@ enum VirtueCurriculumSources {
         sourceClass: .catechism
     )
 
+    static let catechismHumanLife = source(
+        id: "ccc-human-life-study",
+        title: "Catechism of the Catholic Church - Respect for Human Life",
+        url:
+            "https://www.vatican.va/content/catechism/en/part_three/section_two/chapter_two/article_5/i_respect_for_human_life.html",
+        locator: "CCC 2258-2330, especially 2263-2265",
+        sourceClass: .catechism
+    )
+
     static let catechismPrayerHumility = source(
         id: "ccc-prayer-humility-study",
         title: "Catechism of the Catholic Church - Prayer as God's Gift",
@@ -251,6 +269,15 @@ enum VirtueCurriculumSources {
         url:
             "https://www.vatican.va/content/benedict-xvi/en/encyclicals/documents/hf_ben-xvi_enc_20051225_deus-caritas-est.html",
         locator: "Sections 1-18 and 25-39",
+        sourceClass: .universalChurch
+    )
+
+    static let veritatisSplendor = source(
+        id: "saint-john-paul-veritatis-splendor",
+        title: "Saint John Paul II - Veritatis Splendor",
+        url:
+            "https://www.vatican.va/content/john-paul-ii/en/encyclicals/documents/hf_jp-ii_enc_06081993_veritatis-splendor.html",
+        locator: "Sections 89-94 on witness and martyrdom",
         sourceClass: .universalChurch
     )
 

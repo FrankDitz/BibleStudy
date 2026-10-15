@@ -30,7 +30,7 @@ final class VirtueStudyTests: XCTestCase {
             let expectedContentVersion =
                 switch course.id {
                 case "virtue-foundations": 4
-                case "cardinal-prudence", "cardinal-justice": 3
+                case "cardinal-prudence", "cardinal-justice", "cardinal-fortitude": 3
                 default: 2
                 }
             XCTAssertEqual(course.contentVersion, expectedContentVersion, course.id)
@@ -182,10 +182,44 @@ final class VirtueStudyTests: XCTestCase {
         XCTAssertFalse(course.lessons.last?.formationSupport?.knowledgeChecks.isEmpty ?? true)
     }
 
+    func testFortitudeCourseMeetsFullLectureStandard() throws {
+        let course = try XCTUnwrap(VirtueStudyCatalog.course(id: "cardinal-fortitude"))
+
+        for lesson in course.lessons {
+            let metrics = VirtueLectureStandard.metrics(for: lesson)
+            let issues = VirtueLectureStandard.issues(for: lesson)
+
+            XCTAssertTrue(
+                issues.isEmpty,
+                "\(lesson.id) failed the lecture standard with \(issues.map(\.rawValue).sorted()); "
+                    + "instructional=\(metrics.instructionalWords), total=\(metrics.totalSectionWords), "
+                    + "passages=\(metrics.scripturePassages), verses=\(metrics.scriptureVerses), "
+                    + "review=\(metrics.reviewPrompts), minutes=\(metrics.estimatedMinutes)"
+            )
+
+            let support = try XCTUnwrap(lesson.formationSupport, lesson.id)
+            XCTAssertGreaterThanOrEqual(support.selfExaminationSteps.count, 9, lesson.id)
+            XCTAssertTrue(
+                Set(support.supportingSourceIDs).isSubset(of: Set(lesson.sourceIDs)),
+                lesson.id
+            )
+        }
+
+        XCTAssertTrue(VirtueCourseLearningStandard.issues(for: course).isEmpty)
+        XCTAssertEqual(
+            course.lessons.filter { $0.formationSupport?.knowledgeChecks.isEmpty == false }.count,
+            3
+        )
+        XCTAssertFalse(course.lessons.last?.formationSupport?.knowledgeChecks.isEmpty ?? true)
+    }
+
     func testOnlyCoursesPassingTheLectureGateAreAvailable() {
         XCTAssertEqual(
             VirtueStudyCatalog.lectureReadyCourseIDs,
-            ["virtue-foundations", "cardinal-prudence", "cardinal-justice"]
+            [
+                "virtue-foundations", "cardinal-prudence", "cardinal-justice",
+                "cardinal-fortitude",
+            ]
         )
 
         for course in VirtueStudyCatalog.courses {
