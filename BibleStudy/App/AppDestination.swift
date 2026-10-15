@@ -28,8 +28,8 @@ enum AppDestination: String, CaseIterable, Codable, Identifiable, Hashable, Send
         case .home: "house"
         case .bible: "book.closed"
         case .plans: "checkmark.square"
-        case .virtues: "sparkles"
-        case .learning: "graduationcap"
+        case .virtues: "shield"
+        case .learning: "books.vertical"
         case .you: "person.crop.circle"
         }
     }

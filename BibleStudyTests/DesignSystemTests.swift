@@ -3,9 +3,18 @@ import XCTest
 @testable import BibleStudy
 
 final class DesignSystemTests: XCTestCase {
+    func testAppAppearancesMapToExpectedColorSchemes() {
+        XCTAssertNil(AppAppearance.system.preferredColorScheme)
+        XCTAssertEqual(AppAppearance.emeraldLight.preferredColorScheme, .light)
+        XCTAssertEqual(AppAppearance.emeraldAfterDark.preferredColorScheme, .dark)
+        XCTAssertEqual(Set(AppAppearance.allCases.map(\.rawValue)).count, 3)
+    }
+
     func testReaderThemesHaveStableUniqueIdentifiersAndTitles() {
-        XCTAssertEqual(Set(ReaderTheme.allCases.map(\.rawValue)).count, 3)
-        XCTAssertEqual(Set(ReaderTheme.allCases.map(\.title)).count, 3)
+        XCTAssertEqual(Set(ReaderTheme.allCases.map(\.rawValue)).count, 4)
+        XCTAssertEqual(Set(ReaderTheme.allCases.map(\.title)).count, 4)
+        XCTAssertEqual(ReaderTheme.automatic.resolved(for: .light), .light)
+        XCTAssertEqual(ReaderTheme.automatic.resolved(for: .dark), .dark)
     }
 
     func testEveryStateKindHasAVisibleDefaultIcon() {

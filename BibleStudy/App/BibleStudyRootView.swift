@@ -10,6 +10,7 @@ struct BibleStudyRootView: View {
     @State private var activePlanNavigationRequest = 0
     @State private var isPresentingProfile = false
     @State private var presentedVirtueReading: ScriptureReference?
+    @AppStorage(AppAppearance.storageKey) private var appearance = AppAppearance.system
 
     var body: some View {
         Group {
@@ -20,7 +21,7 @@ struct BibleStudyRootView: View {
                             .tag(destination)
                             .accessibilityIdentifier("navigation-\(destination.rawValue)")
                     }
-                    .navigationTitle("Bible Study")
+                    .navigationTitle("Kingdom")
                     .navigationSplitViewColumnWidth(min: 190, ideal: 220)
                 } detail: {
                     destinationView(selection)
@@ -36,8 +37,14 @@ struct BibleStudyRootView: View {
                             .tag(destination)
                     }
                 }
+                .toolbarBackground(AppTheme.surface, for: .tabBar)
+                .toolbarBackground(.visible, for: .tabBar)
             #endif
         }
+        .preferredColorScheme(appearance.preferredColorScheme)
+        .tint(AppTheme.accent)
+        .foregroundStyle(AppTheme.ink)
+        .background(AppTheme.background)
         #if !os(macOS)
             .sheet(isPresented: $isPresentingProfile) {
                 ProfileView(
