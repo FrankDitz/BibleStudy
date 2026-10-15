@@ -50,14 +50,14 @@ struct ReadingPlanPreviewView: View {
                         .font(.headline)
                         .frame(maxWidth: .infinity, minHeight: 34)
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(AppTheme.accent)
+                .buttonStyle(EmeraldActionButtonStyle())
                 .accessibilityIdentifier("choose-previewed-plan")
             }
-            .padding()
+            .padding(AppSpacing.screen)
             .frame(maxWidth: 900)
             .frame(maxWidth: .infinity)
         }
+        .background(AppScreenBackground())
         .navigationTitle("Plan Preview")
         #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
@@ -106,7 +106,11 @@ struct ReadingPlanPreviewView: View {
         }
         .frame(maxWidth: .infinity, minHeight: 58, alignment: .leading)
         .padding(12)
-        .background(Color.secondary.opacity(0.08), in: RoundedRectangle(cornerRadius: 14))
+        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppCornerRadius.control))
+        .overlay {
+            RoundedRectangle(cornerRadius: AppCornerRadius.control)
+                .stroke(AppTheme.hairline, lineWidth: 1)
+        }
     }
 
     private func previewSection(
@@ -140,7 +144,7 @@ struct ReadingPlanPreviewView: View {
                 ForEach(day.assignments) { assignment in
                     Label(assignment.displayTitle, systemImage: "circle")
                         .font(.subheadline)
-                        .foregroundStyle(.primary)
+                        .foregroundStyle(AppTheme.ink)
                 }
             }
             .padding(.top, 10)
@@ -156,7 +160,11 @@ struct ReadingPlanPreviewView: View {
             }
         }
         .padding(14)
-        .background(Color.secondary.opacity(0.06), in: RoundedRectangle(cornerRadius: 14))
+        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppCornerRadius.control))
+        .overlay {
+            RoundedRectangle(cornerRadius: AppCornerRadius.control)
+                .stroke(AppTheme.hairline, lineWidth: 1)
+        }
         .accessibilityIdentifier("preview-plan-day-\(day.logicalDayIndex)")
     }
 

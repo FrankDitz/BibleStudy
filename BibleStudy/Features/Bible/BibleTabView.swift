@@ -40,7 +40,7 @@ struct BibleTabView: View {
                     configuredContent
                 }
             }
-            .navigationTitle("Bible")
+            .navigationTitle("Scripture")
             .toolbar {
                 if let returnTitle, let onReturn {
                     ToolbarItem(placement: .cancellationAction) {
@@ -61,6 +61,7 @@ struct BibleTabView: View {
         .task {
             await catalogApproval.audit(using: configuration)
         }
+        .background(AppScreenBackground())
         .sheet(isPresented: $isSearchPresented) {
             if let appKey = configuration.youVersionAppKey,
                 let versionID = approvedVersionID
@@ -105,7 +106,7 @@ struct BibleTabView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.horizontal, AppSpacing.compact)
                         .padding(.vertical, 6)
-                        .background(.bar)
+                        .background(AppTheme.surface)
                         .accessibilityLabel("Bible edition notice. \(notice)")
                 }
             }

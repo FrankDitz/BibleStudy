@@ -21,7 +21,7 @@ struct VirtuePathwayView: View {
             .frame(maxWidth: 820)
             .frame(maxWidth: .infinity)
         }
-        .background(AppTheme.warmSurface.opacity(0.35))
+        .background(AppScreenBackground())
         .navigationTitle(pathway.title)
         .accessibilityIdentifier("virtue-pathway-detail-\(pathway.id.rawValue)")
     }

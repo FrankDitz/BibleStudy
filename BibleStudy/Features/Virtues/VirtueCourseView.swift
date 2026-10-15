@@ -25,11 +25,11 @@ struct VirtueCourseView: View {
                 lessonOutline
                 sources
             }
-            .padding()
+            .padding(AppSpacing.screen)
             .frame(maxWidth: 840)
             .frame(maxWidth: .infinity)
         }
-        .background(AppTheme.warmSurface.opacity(0.35))
+        .background(AppScreenBackground())
         .navigationTitle(course.title)
         .onAppear(perform: loadReflections)
         .accessibilityIdentifier("virtue-course-\(course.id)")
@@ -80,28 +80,36 @@ struct VirtueCourseView: View {
     }
 
     private var header: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        ZStack(alignment: .bottomLeading) {
+            LinearGradient(
+                colors: [AppTheme.accent, .black],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
             Image(systemName: course.systemImage)
-                .font(.system(size: 34, weight: .semibold))
-                .foregroundStyle(AppTheme.accent)
-                .frame(width: 68, height: 68)
-                .background(AppTheme.accent.opacity(0.12), in: RoundedRectangle(cornerRadius: 18))
+                .font(.system(size: 180, weight: .ultraLight))
+                .foregroundStyle(.white.opacity(0.08))
+                .offset(x: 180, y: -35)
                 .accessibilityHidden(true)
-            Text(course.collection.title.uppercased())
-                .font(.caption.bold())
-                .foregroundStyle(AppTheme.accent)
-            Text(course.title)
-                .font(.system(.largeTitle, design: .serif, weight: .bold))
-            Text(course.subtitle)
-                .font(AppTypography.screenIntroduction)
-                .foregroundStyle(AppTheme.supportingText)
-            HStack(spacing: 16) {
-                Label("\(course.lessons.count) lessons", systemImage: "list.number")
-                Label("About \(course.estimatedMinutes) min", systemImage: "clock")
+            VStack(alignment: .leading, spacing: 12) {
+                EditorialEyebrow(course.collection.title, inverse: true)
+                Text(course.title)
+                    .font(.system(.largeTitle, design: .serif, weight: .bold))
+                Text(course.subtitle)
+                    .font(AppTypography.screenIntroduction)
+                    .foregroundStyle(.white.opacity(0.84))
+                HStack(spacing: 16) {
+                    Label("\(course.lessons.count) lessons", systemImage: "list.number")
+                    Label("About \(course.estimatedMinutes) min", systemImage: "clock")
+                }
+                .font(.subheadline)
+                .foregroundStyle(.white.opacity(0.84))
             }
-            .font(.subheadline)
-            .foregroundStyle(AppTheme.supportingText)
+            .foregroundStyle(.white)
+            .padding(AppSpacing.spacious)
         }
+        .frame(minHeight: 280)
+        .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.hero, style: .continuous))
     }
 
     private var courseProgress: some View {
@@ -121,8 +129,10 @@ struct VirtueCourseView: View {
                         .foregroundStyle(courseProgressColor)
                 }
 
-                ProgressView(value: Double(completedLessonCount), total: Double(course.lessons.count))
-                    .tint(AppTheme.success)
+                EmeraldProgressBar(
+                    value: course.lessons.isEmpty
+                        ? 0 : Double(completedLessonCount) / Double(course.lessons.count)
+                )
 
                 Text(
                     progress?.isComplete(course) == true
@@ -230,8 +240,7 @@ struct VirtueCourseView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
             }
-            .buttonStyle(.borderedProminent)
-            .tint(AppTheme.accent)
+            .buttonStyle(EmeraldActionButtonStyle())
             .simultaneousGesture(TapGesture().onEnded(beginCourse))
             .accessibilityIdentifier("virtue-course-primary-action")
         }
@@ -432,11 +441,11 @@ struct VirtueLessonView: View {
                 lessonSources
                 completion
             }
-            .padding()
+            .padding(AppSpacing.screen)
             .frame(maxWidth: 760)
             .frame(maxWidth: .infinity)
         }
-        .background(AppTheme.warmSurface.opacity(0.35))
+        .background(AppScreenBackground())
         .navigationTitle("Lesson \(lessonNumber) of \(course.lessons.count)")
         .onAppear(perform: recordOpened)
         .accessibilityIdentifier("virtue-lesson-\(lesson.id)")
@@ -630,7 +639,7 @@ struct VirtueLessonView: View {
                     }
                     .padding(12)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(AppTheme.warmSurface, in: RoundedRectangle(cornerRadius: 12))
+                    .background(AppTheme.elevatedSurface, in: RoundedRectangle(cornerRadius: 12))
 
                     Text(
                         "Now apply the steps to your own situation. Move slowly; this is an aid to honest prayer and practical judgment, not a diagnosis, a judgment of another person's soul, or a substitute for Confession or qualified help."

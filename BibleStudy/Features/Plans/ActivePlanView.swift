@@ -74,10 +74,8 @@ struct ActivePlanView: View {
                         Spacer()
                         PaceBadge(pace: displayedPace(progress.pace, state: state))
                     }
-                    ProgressView(value: state.completionFraction)
-                        .tint(AppTheme.accent)
+                    EmeraldProgressBar(value: state.completionFraction)
                         .accessibilityLabel("Plan completion")
-                        .accessibilityValue("\(Int(state.completionFraction * 100)) percent")
                 }
 
                 DayRail(
@@ -122,8 +120,7 @@ struct ActivePlanView: View {
                     .font(.headline)
                     .frame(maxWidth: .infinity, minHeight: 32)
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(AppTheme.accent)
+                .buttonStyle(EmeraldActionButtonStyle())
                 .disabled(selectedDay?.assignments.isEmpty != false)
                 .accessibilityIdentifier("start-plan-reading")
             }
@@ -131,6 +128,7 @@ struct ActivePlanView: View {
             .frame(maxWidth: 900)
             .frame(maxWidth: .infinity)
         }
+        .background(AppScreenBackground())
         .accessibilityIdentifier("active-plan-detail")
     }
 
@@ -299,11 +297,15 @@ struct PlanCoverView: View {
 
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            LinearGradient(colors: style.colors, startPoint: .topLeading, endPoint: .bottomTrailing)
-            Circle()
-                .fill(.white.opacity(0.09))
-                .frame(width: 280, height: 280)
-                .offset(x: 120, y: -80)
+            LinearGradient(
+                colors: [AppTheme.accent, .black],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            Text("WORD")
+                .font(.system(size: 96, weight: .black, design: .serif))
+                .foregroundStyle(.white.opacity(0.08))
+                .offset(x: 120, y: -100)
             Image(systemName: "cross.fill")
                 .font(.system(size: 90, weight: .ultraLight))
                 .foregroundStyle(.white.opacity(0.13))
@@ -324,8 +326,8 @@ struct PlanCoverView: View {
             }
             .padding(28)
         }
-        .clipShape(RoundedRectangle(cornerRadius: 24))
-        .shadow(color: style.colors.last?.opacity(0.25) ?? .clear, radius: 18, y: 8)
+        .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.hero, style: .continuous))
+        .shadow(color: AppTheme.accent.opacity(0.18), radius: 18, y: 8)
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("active-plan-cover")
     }
