@@ -1,8 +1,8 @@
 # Virtue Curriculum Review Packet
 
-**Curriculum status:** progressive manuscript rewrite; qualified Catholic review pending
+**Curriculum status:** complete technical manuscript; qualified Catholic review pending
 **Content baseline:** 2026-10-14
-**Current reviewable scope:** eleven-lesson foundation course and all four ten-lesson cardinal courses: Prudence, Justice, Fortitude, and Temperance. Seven capital-sin counter-virtue courses retain their planned structure but remain unavailable prototypes pending full manuscripts.
+**Current reviewable scope:** the full twelve-course, 121-lesson curriculum: the eleven-lesson foundation course, four ten-lesson cardinal courses, and seven ten-lesson capital-sin counter-virtue courses.
 
 ## Purpose
 
@@ -19,7 +19,7 @@ The Virtues tab is a guided library for learning what virtue is, seeing it in Sc
 ## Course inventory
 
 - **Foundations:** *Becoming the Person God Calls You to Be* — 11 full lecture drafts available for owner inspection and qualified review.
-- **Counter-virtue track:** Humility against Pride; Charity and Generosity against Avarice; Kindness and Goodwill against Envy; Patience and Meekness against Wrath; Chastity against Lust; Temperance against Gluttony; Diligence and Perseverance against Sloth and Acedia — 10 planned lessons each, unavailable until rewritten.
+- **Counter-virtue track:** Humility against Pride; Charity and Generosity against Avarice; Kindness and Goodwill against Envy; Patience and Meekness against Wrath; Chastity against Lust; Temperance against Gluttony; Diligence and Perseverance against Sloth and Acedia — 10 full lecture drafts each, available for owner inspection and qualified review.
 - **Cardinal track:** Prudence, Justice, Fortitude, and Temperance — 10 full lecture drafts each, available for owner inspection and qualified review.
 
 The shared technical gate requires at least 800 words of instruction and 1,000 authored words overall in every available lesson, three Scripture passages totaling at least 24 verses, eight distinct sections, five review prompts, full formation supports, and a time estimate derived from the real material. Passing that gate establishes depth and structure; it does not constitute theological approval.
@@ -62,3 +62,10 @@ The app omits dated rhetoric, stereotypes, culture-bound examples, and claims th
 | Pending | Pending | Justice course | Pending | Pending | No content is labeled reviewed until this row is completed. |
 | Pending | Pending | Fortitude course | Pending | Pending | No content is labeled reviewed until this row is completed. |
 | Pending | Pending | Cardinal Temperance course | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Humility against Pride course | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Charity and Generosity against Avarice course | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Kindness and Goodwill against Envy course | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Patience and Meekness against Wrath course | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Chastity against Lust course | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Temperance against Gluttony course | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Diligence and Perseverance against Sloth and Acedia course | Pending | Pending | No content is labeled reviewed until this row is completed. |
