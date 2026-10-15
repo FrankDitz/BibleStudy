@@ -28,6 +28,7 @@ The personal-use release is a local-first formation app that uses the YouVersion
 | 3. Plans | Reading goals become actionable and accountable | Premade plans, custom plan builder, schedule engine, day checklist, reminders, catch-up choices, progress | Plan math passes edge cases and a plan works end-to-end |
 | 4. Daily formation | The app feels like a coherent Catholic companion | Home dashboard, Learning MVP, Echo reflection handoff, source/reviewer metadata | A complete daily loop works without dead ends |
 | 4A. Virtue study and formation | Catholic teaching and Scripture become an intelligible path toward virtuous life | First-class Virtues destination, orientation course, seven capital-sin counter-virtue courses, four cardinal-virtue courses, optional practice tools, private study record | Every virtue has a coherent source-backed course and Scripture path; study progress never claims moral mastery |
+| 4B. Emerald UI system | The whole product has one distinctive, adaptive visual identity | Approved references, Emerald Light/After Dark tokens, editorial components, redesigned Home/Bible/Plans/Virtues/Learning/You, accessibility verification | Every core journey matches the approved design language in both appearances without losing readability or behavior |
 | 5. Personalization and hub | The experience persists across devices and belongs in the hub | You, private analytics, milestones, iCloud sync, deep links, import/export, hub events | iPhone/Mac state converges and hub journeys work |
 | 6. Narrated Bible | Listening is first-class where rights allow it | Licensed audio provider, background player, lock-screen controls, chapter queue, optional verse timecodes | Playback survives interruptions and text/audio stay aligned |
 | 7. Hardening and personal release | A trustworthy owner-only v1.0 is ready | Accessibility, performance, content/legal QA, direct-device testing, migration and recovery tests, release checklist | No personal-release blocker remains |
@@ -880,6 +881,47 @@ Do not generate text-to-speech from a copyrighted translation unless its license
 - A qualified Catholic review route approves all published formation content and sensitive pastoral language.
 - The owner can remove the complete virtue history without deleting Scripture annotations or Echo entries.
 - No private check-in or reflection text enters provider requests, logs, analytics, or hub events.
+
+## Phase 4B — Emerald Light and Emerald After Dark UI
+
+**Goal:** give every existing journey one memorable, modern Christian visual system while preserving its behavior, Catholic content, privacy, and Scripture-provider boundaries.
+
+### Deliverable 4B.1 — Lock the visual contract
+
+- Preserve the approved Emerald Light and Emerald After Dark boards in the repository.
+- Record semantic palette, typography, geometry, photography, accessibility, and anti-pattern rules.
+- Produce original project-owned hero artwork rather than extracting images from a concept board.
+
+### Deliverable 4B.2 — Adaptive foundation and appearance controls
+
+- Implement semantic light/dark colors and editorial UI primitives.
+- Add System, Emerald Light, and Emerald After Dark choices in You.
+- Apply adaptive app backgrounds, surfaces, hairlines, buttons, progress, typography, and imagery on iPhone and Mac.
+
+### Deliverable 4B.3 — Navigation and Home
+
+- Restyle tabs, sidebar, toolbars, profile entry, and selected states.
+- Build the fashion-led Home hero with one dominant Continue Reading action.
+- Recompose plan, virtue, learning, and activity modules using the approved hierarchy.
+
+### Deliverable 4B.4 — Bible and Plans
+
+- Restyle reader header/footer and settings while keeping Scripture quiet and highly readable.
+- Restyle plan browsing, honest previews, activation, active-day wheel, chapter checklist, and progress states.
+
+### Deliverable 4B.5 — Virtues, Learning, and You
+
+- Apply the emerald editorial system to course browsing, course progress, lessons, and optional formation tools.
+- Present Catholic Learning as clear editorial collections with visible scope.
+- Finish the profile/settings appearance and integration surfaces.
+
+### Deliverable 4B.6 — Cross-platform quality gate
+
+- Verify Dynamic Type, VoiceOver semantics, non-color state cues, Reduce Motion, keyboard focus, iPhone layouts, and Mac resizing.
+- Build all supported targets and run the existing automated checks.
+- Compare the implemented core screens against both approved boards before merge.
+
+See `docs/design/EMERALD_DESIGN_SYSTEM.md` for the binding visual specification and source references.
 
 ## Phase 5 — You, iCloud, and hub integration
 
