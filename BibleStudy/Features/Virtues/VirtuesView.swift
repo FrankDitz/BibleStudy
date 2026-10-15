@@ -24,6 +24,7 @@ struct VirtuesView: View {
                     privacyNote
                     courseCollection(
                         title: "Seven virtues against the capital sins",
+                        trackNumber: "01",
                         detail:
                             "Learn how pride, avarice, envy, wrath, lust, gluttony, and sloth distort good desires—and how Catholic virtue heals and redirects them.",
                         courses: VirtueStudyCatalog.christianCourses,
@@ -31,6 +32,7 @@ struct VirtuesView: View {
                     )
                     courseCollection(
                         title: "The four cardinal virtues",
+                        trackNumber: "02",
                         detail:
                             "Study the four hinges of moral life: prudent judgment, justice in relationship, courageous steadfastness, and temperate freedom.",
                         courses: VirtueStudyCatalog.cardinalCourses,
@@ -96,7 +98,7 @@ struct VirtuesView: View {
         } label: {
             VStack(spacing: 0) {
                 ZStack(alignment: .bottomLeading) {
-                    AppHeroArtwork()
+                    EditorialArtwork(assetName: "VirtuesHero")
                         .frame(height: 380)
                         .frame(maxWidth: .infinity)
                         .clipped()
@@ -106,6 +108,18 @@ struct VirtuesView: View {
                                 startPoint: .top,
                                 endPoint: .bottom
                             )
+                        }
+                        .overlay(alignment: .topTrailing) {
+                            Label("Private progress", systemImage: "lock.fill")
+                                .font(.caption2.weight(.bold))
+                                .textCase(.uppercase)
+                                .tracking(1.2)
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 9)
+                                .background(.black.opacity(0.72))
+                                .padding(AppSpacing.standard)
+                                .accessibilityIdentifier("virtues-privacy-note")
                         }
 
                     VStack(alignment: .leading, spacing: 9) {
@@ -289,35 +303,63 @@ struct VirtuesView: View {
     }
 
     private var formationJourney: some View {
-        FeatureCard {
-            VStack(alignment: .leading, spacing: 14) {
-                Label("How this library works", systemImage: "point.topleft.down.to.point.bottomright.curvepath")
-                    .font(.headline)
-                journeyRow(
-                    number: 1,
-                    title: "Begin with the foundation",
-                    detail:
-                        "Learn how freedom, habit, the cardinal virtues, grace, and imitation of Christ fit together."
-                )
-                journeyRow(
-                    number: 2,
-                    title: "Choose a learning track",
-                    detail:
-                        "Study a virtue against a capital sin, or deepen the cardinal virtues that guide every moral choice. Preview all ten lessons before beginning."
-                )
-                journeyRow(
-                    number: 3,
-                    title: "Carry it into life",
-                    detail:
-                        "Open Scripture and use an optional Focus Cycle only after the teaching gives the practice meaning."
-                )
-                Label(
-                    "The Catechism and current universal-Church teaching govern the courses. Joseph Rickaby's 1908 work is used only as a historical guide to the cardinal virtues.",
-                    systemImage: "checkmark.shield"
-                )
-                .font(.footnote)
-                .foregroundStyle(AppTheme.supportingText)
+        VStack(alignment: .leading, spacing: AppSpacing.spacious) {
+            VStack(alignment: .leading, spacing: 7) {
+                EditorialEyebrow("Your formation path", inverse: true)
+                Text("LEARN IT.\nPRACTICE IT.\nLIVE IT.")
+                    .font(.system(size: 36, weight: .black, design: .serif))
+                    .foregroundStyle(.white)
             }
+
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .top, spacing: AppSpacing.spacious) {
+                    journeyRow(
+                        number: 1,
+                        title: "Build the foundation",
+                        detail: "Understand freedom, habit, grace, and why virtue makes a person more free."
+                    )
+                    journeyRow(
+                        number: 2,
+                        title: "Choose a course",
+                        detail: "Study a counter-virtue or deepen one of the four hinges of moral life."
+                    )
+                    journeyRow(
+                        number: 3,
+                        title: "Carry it into life",
+                        detail: "Open Scripture, practice deliberately, and return for continued formation."
+                    )
+                }
+                VStack(alignment: .leading, spacing: AppSpacing.spacious) {
+                    journeyRow(
+                        number: 1,
+                        title: "Build the foundation",
+                        detail: "Understand freedom, habit, grace, and why virtue makes a person more free."
+                    )
+                    journeyRow(
+                        number: 2,
+                        title: "Choose a course",
+                        detail: "Study a counter-virtue or deepen one of the four hinges of moral life."
+                    )
+                    journeyRow(
+                        number: 3,
+                        title: "Carry it into life",
+                        detail: "Open Scripture, practice deliberately, and return for continued formation."
+                    )
+                }
+            }
+
+            Rectangle().fill(.white.opacity(0.22)).frame(height: 1)
+            Label(
+                "The Catechism and current universal-Church teaching govern every course. Joseph Rickaby is used only as a historical guide to the cardinal virtues.",
+                systemImage: "checkmark.shield"
+            )
+            .font(.footnote)
+            .foregroundStyle(.white.opacity(0.72))
+        }
+        .padding(AppSpacing.spacious)
+        .background(.black)
+        .overlay(alignment: .leading) {
+            Rectangle().fill(AppTheme.accent).frame(width: 5)
         }
         .accessibilityIdentifier("virtues-formation-journey")
     }
@@ -338,28 +380,35 @@ struct VirtuesView: View {
 
     private func courseCollection(
         title: String,
+        trackNumber: String,
         detail: String,
         courses: [VirtueStudyCourse],
         identifier: String
     ) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            EditorialSectionHeader(title, eyebrow: "Course library", detail: detail)
+        VStack(alignment: .leading, spacing: AppSpacing.standard) {
+            HStack(alignment: .top, spacing: AppSpacing.standard) {
+                Text(trackNumber)
+                    .font(.system(size: 42, weight: .black, design: .serif))
+                    .foregroundStyle(AppTheme.accent)
+                    .accessibilityHidden(true)
+                EditorialSectionHeader(title, eyebrow: "Course library", detail: detail)
+            }
 
             LazyVGrid(
                 columns: [GridItem(.adaptive(minimum: 260), spacing: AppSpacing.standard)],
                 spacing: AppSpacing.standard
             ) {
-                ForEach(courses) { course in
+                ForEach(Array(courses.enumerated()), id: \.element.id) { index, course in
                     if VirtueStudyCatalog.isLectureReady(course) {
                         NavigationLink {
                             VirtueCourseView(course: course, openReading: openReading)
                         } label: {
-                            courseCard(course, isReady: true)
+                            courseCard(course, number: index + 1, isReady: true)
                         }
                         .buttonStyle(.plain)
                         .accessibilityIdentifier(courseIdentifier(course))
                     } else {
-                        courseCard(course, isReady: false)
+                        courseCard(course, number: index + 1, isReady: false)
                             .accessibilityElement(children: .combine)
                             .accessibilityLabel("\(course.title). Full lecture course in development.")
                             .accessibilityIdentifier("\(courseIdentifier(course))-in-development")
@@ -370,37 +419,47 @@ struct VirtuesView: View {
         .accessibilityIdentifier(identifier)
     }
 
-    private func courseCard(_ course: VirtueStudyCourse, isReady: Bool) -> some View {
-        FeatureCard {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack {
-                    Image(systemName: course.systemImage)
-                        .font(.title2)
-                        .foregroundStyle(AppTheme.accent)
-                        .frame(width: 46, height: 46)
-                        .background(
-                            AppTheme.elevatedSurface, in: RoundedRectangle(cornerRadius: AppCornerRadius.control))
-                    Spacer()
-                    courseStatus(course)
-                    Image(systemName: "chevron.right")
-                        .foregroundStyle(.secondary)
-                        .accessibilityHidden(true)
-                }
+    private func courseCard(_ course: VirtueStudyCourse, number: Int, isReady: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(alignment: .top) {
+                Text(String(format: "%02d", number))
+                    .font(.system(size: 38, weight: .black, design: .serif))
+                    .foregroundStyle(AppTheme.accent)
+                Spacer()
+                courseStatus(course)
+                Image(systemName: "arrow.up.right")
+                    .foregroundStyle(AppTheme.accent)
+                    .accessibilityHidden(true)
+            }
+            .padding(AppSpacing.standard)
+            .background(AppTheme.elevatedSurface)
+
+            VStack(alignment: .leading, spacing: 10) {
+                EditorialEyebrow(isReady ? "Full lecture course" : "In development")
                 Text(course.title)
-                    .font(.title2.bold())
+                    .font(.system(.title2, design: .serif, weight: .bold))
                 Text(course.subtitle)
                     .foregroundStyle(AppTheme.supportingText)
                     .multilineTextAlignment(.leading)
-                Label(
-                    isReady
-                        ? "\(course.lessons.count) full lessons"
-                        : "Full lecture course in development",
-                    systemImage: isReady ? "book.closed" : "hammer"
-                )
+                Spacer(minLength: 4)
+                HStack {
+                    Label(
+                        isReady
+                            ? "\(course.lessons.count) lessons"
+                            : "Course in development",
+                        systemImage: isReady ? "book.closed" : "hammer"
+                    )
+                    Spacer()
+                    Image(systemName: course.systemImage)
+                }
                 .font(.caption.bold())
                 .foregroundStyle(isReady ? AppTheme.accent : AppTheme.warning)
             }
+            .padding(AppSpacing.standard)
+            .frame(maxWidth: .infinity, minHeight: 170, alignment: .topLeading)
+            .background(AppTheme.surface)
         }
+        .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
         .opacity(isReady ? 1 : 0.76)
     }
 
@@ -543,7 +602,6 @@ struct VirtuesView: View {
         )
         .font(.footnote)
         .foregroundStyle(AppTheme.supportingText)
-        .accessibilityIdentifier("virtues-privacy-note")
     }
 
     private func courseIdentifier(_ course: VirtueStudyCourse) -> String {
@@ -554,20 +612,20 @@ struct VirtuesView: View {
     }
 
     private func journeyRow(number: Int, title: String, detail: String) -> some View {
-        HStack(alignment: .top, spacing: 12) {
-            Text("\(number)")
+        VStack(alignment: .leading, spacing: 8) {
+            Text(String(format: "%02d", number))
+                .font(.system(.title2, design: .serif, weight: .black))
+                .foregroundStyle(AppTheme.accent)
+                .accessibilityHidden(true)
+            Rectangle().fill(.white.opacity(0.35)).frame(width: 36, height: 1)
+            Text(title)
                 .font(.headline)
                 .foregroundStyle(.white)
-                .frame(width: 30, height: 30)
-                .background(AppTheme.accent, in: Circle())
-                .accessibilityHidden(true)
-            VStack(alignment: .leading, spacing: 3) {
-                Text(title)
-                    .font(.headline)
-                Text(detail)
-                    .foregroundStyle(AppTheme.supportingText)
-            }
+            Text(detail)
+                .font(.subheadline)
+                .foregroundStyle(.white.opacity(0.68))
         }
+        .frame(maxWidth: .infinity, alignment: .topLeading)
         .accessibilityElement(children: .combine)
     }
 }

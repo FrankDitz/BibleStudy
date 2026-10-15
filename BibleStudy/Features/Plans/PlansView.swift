@@ -22,30 +22,32 @@ struct PlansView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: AppSpacing.spacious) {
+                LazyVStack(alignment: .leading, spacing: AppSpacing.section) {
                     planHero
-
                     activePlanSection
-
-                    EditorialSectionHeader(
-                        "Premade plans",
-                        eyebrow: "Choose your rhythm",
-                        detail: "Preview every reading and commitment before you begin."
+                    planCollection(
+                        title: "Start with Jesus",
+                        eyebrow: "01 · A clear beginning",
+                        detail:
+                            "Short, focused routes through the life of Christ—ideal for beginning again or building a first daily rhythm.",
+                        identifiers: ["start-with-jesus-21", "gospels-30"]
                     )
-                    .padding(.top, 4)
-
-                    LazyVGrid(
-                        columns: [GridItem(.adaptive(minimum: 300), spacing: AppSpacing.standard)],
-                        spacing: AppSpacing.standard
-                    ) {
-                        ForEach(ReadingPlanTemplate.featured) { plan in
-                            PremadePlanCard(
-                                plan: plan,
-                                previewPlan: { previewedTemplate = plan },
-                                startPlan: { selectedTemplate = plan }
-                            )
-                        }
-                    }
+                    planCollection(
+                        title: "Build a monthly rhythm",
+                        eyebrow: "02 · Focused formation",
+                        detail:
+                            "Spend one month with prayer, wisdom, or the books unique to the Catholic canon.",
+                        identifiers: ["psalms-proverbs-31", "catholic-deuterocanon-30"]
+                    )
+                    planCollection(
+                        title: "Take the long road",
+                        eyebrow: "03 · Complete journeys",
+                        detail:
+                            "Choose a sustained route through the New Testament, Old Testament, or the full Catholic Bible.",
+                        identifiers: [
+                            "new-testament-90", "catholic-old-testament-90", "catholic-bible-365",
+                        ]
+                    )
                 }
                 .padding(AppSpacing.screen)
                 .frame(maxWidth: 1120)
@@ -101,39 +103,77 @@ struct PlansView: View {
     }
 
     private var planHero: some View {
-        ZStack(alignment: .bottomLeading) {
-            LinearGradient(
-                colors: [.black, AppTheme.accent.opacity(0.88)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+        VStack(spacing: 0) {
+            ZStack(alignment: .bottomLeading) {
+                EditorialArtwork(assetName: "PlansHero")
+                    .frame(height: 420)
+                    .frame(maxWidth: .infinity)
+                    .clipped()
+                    .overlay {
+                        LinearGradient(
+                            colors: [.black.opacity(0.04), .black.opacity(0.28), .black.opacity(0.92)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    }
 
-            Text("365")
-                .font(.system(size: 210, weight: .black, design: .serif))
-                .foregroundStyle(.white.opacity(0.055))
-                .offset(x: 130, y: 54)
-                .accessibilityHidden(true)
-
-            VStack(alignment: .leading, spacing: 8) {
-                EditorialEyebrow("Scripture formation", inverse: true)
-                Text("PLAN\nTHE WORD.")
-                    .font(.system(size: 47, weight: .black, design: .serif))
-                    .minimumScaleFactor(0.72)
-                Rectangle()
-                    .fill(.white.opacity(0.8))
-                    .frame(width: 42, height: 2)
-                Text(
-                    "Choose a clear path. Keep an honest pace. Return without shame when life interrupts the schedule."
-                )
-                .font(.headline)
-                .foregroundStyle(.white.opacity(0.82))
-                .frame(maxWidth: 560, alignment: .leading)
+                VStack(alignment: .leading, spacing: 9) {
+                    EditorialEyebrow("Scripture formation", inverse: true)
+                    Text("STAY IN\nTHE WORD.")
+                        .font(.system(size: 48, weight: .black, design: .serif))
+                        .minimumScaleFactor(0.68)
+                    Rectangle()
+                        .fill(AppTheme.accent)
+                        .frame(width: 48, height: 3)
+                    Text("A reading rhythm gives intention to every return to Scripture.")
+                        .font(.headline)
+                        .foregroundStyle(.white.opacity(0.86))
+                        .frame(maxWidth: 480, alignment: .leading)
+                }
+                .foregroundStyle(.white)
+                .padding(AppSpacing.spacious)
             }
-            .foregroundStyle(.white)
-            .padding(AppSpacing.spacious)
+
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 0) {
+                    planStep("01", title: "Choose", detail: "Find your scope")
+                    planStep("02", title: "Preview", detail: "See every reading")
+                    planStep("03", title: "Begin", detail: "Keep an honest pace")
+                }
+                VStack(spacing: 0) {
+                    planStep("01", title: "Choose", detail: "Find your scope")
+                    planStep("02", title: "Preview", detail: "See every reading")
+                    planStep("03", title: "Begin", detail: "Keep an honest pace")
+                }
+            }
+            .background(AppTheme.surface)
+            .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
         }
-        .frame(minHeight: 320)
         .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.hero, style: .continuous))
+        .accessibilityElement(children: .contain)
+    }
+
+    private func planStep(_ number: String, title: String, detail: String) -> some View {
+        HStack(spacing: 10) {
+            Text(number)
+                .font(.system(.title3, design: .serif, weight: .black))
+                .foregroundStyle(AppTheme.accent)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(title)
+                    .font(.subheadline.bold())
+                    .foregroundStyle(AppTheme.ink)
+                Text(detail)
+                    .font(.caption)
+                    .foregroundStyle(AppTheme.supportingText)
+            }
+            Spacer(minLength: 8)
+        }
+        .padding(.horizontal, AppSpacing.standard)
+        .padding(.vertical, 14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .overlay(alignment: .trailing) {
+            Rectangle().fill(AppTheme.hairline).frame(width: 1)
+        }
         .accessibilityElement(children: .combine)
     }
 
@@ -143,55 +183,90 @@ struct PlansView: View {
             Button {
                 isShowingActivePlan = true
             } label: {
-                FeatureCard {
-                    HStack(spacing: 16) {
-                        Rectangle()
-                            .fill(
-                                LinearGradient(
-                                    colors: state.snapshot.coverStyle.colors,
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .frame(width: 82, height: 96)
-                            .overlay {
-                                Image(systemName: "book.closed.fill")
-                                    .font(.title)
-                                    .foregroundStyle(.white.opacity(0.88))
-                            }
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text("Your active plan")
-                                .font(.caption.bold())
-                                .foregroundStyle(AppTheme.accent)
+                VStack(spacing: 0) {
+                    Rectangle().fill(AppTheme.accent).frame(height: 4)
+                    HStack(spacing: AppSpacing.standard) {
+                        EditorialArtwork(
+                            assetName: ReadingPlanArtwork.assetName(for: state.snapshot.sourceID)
+                        )
+                        .frame(width: 112, height: 126)
+                        .clipped()
+
+                        VStack(alignment: .leading, spacing: 7) {
+                            EditorialEyebrow("Continue your active plan")
                             Text(state.snapshot.title)
-                                .font(.title3.bold())
-                                .foregroundStyle(.primary)
+                                .font(.system(.title2, design: .serif, weight: .bold))
+                                .foregroundStyle(AppTheme.ink)
                             Text(activePlanSummary(state))
                                 .font(.subheadline)
                                 .foregroundStyle(AppTheme.supportingText)
                             EmeraldProgressBar(value: state.completionFraction)
                         }
                         Spacer(minLength: 4)
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(.secondary)
+                        Image(systemName: "arrow.right")
+                            .font(.headline)
+                            .foregroundStyle(AppTheme.accent)
                     }
+                    .padding(AppSpacing.standard)
                 }
+                .background(AppTheme.surface)
+                .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
             }
             .buttonStyle(.plain)
             .accessibilityIdentifier("open-active-plan")
         } else {
-            FeatureCard {
-                VStack(alignment: .leading, spacing: 10) {
-                    Label("Your active plan", systemImage: "calendar.badge.checkmark")
-                        .font(.headline)
-                    Text("No active plan yet")
-                        .font(.title2.bold())
-                    Text(
-                        "Choose a premade plan below or create a schedule around your own reading goal."
-                    )
+            VStack(alignment: .leading, spacing: 12) {
+                Rectangle().fill(AppTheme.accent).frame(height: 4)
+                EditorialEyebrow("Your next step")
+                Text("Choose a plan or build your own.")
+                    .font(.system(.title2, design: .serif, weight: .bold))
+                Text(
+                    "Preview a complete schedule below, or create a plan around the books and pace you already have in mind."
+                )
+                .foregroundStyle(AppTheme.supportingText)
+                Button("Create a Custom Plan") { isPresentingComposer = true }
+                    .buttonStyle(EmeraldActionButtonStyle())
+            }
+            .padding(AppSpacing.spacious)
+            .background(AppTheme.surface)
+            .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
+        }
+    }
+
+    private func planCollection(
+        title: String,
+        eyebrow: String,
+        detail: String,
+        identifiers: [String]
+    ) -> some View {
+        let plans = identifiers.compactMap { identifier in
+            ReadingPlanTemplate.featured.first { $0.id == identifier }
+        }
+
+        return VStack(alignment: .leading, spacing: AppSpacing.standard) {
+            HStack(alignment: .top, spacing: AppSpacing.standard) {
+                Rectangle()
+                    .fill(AppTheme.accent)
+                    .frame(width: 4, height: 58)
+                EditorialSectionHeader(title, eyebrow: eyebrow, detail: detail)
+                Spacer(minLength: 8)
+                Text("\(plans.count) PLANS")
+                    .font(AppTypography.eyebrow)
+                    .tracking(1.4)
                     .foregroundStyle(AppTheme.supportingText)
-                    Button("Create a Custom Plan") { isPresentingComposer = true }
-                        .buttonStyle(EmeraldActionButtonStyle())
+                    .padding(.top, 2)
+            }
+
+            LazyVGrid(
+                columns: [GridItem(.adaptive(minimum: 300), spacing: AppSpacing.standard)],
+                spacing: AppSpacing.standard
+            ) {
+                ForEach(plans) { plan in
+                    PremadePlanCard(
+                        plan: plan,
+                        previewPlan: { previewedTemplate = plan },
+                        startPlan: { selectedTemplate = plan }
+                    )
                 }
             }
         }
@@ -251,53 +326,53 @@ private struct PremadePlanCard: View {
     let startPlan: () -> Void
 
     var body: some View {
-        FeatureCard {
-            VStack(alignment: .leading, spacing: AppSpacing.standard) {
-                cover.frame(height: 185)
-                details
-            }
+        VStack(spacing: 0) {
+            cover
+                .frame(height: 220)
+            details
+                .padding(AppSpacing.standard)
+                .background(AppTheme.surface)
         }
+        .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
+        .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.card, style: .continuous))
     }
 
     private var cover: some View {
         ZStack(alignment: .bottomLeading) {
-            Rectangle()
-                .fill(
-                    LinearGradient(
-                        colors: [AppTheme.accent, .black],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-            Text("\(plan.durationDays)")
-                .font(.system(size: 72, weight: .black, design: .serif))
-                .foregroundStyle(.white.opacity(0.20))
-                .offset(x: 36, y: -18)
+            EditorialArtwork(assetName: ReadingPlanArtwork.assetName(for: plan.id))
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .clipped()
+            LinearGradient(
+                colors: [.clear, .black.opacity(0.18), .black.opacity(0.88)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
             VStack(alignment: .leading, spacing: 5) {
-                EditorialEyebrow("Reading plan", inverse: true)
+                HStack {
+                    EditorialEyebrow("\(plan.durationDays) day plan", inverse: true)
+                    Spacer()
+                    Text("~\(plan.estimatedDailyMinutes.lowerBound)–\(plan.estimatedDailyMinutes.upperBound) MIN")
+                        .font(.caption2.bold())
+                        .tracking(1.2)
+                        .foregroundStyle(.white.opacity(0.82))
+                }
                 Text(plan.title)
-                    .font(.system(.headline, design: .serif, weight: .bold))
+                    .font(.system(.title2, design: .serif, weight: .bold))
                     .foregroundStyle(.white)
-                    .lineLimit(3)
+                    .lineLimit(2)
             }
-            .padding(14)
+            .padding(AppSpacing.standard)
         }
-        .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.control, style: .continuous))
         .accessibilityHidden(true)
     }
 
     private var details: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(plan.title)
-                .font(AppTypography.cardTitle)
-            Text(
-                "\(plan.durationDays) days · ~\(plan.estimatedDailyMinutes.lowerBound)–\(plan.estimatedDailyMinutes.upperBound) min/day"
-            )
-            .font(.subheadline.weight(.semibold))
-            .foregroundStyle(AppTheme.accent)
+        VStack(alignment: .leading, spacing: 12) {
             Text(plan.summary)
                 .foregroundStyle(AppTheme.supportingText)
-            HStack {
+                .lineLimit(3)
+            Rectangle().fill(AppTheme.hairline).frame(height: 1)
+            HStack(spacing: 10) {
                 Button("Preview", action: previewPlan)
                     .buttonStyle(EditorialSecondaryButtonStyle())
                 Button("Start Plan", action: startPlan)
@@ -305,5 +380,20 @@ private struct PremadePlanCard: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+private enum ReadingPlanArtwork {
+    static func assetName(for identifier: String?) -> String {
+        switch identifier {
+        case "new-testament-90": "PlanNewTestament90"
+        case "catholic-old-testament-90": "PlanOldTestament90"
+        case "catholic-bible-365": "PlanBible365"
+        case "gospels-30": "PlanGospels30"
+        case "psalms-proverbs-31": "PlanPsalmsProverbs31"
+        case "start-with-jesus-21": "PlanStartJesus21"
+        case "catholic-deuterocanon-30": "PlanDeuterocanon30"
+        default: "PlansHero"
+        }
     }
 }
