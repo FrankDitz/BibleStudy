@@ -4,22 +4,31 @@ struct LearningView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: AppSpacing.spacious) {
+                LazyVStack(alignment: .leading, spacing: AppSpacing.section) {
                     header
+                    learningMap
                     scopeNote
-                    EditorialSectionHeader(
-                        "Catholic life",
-                        eyebrow: "Learn the faith",
-                        detail: "Clear introductions to worship, sacraments, prayer, seasons, and life in the Church."
+                    topicCollection(
+                        number: "01",
+                        title: "Worship & sacred time",
+                        detail:
+                            "Learn what happens at Mass and how the Church's seasons, solemnities, and holy days shape Catholic life.",
+                        identifiers: ["mass", "liturgical-year"]
                     )
-                    LazyVGrid(
-                        columns: [GridItem(.adaptive(minimum: 250), spacing: AppSpacing.standard)],
-                        spacing: AppSpacing.standard
-                    ) {
-                        ForEach(Array(LearningTopicCatalog.topics.enumerated()), id: \.element.id) { index, topic in
-                            topicCard(topic, index: index)
-                        }
-                    }
+                    topicCollection(
+                        number: "02",
+                        title: "Sacraments & belonging",
+                        detail:
+                            "Understand the signs of grace that mark Christian initiation, healing, vocation, and life in the Church.",
+                        identifiers: ["sacraments"]
+                    )
+                    topicCollection(
+                        number: "03",
+                        title: "Prayer & devotion",
+                        detail:
+                            "Build confidence with the Rosary, foundational prayers, devotions, and Catholic prayer beyond Sunday Mass.",
+                        identifiers: ["rosary", "prayer-devotions"]
+                    )
                 }
                 .padding(AppSpacing.screen)
                 .frame(maxWidth: 1120)
@@ -32,30 +41,85 @@ struct LearningView: View {
 
     private var header: some View {
         ZStack(alignment: .bottomLeading) {
-            LinearGradient(
-                colors: [AppTheme.accent, .black],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            Text("KNOW")
-                .font(.system(size: 96, weight: .black, design: .serif))
-                .foregroundStyle(.white.opacity(0.10))
-                .offset(x: 90, y: -60)
-            VStack(alignment: .leading, spacing: 10) {
+            EditorialArtwork(assetName: "LearningHero")
+                .frame(height: 420)
+                .frame(maxWidth: .infinity)
+                .clipped()
+                .overlay {
+                    LinearGradient(
+                        colors: [.black.opacity(0.02), .black.opacity(0.18), .black.opacity(0.90)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                }
+
+            VStack(alignment: .leading, spacing: 9) {
                 EditorialEyebrow("Formation beyond the page", inverse: true)
-                Text("Know what the Church lives.")
-                    .font(.system(.largeTitle, design: .serif, weight: .bold))
+                Text("KNOW THE\nFAITH.")
+                    .font(.system(size: 48, weight: .black, design: .serif))
+                    .minimumScaleFactor(0.68)
+                Rectangle()
+                    .fill(AppTheme.accent)
+                    .frame(width: 48, height: 3)
                 Text(
-                    "Understand Catholic worship and practice so you can participate with confidence, reverence, and purpose."
+                    "Understand what the Church believes, celebrates, and lives—then participate with confidence and reverence."
                 )
-                .font(.title3)
-                .foregroundStyle(.white.opacity(0.84))
+                .font(.headline)
+                .foregroundStyle(.white.opacity(0.86))
+                .frame(maxWidth: 520, alignment: .leading)
             }
             .foregroundStyle(.white)
             .padding(AppSpacing.spacious)
         }
-        .frame(minHeight: 260)
+        .frame(minHeight: 420)
         .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.hero, style: .continuous))
+        .accessibilityElement(children: .combine)
+    }
+
+    private var learningMap: some View {
+        VStack(alignment: .leading, spacing: AppSpacing.standard) {
+            EditorialSectionHeader(
+                "A map for Catholic life",
+                eyebrow: "Learn in context",
+                detail:
+                    "Move from the Church's public worship, through sacramental life, into the prayer practices you carry home."
+            )
+
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 0) {
+                    mapStep("01", title: "Worship", detail: "Mass & seasons")
+                    mapStep("02", title: "Belong", detail: "Sacraments & initiation")
+                    mapStep("03", title: "Pray", detail: "Devotions & daily life")
+                }
+                VStack(spacing: 0) {
+                    mapStep("01", title: "Worship", detail: "Mass & seasons")
+                    mapStep("02", title: "Belong", detail: "Sacraments & initiation")
+                    mapStep("03", title: "Pray", detail: "Devotions & daily life")
+                }
+            }
+            .background(AppTheme.surface)
+            .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
+        }
+    }
+
+    private func mapStep(_ number: String, title: String, detail: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(number)
+                .font(.system(.title2, design: .serif, weight: .black))
+                .foregroundStyle(AppTheme.accent)
+            Text(title)
+                .font(.headline)
+                .foregroundStyle(AppTheme.ink)
+            Text(detail)
+                .font(.caption)
+                .foregroundStyle(AppTheme.supportingText)
+        }
+        .padding(AppSpacing.standard)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .overlay(alignment: .trailing) {
+            Rectangle().fill(AppTheme.hairline).frame(width: 1)
+        }
+        .accessibilityElement(children: .combine)
     }
 
     private var scopeNote: some View {
@@ -68,23 +132,54 @@ struct LearningView: View {
         .padding(.horizontal, 2)
     }
 
-    private func topicCard(_ topic: LearningTopic, index: Int) -> some View {
-        FeatureCard {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack {
-                    Text(String(format: "%02d", index + 1))
-                        .font(.system(.title, design: .serif, weight: .black))
-                        .foregroundStyle(AppTheme.accent)
-                    Spacer()
-                    Image(systemName: topic.icon)
-                        .font(.title2)
-                        .foregroundStyle(AppTheme.accent)
+    private func topicCollection(
+        number: String,
+        title: String,
+        detail: String,
+        identifiers: [String]
+    ) -> some View {
+        let topics = identifiers.compactMap { LearningTopicCatalog.topic(id: $0) }
+
+        return VStack(alignment: .leading, spacing: AppSpacing.standard) {
+            HStack(alignment: .top, spacing: AppSpacing.standard) {
+                Text(number)
+                    .font(.system(size: 42, weight: .black, design: .serif))
+                    .foregroundStyle(AppTheme.accent)
+                    .accessibilityHidden(true)
+                EditorialSectionHeader(title, eyebrow: "Catholic life", detail: detail)
+            }
+
+            LazyVGrid(
+                columns: [GridItem(.adaptive(minimum: 280), spacing: AppSpacing.standard)],
+                spacing: AppSpacing.standard
+            ) {
+                ForEach(Array(topics.enumerated()), id: \.element.id) { index, topic in
+                    topicCard(topic, index: index + 1)
                 }
+            }
+        }
+    }
+
+    private func topicCard(_ topic: LearningTopic, index: Int) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                Text(String(format: "%02d", index))
+                    .font(.system(.title, design: .serif, weight: .black))
+                    .foregroundStyle(AppTheme.accent)
+                Spacer()
+                Image(systemName: topic.icon)
+                    .font(.title2)
+                    .foregroundStyle(AppTheme.accent)
+            }
+            .padding(AppSpacing.standard)
+            .background(AppTheme.elevatedSurface)
+
+            VStack(alignment: .leading, spacing: 10) {
                 Text(topic.title)
-                    .font(AppTypography.cardTitle)
+                    .font(.system(.title2, design: .serif, weight: .bold))
                 Text(topic.subtitle)
-                    .font(.subheadline)
                     .foregroundStyle(AppTheme.supportingText)
+                Spacer(minLength: 8)
                 HStack {
                     Text("COMING IN LEARNING MVP")
                         .font(AppTypography.eyebrow)
@@ -94,7 +189,11 @@ struct LearningView: View {
                 }
                 .foregroundStyle(AppTheme.accent)
             }
+            .padding(AppSpacing.standard)
+            .frame(maxWidth: .infinity, minHeight: 150, alignment: .topLeading)
+            .background(AppTheme.surface)
         }
+        .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
         .accessibilityElement(children: .combine)
     }
 }

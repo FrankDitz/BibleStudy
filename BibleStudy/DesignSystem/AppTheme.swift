@@ -230,6 +230,17 @@ struct AppHeroArtwork: View {
     }
 }
 
+struct EditorialArtwork: View {
+    let assetName: String
+
+    var body: some View {
+        Image(assetName)
+            .resizable()
+            .scaledToFill()
+            .accessibilityHidden(true)
+    }
+}
+
 struct AppScreenBackground: View {
     var body: some View {
         AppTheme.background.ignoresSafeArea()
