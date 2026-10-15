@@ -2,7 +2,7 @@
 
 **Baseline:** Phase 1 navigation shell and design states  
 **Platforms:** iOS 17+ and macOS 15+  
-**Last updated:** 2026-10-12
+**Last updated:** 2026-10-15
 
 ## Required preview matrix
 
@@ -43,3 +43,12 @@ For UI changes, record the tested platform/window, text size, color scheme, Voic
 ### 2026-10-12 Phase 2 disposition
 
 The owner approved closing the reader phase and deferring the physical iPhone/Mac accessibility pass plus live provider-managed offline/error-recovery checks to Phase 7 hardening. Automated reader semantics, largest-text UI coverage, simulator compilation, keyboard shortcuts, themes, Reduce Motion-aware transitions, and live Mac reader behavior are complete. The deferred checks remain release requirements and must not be described as passing until performed.
+
+### 2026-10-15 Emerald redesign verification
+
+- Native Mac, wide window: Emerald Light and Emerald After Dark were both selected in-app and visually inspected on Home and You. Editorial type, fashion artwork, surface contrast, progress modules, and appearance persistence rendered correctly.
+- Native Mac reader: Scripture content, chapter controls, edition notice, and typography rendered correctly. The default reader theme now follows the app appearance; Light, Sepia, and Dark remain explicit reader overrides.
+- macOS build and the complete `BibleStudyTests` unit-test bundle passed.
+- Generic iOS Simulator compilation passed after the automatic reader-theme refinement.
+- The combined macOS scheme test reached and passed the unit suites, but the UI-test runner exited before establishing its automation connection. This is a host-runner failure, not a passing UI-test result.
+- Still required before release: hands-on compact/large iPhone review, largest Dynamic Type, VoiceOver, keyboard-only Mac navigation, Reduce Motion, and the physical-device checks already deferred to Phase 7.
