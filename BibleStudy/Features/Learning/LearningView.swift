@@ -41,8 +41,8 @@ struct LearningView: View {
 
     private var header: some View {
         ZStack(alignment: .bottomLeading) {
-            EditorialArtwork(assetName: "LearningHero")
-                .frame(height: 420)
+            EditorialHeroArtwork(assetName: "LearningHero")
+                .frame(height: EditorialImageMetrics.primaryHeroHeight)
                 .frame(maxWidth: .infinity)
                 .clipped()
                 .overlay {
@@ -71,7 +71,7 @@ struct LearningView: View {
             .foregroundStyle(.white)
             .padding(AppSpacing.spacious)
         }
-        .frame(minHeight: 420)
+        .frame(minHeight: EditorialImageMetrics.primaryHeroHeight)
         .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.hero, style: .continuous))
         .accessibilityElement(children: .combine)
     }
