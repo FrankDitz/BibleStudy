@@ -241,6 +241,61 @@ struct EditorialArtwork: View {
     }
 }
 
+struct EditorialHeroArtwork: View {
+    let assetName: String
+
+    var body: some View {
+        #if os(macOS)
+            GeometryReader { geometry in
+                ZStack {
+                    Color.black
+                    Image(assetName)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(
+                            width: geometry.size.width,
+                            height: geometry.size.height,
+                            alignment: .trailing
+                        )
+                }
+            }
+            .accessibilityHidden(true)
+        #else
+            Image(assetName)
+                .resizable()
+                .scaledToFill()
+                .accessibilityHidden(true)
+        #endif
+    }
+}
+
+enum EditorialImageMetrics {
+    static var primaryHeroHeight: CGFloat {
+        #if os(macOS)
+            520
+        #else
+            420
+        #endif
+    }
+
+    static var virtueHeroHeight: CGFloat {
+        #if os(macOS)
+            520
+        #else
+            380
+        #endif
+    }
+
+    static var activePlanThumbnailSize: CGSize {
+        #if os(macOS)
+            CGSize(width: 168, height: 112)
+        #else
+            CGSize(width: 112, height: 126)
+        #endif
+    }
+
+}
+
 struct AppScreenBackground: View {
     var body: some View {
         AppTheme.background.ignoresSafeArea()

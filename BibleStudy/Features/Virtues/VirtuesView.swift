@@ -98,8 +98,8 @@ struct VirtuesView: View {
         } label: {
             VStack(spacing: 0) {
                 ZStack(alignment: .bottomLeading) {
-                    EditorialArtwork(assetName: "VirtuesHero")
-                        .frame(height: 380)
+                    EditorialHeroArtwork(assetName: "VirtuesHero")
+                        .frame(height: EditorialImageMetrics.virtueHeroHeight)
                         .frame(maxWidth: .infinity)
                         .clipped()
                         .overlay {

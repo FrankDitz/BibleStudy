@@ -105,8 +105,8 @@ struct PlansView: View {
     private var planHero: some View {
         VStack(spacing: 0) {
             ZStack(alignment: .bottomLeading) {
-                EditorialArtwork(assetName: "PlansHero")
-                    .frame(height: 420)
+                EditorialHeroArtwork(assetName: "PlansHero")
+                    .frame(height: EditorialImageMetrics.primaryHeroHeight)
                     .frame(maxWidth: .infinity)
                     .clipped()
                     .overlay {
@@ -189,7 +189,10 @@ struct PlansView: View {
                         EditorialArtwork(
                             assetName: ReadingPlanArtwork.assetName(for: state.snapshot.sourceID)
                         )
-                        .frame(width: 112, height: 126)
+                        .frame(
+                            width: EditorialImageMetrics.activePlanThumbnailSize.width,
+                            height: EditorialImageMetrics.activePlanThumbnailSize.height
+                        )
                         .clipped()
 
                         VStack(alignment: .leading, spacing: 7) {
@@ -327,14 +330,25 @@ private struct PremadePlanCard: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            cover
-                .frame(height: 220)
+            planCover
             details
                 .padding(AppSpacing.standard)
                 .background(AppTheme.surface)
         }
         .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
         .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.card, style: .continuous))
+    }
+
+    @ViewBuilder
+    private var planCover: some View {
+        #if os(macOS)
+            cover
+                .frame(maxWidth: .infinity)
+                .aspectRatio(3 / 2, contentMode: .fit)
+        #else
+            cover
+                .frame(height: 220)
+        #endif
     }
 
     private var cover: some View {
