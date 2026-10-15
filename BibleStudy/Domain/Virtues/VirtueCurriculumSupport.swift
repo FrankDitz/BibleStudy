@@ -245,6 +245,15 @@ enum VirtueCurriculumSources {
         sourceClass: .catechism
     )
 
+    static let catechismPenance = source(
+        id: "ccc-penance-study",
+        title: "Catechism of the Catholic Church - The Many Forms of Penance",
+        url:
+            "https://www.vatican.va/content/catechism/en/part_two/section_two/chapter_two/article_4/v_the_many_forms_of_penance_in_christian_life.html",
+        locator: "CCC 1434-1439; see also 2043",
+        sourceClass: .catechism
+    )
+
     static let lumenGentium = source(
         id: "vatican-ii-lumen-gentium-holiness",
         title: "Second Vatican Council - Lumen Gentium",
