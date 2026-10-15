@@ -16,9 +16,10 @@ struct VirtuesView: View {
         NavigationStack {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: AppSpacing.spacious) {
-                    introduction
-                    continueLearning
-                    foundationCourse
+                    featuredFormation
+                    if featuredCourse.id != VirtueStudyCatalog.foundationCourse.id {
+                        foundationCourse
+                    }
                     formationJourney
                     privacyNote
                     courseCollection(
@@ -38,8 +39,9 @@ struct VirtuesView: View {
                     doctrinalMap
                     practiceCompanion
                 }
-                .padding(AppSpacing.screen)
-                .frame(maxWidth: 980)
+                .padding(.horizontal, AppSpacing.screen)
+                .padding(.bottom, AppSpacing.section)
+                .frame(maxWidth: 1120)
                 .frame(maxWidth: .infinity)
             }
             .background(AppScreenBackground())
@@ -61,6 +63,121 @@ struct VirtuesView: View {
 
     private var currentCycle: VirtueFocusCycle? {
         state.currentCycle
+    }
+
+    private var featuredCourse: VirtueStudyCourse {
+        guard let latestProgress,
+            let course = VirtueStudyCatalog.course(id: latestProgress.courseID)
+        else {
+            return VirtueStudyCatalog.foundationCourse
+        }
+        return course
+    }
+
+    private var featuredProgress: VirtueCourseProgress? {
+        state.courseProgress.first { $0.courseID == featuredCourse.id }
+    }
+
+    private var featuredLesson: VirtueStudyLesson? {
+        if let lastOpenedLessonID = featuredProgress?.lastOpenedLessonID,
+            featuredProgress?.completedLessonIDs.contains(lastOpenedLessonID) == false,
+            let lesson = featuredCourse.lessons.first(where: { $0.id == lastOpenedLessonID })
+        {
+            return lesson
+        }
+        return featuredCourse.lessons.first {
+            featuredProgress?.completedLessonIDs.contains($0.id) != true
+        } ?? featuredCourse.lessons.first
+    }
+
+    private var featuredFormation: some View {
+        NavigationLink {
+            VirtueCourseView(course: featuredCourse, openReading: openReading)
+        } label: {
+            VStack(spacing: 0) {
+                ZStack(alignment: .bottomLeading) {
+                    AppHeroArtwork()
+                        .frame(height: 380)
+                        .frame(maxWidth: .infinity)
+                        .clipped()
+                        .overlay {
+                            LinearGradient(
+                                colors: [.black.opacity(0.05), .black.opacity(0.20), .black.opacity(0.90)],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        }
+
+                    VStack(alignment: .leading, spacing: 9) {
+                        EditorialEyebrow("Virtue formation", inverse: true)
+                        Text(featuredCourse.title)
+                            .font(.system(size: 46, weight: .black, design: .serif))
+                            .minimumScaleFactor(0.62)
+                            .lineLimit(2)
+                        Text(featuredCourse.subtitle.uppercased())
+                            .font(.caption.weight(.bold))
+                            .tracking(2.2)
+                            .foregroundStyle(.white.opacity(0.82))
+                            .lineLimit(3)
+                    }
+                    .foregroundStyle(.white)
+                    .padding(AppSpacing.spacious)
+                }
+
+                VStack(alignment: .leading, spacing: AppSpacing.standard) {
+                    HStack(spacing: 7) {
+                        ForEach(featuredCourse.lessons.indices, id: \.self) { index in
+                            Rectangle()
+                                .fill(
+                                    featuredProgress?.completedLessonIDs.contains(
+                                        featuredCourse.lessons[index].id
+                                    ) == true
+                                        ? AppTheme.accent : AppTheme.elevatedSurface
+                                )
+                                .frame(height: 9)
+                        }
+                        Text(
+                            "\(featuredProgress?.completedLessonCount(in: featuredCourse) ?? 0) / \(featuredCourse.lessons.count)"
+                        )
+                        .font(.caption.bold())
+                        .foregroundStyle(AppTheme.supportingText)
+                        .fixedSize()
+                    }
+
+                    if let featuredLesson {
+                        EditorialEyebrow(featuredProgress == nil ? "Begin here" : "Continue learning")
+                        Text(featuredLesson.title)
+                            .font(.system(.title, design: .serif, weight: .bold))
+                            .foregroundStyle(AppTheme.ink)
+                        Text(featuredLesson.summary)
+                            .foregroundStyle(AppTheme.supportingText)
+                            .multilineTextAlignment(.leading)
+
+                        HStack {
+                            Label(
+                                "Lesson \((featuredCourse.lessons.firstIndex(where: { $0.id == featuredLesson.id }) ?? 0) + 1)",
+                                systemImage: "book.closed"
+                            )
+                            Spacer()
+                            Label("Open course", systemImage: "arrow.right")
+                        }
+                        .font(.subheadline.bold())
+                        .foregroundStyle(AppTheme.accent)
+                    }
+                }
+                .padding(AppSpacing.spacious)
+                .background(AppTheme.surface)
+                .overlay {
+                    Rectangle().stroke(AppTheme.hairline, lineWidth: 1)
+                }
+            }
+            .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.hero, style: .continuous))
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier(
+            featuredCourse.id == VirtueStudyCatalog.foundationCourse.id
+                ? "virtue-foundation-course" : "virtue-featured-course"
+        )
     }
 
     private var introduction: some View {
@@ -105,11 +222,11 @@ struct VirtuesView: View {
             } label: {
                 FeatureCard {
                     HStack(spacing: 16) {
-                    Image(systemName: "bookmark.fill")
+                        Image(systemName: "bookmark.fill")
                             .font(.title2)
                             .foregroundStyle(.white)
                             .frame(width: 50, height: 50)
-                            .background(AppTheme.accent, in: RoundedRectangle(cornerRadius: 14))
+                            .background(AppTheme.accent, in: RoundedRectangle(cornerRadius: AppCornerRadius.control))
                         VStack(alignment: .leading, spacing: 5) {
                             Text(latestProgress.isComplete(course) ? "Review your course" : "Continue learning")
                                 .font(.caption.bold())
@@ -261,7 +378,8 @@ struct VirtuesView: View {
                         .font(.title2)
                         .foregroundStyle(AppTheme.accent)
                         .frame(width: 46, height: 46)
-                    .background(AppTheme.elevatedSurface, in: RoundedRectangle(cornerRadius: 10))
+                        .background(
+                            AppTheme.elevatedSurface, in: RoundedRectangle(cornerRadius: AppCornerRadius.control))
                     Spacer()
                     courseStatus(course)
                     Image(systemName: "chevron.right")
@@ -379,7 +497,7 @@ struct VirtuesView: View {
                 formationLink(
                     title: "My Rule of Life",
                     detail: "Keep and revise practices you deliberately choose.",
-                        systemImage: "text.book.closed"
+                    systemImage: "text.book.closed"
                 )
             }
             NavigationLink {

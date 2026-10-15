@@ -68,8 +68,7 @@ struct AppStateView: View {
         } actions: {
             if let actionTitle, let action {
                 Button(actionTitle, action: action)
-                    .buttonStyle(.borderedProminent)
-                    .tint(AppTheme.accent)
+                    .buttonStyle(EmeraldActionButtonStyle())
             }
         }
         .accessibilityElement(children: .contain)
@@ -84,7 +83,8 @@ struct AppStatusBanner: View {
             .font(.footnote.weight(.medium))
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(AppSpacing.compact)
-            .background(tint.opacity(0.14), in: RoundedRectangle(cornerRadius: AppCornerRadius.control))
+            .background(tint.opacity(0.14), in: Rectangle())
+            .overlay { Rectangle().stroke(tint.opacity(0.32), lineWidth: 1) }
             .accessibilityLabel("\(descriptor.title). \(descriptor.message)")
     }
 

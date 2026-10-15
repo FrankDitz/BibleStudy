@@ -22,7 +22,7 @@ struct LearningView: View {
                     }
                 }
                 .padding(AppSpacing.screen)
-                .frame(maxWidth: 980)
+                .frame(maxWidth: 1120)
                 .frame(maxWidth: .infinity)
             }
             .background(AppScreenBackground())
@@ -45,9 +45,11 @@ struct LearningView: View {
                 EditorialEyebrow("Formation beyond the page", inverse: true)
                 Text("Know what the Church lives.")
                     .font(.system(.largeTitle, design: .serif, weight: .bold))
-                Text("Understand Catholic worship and practice so you can participate with confidence, reverence, and purpose.")
-                    .font(.title3)
-                    .foregroundStyle(.white.opacity(0.84))
+                Text(
+                    "Understand Catholic worship and practice so you can participate with confidence, reverence, and purpose."
+                )
+                .font(.title3)
+                .foregroundStyle(.white.opacity(0.84))
             }
             .foregroundStyle(.white)
             .padding(AppSpacing.spacious)

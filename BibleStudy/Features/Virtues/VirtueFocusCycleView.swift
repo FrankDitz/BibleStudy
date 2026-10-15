@@ -86,6 +86,7 @@ struct VirtueFocusCycleSetupView: View {
                     axis: .vertical
                 )
                 .lineLimit(3...6)
+                .textFieldStyle(EditorialTextFieldStyle())
                 Text("This private note will be placed beside your later reflection, not graded or analyzed.")
                     .font(.footnote)
                     .foregroundStyle(AppTheme.supportingText)
@@ -108,8 +109,7 @@ struct VirtueFocusCycleSetupView: View {
 
             Section {
                 Button("Start Focus Cycle", action: start)
-                    .buttonStyle(.borderedProminent)
-                    .tint(AppTheme.accent)
+                    .buttonStyle(EmeraldActionButtonStyle())
                     .disabled(selectedPractice == nil)
                     .accessibilityIdentifier("virtue-confirm-cycle")
             }
@@ -220,8 +220,7 @@ struct VirtueActiveCycleView: View {
                             )
                             .frame(maxWidth: .infinity)
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(AppTheme.accent)
+                        .buttonStyle(EmeraldActionButtonStyle())
                         .accessibilityIdentifier("virtue-open-review")
                     }
 
@@ -289,7 +288,7 @@ struct VirtueActiveCycleView: View {
                     axis: .vertical
                 )
                 .lineLimit(3...6)
-                .textFieldStyle(.roundedBorder)
+                .textFieldStyle(EditorialTextFieldStyle())
                 .accessibilityIdentifier("virtue-private-observation")
 
                 Label("Saved only in your private formation record.", systemImage: "lock.fill")
@@ -311,17 +310,16 @@ struct VirtueActiveCycleView: View {
         HStack {
             if cycle.status == .active {
                 Button("Pause Cycle") { update(.pause) }
-                    .buttonStyle(.bordered)
+                    .buttonStyle(EditorialSecondaryButtonStyle())
                     .accessibilityIdentifier("virtue-pause-cycle")
             } else if cycle.status == .paused {
                 Button("Resume Cycle") { update(.resume) }
-                    .buttonStyle(.borderedProminent)
-                    .tint(AppTheme.accent)
+                    .buttonStyle(EmeraldActionButtonStyle())
                     .accessibilityIdentifier("virtue-resume-cycle")
             }
             if cycle.status != .completed {
                 Button("Close Cycle") { update(.close) }
-                    .buttonStyle(.bordered)
+                    .buttonStyle(EditorialSecondaryButtonStyle())
                     .foregroundStyle(AppTheme.danger)
                     .accessibilityIdentifier("virtue-close-cycle")
             }

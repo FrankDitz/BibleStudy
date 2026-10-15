@@ -33,4 +33,15 @@ enum AppDestination: String, CaseIterable, Codable, Identifiable, Hashable, Send
         case .you: "person.crop.circle"
         }
     }
+
+    var selectedSystemImage: String {
+        switch self {
+        case .home: "house.fill"
+        case .bible: "book.closed.fill"
+        case .plans: "checkmark.square.fill"
+        case .virtues: "shield.fill"
+        case .learning: "books.vertical.fill"
+        case .you: "person.crop.circle.fill"
+        }
+    }
 }

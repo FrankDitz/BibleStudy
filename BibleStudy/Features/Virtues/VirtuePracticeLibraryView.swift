@@ -236,7 +236,7 @@ struct VirtueRuleOfLifeView: View {
                 .font(.caption)
                 .foregroundStyle(AppTheme.accent)
             Button(actionTitle, action: action)
-                .buttonStyle(.bordered)
+                .buttonStyle(EditorialSecondaryButtonStyle())
         }
         .padding(.vertical, 3)
     }

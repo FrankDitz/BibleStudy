@@ -30,52 +30,73 @@ struct HomeView: View {
 
         NavigationStack {
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: AppSpacing.spacious) {
-                    hero(reading: today.reading)
+                #if os(macOS)
+                    desktopContent(today)
+                #else
+                    mobileContent(today)
+                #endif
+            }
+            .background(AppScreenBackground())
+            #if os(macOS)
+                .navigationTitle("Home")
+            #else
+                .toolbar(.hidden, for: .navigationBar)
+            #endif
+        }
+        .onAppear { now = .now }
+    }
 
+    #if os(macOS)
+        private func desktopContent(_ today: HomeTodaySnapshot) -> some View {
+            VStack(alignment: .leading, spacing: AppSpacing.spacious) {
+                HStack(alignment: .top, spacing: AppSpacing.standard) {
+                    hero(reading: today.reading, height: 570, includesQuickActions: false)
+                        .frame(minWidth: 480)
+
+                    VStack(alignment: .leading, spacing: AppSpacing.standard) {
+                        EditorialSectionHeader(
+                            "Today",
+                            eyebrow: now.formatted(.dateTime.weekday(.wide).month(.wide).day()),
+                            detail: "One clear next step in Scripture, formation, and real life."
+                        )
+                        if let plan = today.plan { planCard(plan) } else { noPlanCard }
+                        virtueCard(today.virtue)
+                        learningCard(today.learning)
+                    }
+                    .frame(minWidth: 340, idealWidth: 400, maxWidth: 440)
+                }
+
+                activitySection(today)
+            }
+            .padding(AppSpacing.spacious)
+            .frame(maxWidth: 1180)
+            .frame(maxWidth: .infinity)
+        }
+    #endif
+
+    #if !os(macOS)
+        private func mobileContent(_ today: HomeTodaySnapshot) -> some View {
+            LazyVStack(alignment: .leading, spacing: AppSpacing.spacious) {
+                hero(reading: today.reading, height: 690, includesQuickActions: true)
+
+                VStack(alignment: .leading, spacing: AppSpacing.spacious) {
                     EditorialSectionHeader(
                         "Today",
                         eyebrow: now.formatted(.dateTime.weekday(.wide).month(.wide).day()),
                         detail: "One clear next step in Scripture, formation, and real life."
                     )
 
-                    if let plan = today.plan {
-                        planCard(plan)
-                    } else {
-                        noPlanCard
-                    }
-
-                    ViewThatFits(in: .horizontal) {
-                        HStack(alignment: .top, spacing: AppSpacing.standard) {
-                            virtueCard(today.virtue)
-                            learningCard(today.learning)
-                        }
-                        VStack(alignment: .leading, spacing: AppSpacing.standard) {
-                            virtueCard(today.virtue)
-                            learningCard(today.learning)
-                        }
-                    }
-
+                    if let plan = today.plan { planCard(plan) } else { noPlanCard }
+                    virtueCard(today.virtue)
+                    learningCard(today.learning)
                     activitySection(today)
                 }
                 .padding(.horizontal, AppSpacing.screen)
-                .padding(.bottom, AppSpacing.section)
-                .frame(maxWidth: 980)
-                .frame(maxWidth: .infinity)
             }
-            .background(AppScreenBackground())
-            .navigationTitle("Kingdom")
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button(action: openProfile) {
-                        Label("You", systemImage: "person.crop.circle")
-                    }
-                    .accessibilityIdentifier("home-open-profile")
-                }
-            }
+            .padding(.bottom, AppSpacing.section)
+            .frame(maxWidth: .infinity)
         }
-        .onAppear { now = .now }
-    }
+    #endif
 
     private var snapshot: HomeTodaySnapshot {
         _ = readingPositions.count
@@ -113,22 +134,44 @@ struct HomeView: View {
         )
     }
 
-    private func hero(reading: HomeReadingResume) -> some View {
+    private func hero(
+        reading: HomeReadingResume,
+        height: CGFloat,
+        includesQuickActions: Bool
+    ) -> some View {
         ZStack(alignment: .bottom) {
             AppHeroArtwork()
-                .frame(height: 510)
+                .frame(height: height)
                 .frame(maxWidth: .infinity)
                 .clipped()
                 .overlay {
                     LinearGradient(
-                        colors: [.black.opacity(0.08), .clear, .black.opacity(0.58)],
+                        colors: [.black.opacity(0.18), .clear, .black.opacity(0.82)],
                         startPoint: .top,
                         endPoint: .bottom
                     )
                 }
 
-            VStack(alignment: .leading, spacing: AppSpacing.standard) {
-                Spacer(minLength: 0)
+            VStack(alignment: .leading, spacing: 0) {
+                HStack(alignment: .top) {
+                    EditorialEyebrow("Kingdom\natelier", inverse: true)
+                        .lineSpacing(5)
+                    Spacer()
+                    Button(action: openProfile) {
+                        Image(systemName: "person.crop.circle")
+                            .font(.title2)
+                            .foregroundStyle(.white)
+                            .frame(width: 42, height: 42)
+                            .background(.black.opacity(0.38))
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("home-open-profile")
+                }
+                .padding(.horizontal, AppSpacing.standard)
+                .padding(.top, AppSpacing.spacious)
+
+                Spacer(minLength: 20)
+
                 VStack(alignment: .leading, spacing: 0) {
                     Text("LIVE")
                     Text("THE")
@@ -140,6 +183,8 @@ struct HomeView: View {
                 .minimumScaleFactor(0.68)
                 .shadow(color: .black.opacity(0.34), radius: 12, y: 4)
                 .accessibilityElement(children: .combine)
+                .padding(.horizontal, AppSpacing.standard)
+                .padding(.bottom, AppSpacing.standard)
 
                 Button {
                     openReading(reading.reference)
@@ -160,7 +205,7 @@ struct HomeView: View {
                         Image(systemName: "arrow.right")
                             .font(.headline)
                             .frame(width: 40, height: 40)
-                            .background(.white.opacity(0.14), in: Circle())
+                            .overlay { Rectangle().stroke(.white.opacity(0.35), lineWidth: 1) }
                     }
                     .foregroundStyle(.white)
                     .padding(AppSpacing.standard)
@@ -168,15 +213,73 @@ struct HomeView: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("home-resume-reading")
+
+                if includesQuickActions {
+                    VStack(spacing: 0) {
+                        heroAction(
+                            title: "Formation Plan",
+                            detail: "Keep today's reading rhythm",
+                            systemImage: "chart.bar.fill",
+                            action: openPlans,
+                            identifier: "home-today-plan"
+                        )
+                        Divider().overlay(.white.opacity(0.22))
+                        heroAction(
+                            title: "Virtue Focus",
+                            detail: "Put the Word into practice",
+                            systemImage: "shield.fill",
+                            action: openVirtues,
+                            identifier: "home-open-virtues"
+                        )
+                        Divider().overlay(.white.opacity(0.22))
+                        heroAction(
+                            title: "Catholic Learning",
+                            detail: "Understand the life of the Church",
+                            systemImage: "books.vertical.fill",
+                            action: openLearning,
+                            identifier: "home-open-learning"
+                        )
+                    }
+                    .background(.black.opacity(0.72))
+                }
             }
-            .padding(AppSpacing.standard)
         }
+        .frame(height: height)
         .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.hero, style: .continuous))
-        .overlay {
-            RoundedRectangle(cornerRadius: AppCornerRadius.hero, style: .continuous)
-                .stroke(AppTheme.hairline, lineWidth: 1)
+        .accessibilityElement(children: .contain)
+    }
+
+    private func heroAction(
+        title: String,
+        detail: String,
+        systemImage: String,
+        action: @escaping () -> Void,
+        identifier: String
+    ) -> some View {
+        Button(action: action) {
+            HStack(spacing: 14) {
+                Image(systemName: systemImage)
+                    .font(.headline)
+                    .foregroundStyle(AppTheme.accent)
+                    .frame(width: 30)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.headline)
+                    Text(detail)
+                        .font(.caption)
+                        .foregroundStyle(.white.opacity(0.72))
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.caption.bold())
+            }
+            .foregroundStyle(.white)
+            .padding(.horizontal, AppSpacing.standard)
+            .frame(height: 64)
+            .contentShape(Rectangle())
         }
-        .padding(.top, AppSpacing.compact)
+        .buttonStyle(.plain)
+        .accessibilityIdentifier(identifier)
     }
 
     private func planCard(_ plan: HomePlanToday) -> some View {
@@ -192,9 +295,11 @@ struct HomeView: View {
 
                 Text(plan.title)
                     .font(AppTypography.cardTitle)
-                Text("Day \(plan.dayIndex) of \(plan.totalDays) · \(plan.completedReadingCount) of \(plan.totalReadingCount) readings complete")
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(AppTheme.supportingText)
+                Text(
+                    "Day \(plan.dayIndex) of \(plan.totalDays) · \(plan.completedReadingCount) of \(plan.totalReadingCount) readings complete"
+                )
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(AppTheme.supportingText)
 
                 EmeraldProgressBar(value: plan.overallCompletionFraction)
 
@@ -209,12 +314,11 @@ struct HomeView: View {
                 HStack {
                     if plan.status != .paused, let reference = plan.nextReadingReference {
                         Button("Read Next") { openReading(reference) }
-                            .buttonStyle(.borderedProminent)
-                            .tint(AppTheme.accent)
+                            .buttonStyle(EmeraldActionButtonStyle())
                             .accessibilityIdentifier("home-read-plan")
                     }
                     Button(plan.status == .paused ? "Review Plan" : "Open Plan", action: openPlans)
-                        .buttonStyle(.bordered)
+                        .buttonStyle(EditorialSecondaryButtonStyle())
                         .accessibilityIdentifier("home-open-plan")
                 }
             }
@@ -255,7 +359,7 @@ struct HomeView: View {
             }
         }
         .buttonStyle(.plain)
-        .accessibilityIdentifier("home-open-learning")
+        .accessibilityIdentifier("home-learning-card")
     }
 
     private func virtueCard(_ virtue: HomeVirtueFocus) -> some View {
@@ -284,8 +388,7 @@ struct HomeView: View {
                         Button("Practiced it") {
                             recordHomeCheckIn(cycleID: cycleID, status: .practiced)
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(AppTheme.accent)
+                        .buttonStyle(EmeraldActionButtonStyle())
                         .accessibilityIdentifier("home-virtue-check-in")
                     }
                 }
@@ -293,11 +396,11 @@ struct HomeView: View {
                     Button("Read \(virtue.scriptureTitle)") {
                         openReading(virtue.scriptureReference)
                     }
-                    .buttonStyle(.bordered)
+                    .buttonStyle(EditorialSecondaryButtonStyle())
                     .accessibilityIdentifier("home-open-virtue-scripture")
                     Button("Open Virtues", action: openVirtues)
-                        .buttonStyle(.bordered)
-                        .accessibilityIdentifier("home-open-virtues")
+                        .buttonStyle(EditorialSecondaryButtonStyle())
+                        .accessibilityIdentifier("home-virtues-card")
                 }
             }
         }

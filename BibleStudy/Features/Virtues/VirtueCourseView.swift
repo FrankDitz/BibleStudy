@@ -196,6 +196,7 @@ struct VirtueCourseView: View {
                     axis: .vertical
                 )
                 .lineLimit(3...7)
+                .textFieldStyle(EditorialTextFieldStyle())
 
                 if let progress, progress.isComplete(course) {
                     Divider()
@@ -207,6 +208,7 @@ struct VirtueCourseView: View {
                         axis: .vertical
                     )
                     .lineLimit(3...7)
+                    .textFieldStyle(EditorialTextFieldStyle())
                 } else if progress != nil {
                     Text("Your “Now” reflection will appear after the course is complete.")
                         .font(.footnote)
@@ -215,7 +217,7 @@ struct VirtueCourseView: View {
 
                 if progress != nil {
                     Button("Save Private Reflection", action: saveReflections)
-                        .buttonStyle(.bordered)
+                        .buttonStyle(EditorialSecondaryButtonStyle())
                         .accessibilityIdentifier("virtue-course-save-reflection")
                 }
 
@@ -639,7 +641,7 @@ struct VirtueLessonView: View {
                     }
                     .padding(12)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(AppTheme.elevatedSurface, in: RoundedRectangle(cornerRadius: 12))
+                    .background(AppTheme.elevatedSurface, in: RoundedRectangle(cornerRadius: AppCornerRadius.control))
 
                     Text(
                         "Now apply the steps to your own situation. Move slowly; this is an aid to honest prayer and practical judgment, not a diagnosis, a judgment of another person's soul, or a substitute for Confession or qualified help."
@@ -675,9 +677,10 @@ struct VirtueLessonView: View {
                         axis: .vertical
                     )
                     .lineLimit(4...10)
+                    .textFieldStyle(EditorialTextFieldStyle())
 
                     Button("Save Private Notes", action: saveLessonReflection)
-                        .buttonStyle(.bordered)
+                        .buttonStyle(EditorialSecondaryButtonStyle())
                         .accessibilityIdentifier("virtue-save-private-examen")
                     Text("Saved only in the private virtue store. The app does not interpret or score this text.")
                         .font(.footnote)
@@ -767,8 +770,7 @@ struct VirtueLessonView: View {
             Button(isCompleted ? "Mark Lesson Incomplete" : "Mark Lesson Complete") {
                 setCompleted(!isCompleted)
             }
-            .buttonStyle(.borderedProminent)
-            .tint(isCompleted ? AppTheme.success : AppTheme.accent)
+            .buttonStyle(EmeraldActionButtonStyle())
             .frame(maxWidth: .infinity)
             .accessibilityIdentifier("virtue-lesson-complete")
 
@@ -779,7 +781,7 @@ struct VirtueLessonView: View {
                     Label("Next Lesson", systemImage: "arrow.right")
                         .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(EditorialSecondaryButtonStyle())
                 .accessibilityIdentifier("virtue-next-lesson")
             } else if isCompleted {
                 Label(

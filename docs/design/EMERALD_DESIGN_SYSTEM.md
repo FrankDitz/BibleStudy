@@ -26,6 +26,16 @@ The in-app hero artwork is original project artwork and lives in `BibleStudy/Res
 7. Dark appearance is not neon or cyberpunk. Emerald remains a flat, legible accent.
 8. Progress is always communicated with text or symbols as well as color.
 
+## Binding layout rules
+
+- On iPhone, Home opens as an image-led canvas. The fashion photograph occupies most of the first viewport; the brand, display line, Continue Reading block, and three primary formation choices are layered into that canvas rather than presented as detached cards.
+- The iPhone primary navigation is a full-width bar attached to the bottom safe area. It never floats inside a capsule or rounded container.
+- Bible chapters open with an editorial masthead that names the current book and makes the current chapter number unmistakable before the passage text begins.
+- Virtues opens with the current course as a photographic hero. Course progress and the next lesson sit directly beneath it as one connected learning module.
+- Plans uses the same display type, emerald architecture, straight-edged controls, segmented progress, and responsive content grid even though it has no photographic concept board.
+- On Mac, navigation uses a fixed editorial sidebar. Core screens use bounded wide layouts, multi-column composition where useful, and purpose-sized heroes; phone-width stacks must not be stretched across the desktop window.
+- Cards, fields, day selectors, badges, and secondary actions use near-square geometry with hairline borders. Rounded bubbles, floating pills, and soft wellness-card shadows are not part of this system.
+
 ## UI redesign deliverables
 
 ### UI-1 — Visual specification and source assets
