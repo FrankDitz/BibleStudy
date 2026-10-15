@@ -2,7 +2,7 @@
 
 **Curriculum status:** progressive manuscript rewrite; qualified Catholic review pending
 **Content baseline:** 2026-10-14
-**Current reviewable scope:** eleven-lesson foundation course and ten-lesson Prudence course. Seven capital-sin counter-virtue courses and the remaining three cardinal-virtue courses retain their planned structure but remain unavailable prototypes pending full manuscripts.
+**Current reviewable scope:** eleven-lesson foundation course and ten-lesson Prudence and Justice courses. Seven capital-sin counter-virtue courses and the remaining two cardinal-virtue courses retain their planned structure but remain unavailable prototypes pending full manuscripts.
 
 ## Purpose
 
@@ -20,7 +20,7 @@ The Virtues tab is a guided library for learning what virtue is, seeing it in Sc
 
 - **Foundations:** *Becoming the Person God Calls You to Be* — 11 full lecture drafts available for owner inspection and qualified review.
 - **Counter-virtue track:** Humility against Pride; Charity and Generosity against Avarice; Kindness and Goodwill against Envy; Patience and Meekness against Wrath; Chastity against Lust; Temperance against Gluttony; Diligence and Perseverance against Sloth and Acedia — 10 planned lessons each, unavailable until rewritten.
-- **Cardinal track:** Prudence — 10 full lecture drafts available for owner inspection and qualified review. Justice, Fortitude, and Temperance retain 10 planned lessons each and remain unavailable until rewritten.
+- **Cardinal track:** Prudence and Justice — 10 full lecture drafts each, available for owner inspection and qualified review. Fortitude and Temperance retain 10 planned lessons each and remain unavailable until rewritten.
 
 The shared technical gate requires at least 800 words of instruction and 1,000 authored words overall in every available lesson, three Scripture passages totaling at least 24 verses, eight distinct sections, five review prompts, full formation supports, and a time estimate derived from the real material. Passing that gate establishes depth and structure; it does not constitute theological approval.
 
@@ -59,3 +59,4 @@ The app omits dated rhetoric, stereotypes, culture-bound examples, and claims th
 | --- | --- | --- | --- | --- | --- |
 | Pending | Pending | Foundation course | Pending | Pending | No content is labeled reviewed until this row is completed. |
 | Pending | Pending | Prudence course | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Justice course | Pending | Pending | No content is labeled reviewed until this row is completed. |

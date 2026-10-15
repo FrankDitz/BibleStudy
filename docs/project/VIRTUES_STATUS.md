@@ -2,7 +2,7 @@
 
 **Phase:** 4A — Seven Virtues formation  
 **Current deliverable:** BS-0461 — extended cardinal-virtue curriculum, one course at a time
-**Status:** Foundation and Prudence lecture drafts technically verified; qualified Catholic review pending
+**Status:** Foundation, Prudence, and Justice lecture drafts technically verified; qualified Catholic review pending
 **Started:** 2026-10-13
 **Verified:** 2026-10-14
 
@@ -33,7 +33,7 @@
 | BS-0458 | Privacy, accessibility, export/delete, and release acceptance | Not started |
 | BS-0459 | Curriculum architecture and source method | Complete |
 | BS-0460 | Textbook-like course library, preview, lesson reader, and resume | Complete |
-| BS-0461 | Orientation and four extended cardinal-virtue curricula | Orientation and Prudence rewritten as full lecture drafts and technically verified; Justice, Fortitude, and Temperance remain short prototypes and are unavailable pending rewrite |
+| BS-0461 | Orientation and four extended cardinal-virtue curricula | Orientation, Prudence, and Justice rewritten as full lecture drafts and technically verified; Fortitude and Temperance remain short prototypes and are unavailable pending rewrite |
 | BS-0462 | Seven extended capital-sin counter-virtue curricula | Course structure and research notes exist; all seven remain short prototypes and are unavailable pending full manuscript work |
 | BS-0463 | Practice bridge, persistence, accessibility, and acceptance | Complete |
 
@@ -41,9 +41,11 @@
 
 The curriculum has a twelve-course, 121-lesson architecture, but the earlier implementation did not meet its own educational promise. Short paragraphs and one brief Scripture route were incorrectly presented with roughly twenty-minute estimates. Those drafts are now treated as prototypes rather than publishable courses.
 
-The eleven-lesson foundation course and ten-lesson Prudence course are currently available. Every available lesson contains at least 800 words of actual instruction and 1,000 words overall, at least three contextual Scripture readings totaling 24 or more verses, a misconception check, a reasoned case, guided self-examination, concrete practice, prayer, and five review prompts. Study time is calculated from the authored material, assigned Scripture, formation support, and review work rather than hard-coded. The seven counter-virtue courses and remaining three cardinal courses remain visible as **Full lecture course in development** but cannot be opened until every lesson passes the same gate.
+The eleven-lesson foundation course and ten-lesson Prudence and Justice courses are currently available. Every available lesson contains at least 800 words of actual instruction and 1,000 words overall, at least three contextual Scripture readings totaling 24 or more verses, a misconception check, a reasoned case, guided self-examination, concrete practice, prayer, and five review prompts. Study time is calculated from the authored material, assigned Scripture, formation support, and review work rather than hard-coded. The seven counter-virtue courses and remaining two cardinal courses remain visible as **Full lecture course in development** but cannot be opened until every lesson passes the same gate.
 
 Prudence preserves its ten existing lesson identifiers and now teaches a complete sequence: the true good; attention to reality; memory, docility, and counsel; formation of conscience; proportionate deliberation; command and action; foresight and timing; prayerful discernment; counterfeit forms of prudence; and a capstone discernment. Three ungraded checkpoints provide cumulative recall, and the final lesson rehearses the whole process without assigning a virtue score or judging culpability.
+
+Justice preserves its ten existing lesson identifiers and now teaches a connected sequence: what is due; justice toward God and neighbor; equal dignity and impartiality; truth, promises, and reputation; property, stewardship, and restitution; work, wages, and economic power; authority, participation, and the common good; the relation of justice and charity; the poor and works of mercy; and a capstone justice examination. Three ungraded checkpoints provide cumulative recall. The guided examinations distinguish duties from gifts, attend to power and effects, and direct serious safety, legal, employment, or financial questions toward qualified help rather than private moral verdicts.
 
 Progress remains local, reversible, backward-compatible with existing course and lesson identifiers, and expressed only as lessons completed.
 
@@ -90,4 +92,4 @@ The Formation Record presents only owner-recorded facts: cycles begun and closed
 
 ## Next deliverable
 
-Have the owner inspect the rebuilt Prudence course for educational depth, tone, pacing, Scripture integration, and usability. If accepted, rewrite Justice next, followed by Fortitude, cardinal Temperance, and then the seven counter-virtue courses to the same enforced standard. A qualified Catholic reviewer must use `docs/content/VIRTUE_CURRICULUM_REVIEW_PACKET.md` before any course changes from **Catholic review pending**.
+Have the owner inspect the rebuilt Justice course for educational depth, tone, pacing, Scripture integration, and usability. If accepted, rewrite Fortitude next, followed by cardinal Temperance and then the seven counter-virtue courses to the same enforced standard. A qualified Catholic reviewer must use `docs/content/VIRTUE_CURRICULUM_REVIEW_PACKET.md` before any course changes from **Catholic review pending**.

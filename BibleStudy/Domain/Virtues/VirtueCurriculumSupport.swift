@@ -137,6 +137,42 @@ enum VirtueCurriculumSources {
         sourceClass: .catechism
     )
 
+    static let catechismSocialJustice = source(
+        id: "ccc-social-justice-study",
+        title: "Catechism of the Catholic Church - Social Justice and Solidarity",
+        url:
+            "https://www.vatican.va/content/catechism/en/part_three/section_one/chapter_two/article_3/social_justice.html",
+        locator: "CCC 1928-1948",
+        sourceClass: .catechism
+    )
+
+    static let catechismCommonGood = source(
+        id: "ccc-common-good-study",
+        title: "Catechism of the Catholic Church - The Common Good",
+        url:
+            "https://www.vatican.va/content/catechism/en/part_three/section_one/chapter_two/article_2/ii_the_common_good.html",
+        locator: "CCC 1905-1917",
+        sourceClass: .catechism
+    )
+
+    static let catechismReligion = source(
+        id: "ccc-religion-study",
+        title: "Catechism of the Catholic Church - The Virtue of Religion",
+        url:
+            "https://www.vatican.va/content/catechism/en/part_three/section_two/chapter_one/article_1/ii_him_only_shall_you_serve.index.html",
+        locator: "CCC 2095-2109",
+        sourceClass: .catechism
+    )
+
+    static let catechismTruth = source(
+        id: "ccc-truth-study",
+        title: "Catechism of the Catholic Church - Truth and Reputation",
+        url:
+            "https://www.vatican.va/content/catechism/en/part_three/section_two/chapter_two/article_8/iii_offenses_against_truth.index.html",
+        locator: "CCC 2475-2487; see also 2492",
+        sourceClass: .catechism
+    )
+
     static let catechismMercy = source(
         id: "ccc-mercy-study",
         title: "Catechism of the Catholic Church - Love for the Poor",
