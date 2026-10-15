@@ -7,11 +7,15 @@ struct BibleStudyApp: App {
     private let modelContainer: ModelContainer
 
     init() {
-        let configuration = AppConfiguration.current
+        let arguments = ProcessInfo.processInfo.arguments
+        let configuration =
+            arguments.contains("-ui-testing-unconfigured-provider")
+            ? AppConfiguration(infoDictionary: [:])
+            : AppConfiguration.current
         dependencies = .production(configuration: configuration)
         do {
             modelContainer = try BibleStudyModelContainer.make(
-                inMemory: ProcessInfo.processInfo.arguments.contains("-ui-testing")
+                inMemory: arguments.contains("-ui-testing")
             )
         } catch {
             fatalError("Unable to create the Bible Study data store: \(error)")

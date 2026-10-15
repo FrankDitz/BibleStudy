@@ -16,29 +16,63 @@ struct BibleStudyRootView: View {
         Group {
             #if os(macOS)
                 NavigationSplitView {
-                    List(AppDestination.allCases, selection: $selection) { destination in
-                        Label(destination.title, systemImage: destination.systemImage)
-                            .tag(destination)
-                            .accessibilityIdentifier("navigation-\(destination.rawValue)")
+                    VStack(alignment: .leading, spacing: 0) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            EditorialEyebrow("Kingdom atelier")
+                            Text("KINGDOM")
+                                .font(.system(size: 25, weight: .black, design: .serif))
+                        }
+                        .padding(.horizontal, 18)
+                        .padding(.vertical, 22)
+
+                        Divider()
+
+                        VStack(spacing: 4) {
+                            ForEach(AppDestination.allCases) { destination in
+                                Button {
+                                    selection = destination
+                                } label: {
+                                    HStack(spacing: 12) {
+                                        Image(
+                                            systemName: selection == destination
+                                                ? destination.selectedSystemImage : destination.systemImage
+                                        )
+                                        .frame(width: 22)
+                                        Text(destination.title)
+                                            .font(.body.weight(.semibold))
+                                        Spacer()
+                                    }
+                                    .foregroundStyle(selection == destination ? AppTheme.onAccent : AppTheme.ink)
+                                    .padding(.horizontal, 14)
+                                    .frame(height: 46)
+                                    .background(selection == destination ? AppTheme.accent : .clear)
+                                    .contentShape(Rectangle())
+                                }
+                                .buttonStyle(.plain)
+                                .accessibilityIdentifier("navigation-\(destination.rawValue)")
+                            }
+                        }
+                        .padding(10)
+
+                        Spacer()
+
+                        Text("SCRIPTURE · FORMATION · LIFE")
+                            .font(.caption2.bold())
+                            .tracking(1.5)
+                            .foregroundStyle(AppTheme.supportingText)
+                            .padding(18)
                     }
-                    .navigationTitle("Kingdom")
-                    .navigationSplitViewColumnWidth(min: 190, ideal: 220)
+                    .background(AppTheme.surface)
+                    .navigationSplitViewColumnWidth(min: 190, ideal: 210, max: 230)
                 } detail: {
                     destinationView(selection)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             #else
-                TabView(selection: $selection) {
-                    ForEach(AppDestination.primaryTabs) { destination in
-                        destinationView(destination)
-                            .tabItem {
-                                Label(destination.title, systemImage: destination.systemImage)
-                            }
-                            .tag(destination)
+                destinationView(selection)
+                    .safeAreaInset(edge: .bottom, spacing: 0) {
+                        KingdomTabBar(selection: $selection)
                     }
-                }
-                .toolbarBackground(AppTheme.surface, for: .tabBar)
-                .toolbarBackground(.visible, for: .tabBar)
             #endif
         }
         .preferredColorScheme(appearance.preferredColorScheme)
@@ -159,3 +193,42 @@ struct BibleStudyRootView: View {
         }
     }
 }
+
+#if !os(macOS)
+    private struct KingdomTabBar: View {
+        @Binding var selection: AppDestination
+
+        var body: some View {
+            HStack(spacing: 0) {
+                ForEach(AppDestination.primaryTabs) { destination in
+                    Button {
+                        selection = destination
+                    } label: {
+                        VStack(spacing: 4) {
+                            Image(
+                                systemName: selection == destination
+                                    ? destination.selectedSystemImage : destination.systemImage
+                            )
+                            .font(.system(size: 18, weight: .semibold))
+                            Text(destination.title)
+                                .font(.caption2.weight(selection == destination ? .bold : .medium))
+                        }
+                        .foregroundStyle(selection == destination ? AppTheme.accent : AppTheme.ink)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 54)
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("navigation-\(destination.rawValue)")
+                }
+            }
+            .padding(.top, 4)
+            .background(AppTheme.surface)
+            .overlay(alignment: .top) {
+                Rectangle()
+                    .fill(AppTheme.hairline)
+                    .frame(height: 1)
+            }
+        }
+    }
+#endif

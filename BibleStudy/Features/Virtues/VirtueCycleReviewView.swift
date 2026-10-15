@@ -42,6 +42,7 @@ struct VirtueCycleReviewView: View {
                         axis: .vertical
                     )
                     .lineLimit(4...8)
+                    .textFieldStyle(EditorialTextFieldStyle())
                     .accessibilityIdentifier("virtue-review-now")
                     TextField(
                         "Where did you notice grace, help, or an invitation to grow? (optional)",
@@ -49,6 +50,7 @@ struct VirtueCycleReviewView: View {
                         axis: .vertical
                     )
                     .lineLimit(3...6)
+                    .textFieldStyle(EditorialTextFieldStyle())
                 }
 
                 Section("What comes next?") {
@@ -71,8 +73,7 @@ struct VirtueCycleReviewView: View {
 
                 Section {
                     Button("Save Review", action: save)
-                        .buttonStyle(.borderedProminent)
-                        .tint(AppTheme.accent)
+                        .buttonStyle(EmeraldActionButtonStyle())
                         .disabled(nowObservation.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                         .accessibilityIdentifier("virtue-save-review")
                 }

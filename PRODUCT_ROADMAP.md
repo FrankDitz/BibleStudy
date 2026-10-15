@@ -901,16 +901,19 @@ Do not generate text-to-speech from a copyrighted translation unless its license
 ### Deliverable 4B.3 — Navigation and Home
 
 - Restyle tabs, sidebar, toolbars, profile entry, and selected states.
-- Build the fashion-led Home hero with one dominant Continue Reading action.
-- Recompose plan, virtue, learning, and activity modules using the approved hierarchy.
+- Attach the iPhone tab bar to the bottom safe area; do not use a floating capsule.
+- Build the fashion-led Home hero so it owns most of the first iPhone viewport, with one dominant Continue Reading action and the primary formation choices layered into the image.
+- Recompose plan, virtue, learning, and activity modules using the approved hierarchy and a dedicated wide Mac composition.
 
 ### Deliverable 4B.4 — Bible and Plans
 
-- Restyle reader header/footer and settings while keeping Scripture quiet and highly readable.
-- Restyle plan browsing, honest previews, activation, active-day wheel, chapter checklist, and progress states.
+- Open every reader location with an editorial book-and-chapter masthead, then keep the Scripture surface quiet and highly readable.
+- Restyle reader header/footer and settings without changing licensed-provider behavior.
+- Give Plans its own strong editorial hero and responsive browse grid; restyle honest previews, activation, active-day wheel, chapter checklist, and progress states.
 
 ### Deliverable 4B.5 — Virtues, Learning, and You
 
+- Open Virtues with a photographic current-course hero connected directly to course progress and the next lesson.
 - Apply the emerald editorial system to course browsing, course progress, lessons, and optional formation tools.
 - Present Catholic Learning as clear editorial collections with visible scope.
 - Finish the profile/settings appearance and integration surfaces.
@@ -918,6 +921,7 @@ Do not generate text-to-speech from a copyrighted translation unless its license
 ### Deliverable 4B.6 — Cross-platform quality gate
 
 - Verify Dynamic Type, VoiceOver semantics, non-color state cues, Reduce Motion, keyboard focus, iPhone layouts, and Mac resizing.
+- Replace legacy rounded bubbles, pills, and soft shadows with the approved near-square fields, controls, cards, badges, and progress segments.
 - Build all supported targets and run the existing automated checks.
 - Compare the implemented core screens against both approved boards before merge.
 

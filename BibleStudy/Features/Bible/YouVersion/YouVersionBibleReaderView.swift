@@ -109,16 +109,20 @@ struct YouVersionBibleReaderView: View {
 
             ScrollViewReader { proxy in
                 ScrollView {
-                    BibleTextView(
-                        location.providerReference,
-                        textOptions: textOptions,
-                        onVerseTap: handleVerseTap
-                    )
-                    .id(location.id)
-                    .frame(maxWidth: 760, alignment: .leading)
-                    .padding(.horizontal, AppSpacing.standard)
-                    .padding(.vertical, AppSpacing.compact)
-                    .frame(maxWidth: .infinity)
+                    LazyVStack(alignment: .leading, spacing: 0) {
+                        chapterMasthead(location: location, edition: edition)
+                            .id(location.id)
+
+                        BibleTextView(
+                            location.providerReference,
+                            textOptions: textOptions,
+                            onVerseTap: handleVerseTap
+                        )
+                        .frame(maxWidth: 760, alignment: .leading)
+                        .padding(.horizontal, AppSpacing.screen)
+                        .padding(.vertical, AppSpacing.spacious)
+                        .frame(maxWidth: .infinity)
+                    }
                 }
                 .onChange(of: location.id) {
                     proxy.scrollTo(location.id, anchor: .top)
@@ -131,6 +135,79 @@ struct YouVersionBibleReaderView: View {
         .background(activeReaderTheme.backgroundColor)
         .foregroundStyle(activeReaderTheme.textColor)
         .preferredColorScheme(readerTheme.preferredColorScheme)
+    }
+
+    private func chapterMasthead(
+        location: YouVersionReaderLocation,
+        edition: YouVersionReaderEdition
+    ) -> some View {
+        let book = edition.books.first { $0.providerID == location.providerBookID }
+
+        return VStack(alignment: .leading, spacing: 14) {
+            EditorialEyebrow(chapterEyebrow(for: location))
+
+            Text((book?.title ?? location.providerBookID).uppercased())
+                .font(.system(size: 46, weight: .black, design: .serif))
+                .minimumScaleFactor(0.55)
+                .lineLimit(2)
+                .foregroundStyle(activeReaderTheme.textColor)
+
+            Rectangle()
+                .fill(activeReaderTheme.textColor.opacity(0.24))
+                .frame(height: 1)
+
+            HStack(alignment: .center, spacing: AppSpacing.spacious) {
+                Text("\(location.chapter)")
+                    .font(.system(size: 138, weight: .black, design: .serif))
+                    .minimumScaleFactor(0.72)
+                    .foregroundStyle(AppTheme.accent)
+                    .lineLimit(1)
+
+                VStack(alignment: .leading, spacing: 8) {
+                    EditorialEyebrow("Chapter")
+                    Text(chapterInvitation(for: location))
+                        .font(.system(.headline, design: .serif, weight: .regular))
+                        .foregroundStyle(activeReaderTheme.textColor.opacity(0.78))
+                }
+
+                Spacer(minLength: 0)
+            }
+
+            Rectangle()
+                .fill(activeReaderTheme.textColor.opacity(0.24))
+                .frame(height: 1)
+        }
+        .padding(.horizontal, AppSpacing.screen)
+        .padding(.top, AppSpacing.spacious)
+        .padding(.bottom, AppSpacing.standard)
+        .frame(maxWidth: 900, minHeight: 270, alignment: .leading)
+        .frame(maxWidth: .infinity)
+        .background(activeReaderTheme.backgroundColor)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(locationTitle(location, in: edition)), \(chapterEyebrow(for: location))")
+    }
+
+    private func chapterEyebrow(for location: YouVersionReaderLocation) -> String {
+        switch CatholicCanon.book(osisID: location.canonicalBookID)?.section {
+        case .gospels: "The Gospel according to"
+        case .paulineLetters, .catholicLetters: "A New Testament letter"
+        case .wisdom: "Wisdom and prayer"
+        case .prophetic: "The prophetic books"
+        case .pentateuch: "The law and covenant"
+        case .historical, .biblicalNovellas: "Sacred history"
+        case .acts: "The early Church"
+        case .revelation: "Revelation"
+        case nil: "Sacred Scripture"
+        }
+    }
+
+    private func chapterInvitation(for location: YouVersionReaderLocation) -> String {
+        switch CatholicCanon.book(osisID: location.canonicalBookID)?.section {
+        case .gospels: "Meet Christ in his words and works."
+        case .wisdom: "Let wisdom form prayer and daily life."
+        case .paulineLetters, .catholicLetters: "Receive the apostolic faith of the Church."
+        default: "Read slowly. Listen closely. Live the Word."
+        }
     }
 
     private func readerHeader(
@@ -195,7 +272,7 @@ struct YouVersionBibleReaderView: View {
                 move(direction: -1, from: location, in: edition)
             }
             .labelStyle(.iconOnly)
-            .buttonStyle(.bordered)
+            .buttonStyle(EditorialSecondaryButtonStyle())
             .disabled(
                 YouVersionReaderNavigator.adjacentLocation(
                     to: location,
@@ -216,7 +293,7 @@ struct YouVersionBibleReaderView: View {
                 move(direction: 1, from: location, in: edition)
             }
             .labelStyle(.iconOnly)
-            .buttonStyle(.bordered)
+            .buttonStyle(EditorialSecondaryButtonStyle())
             .disabled(
                 YouVersionReaderNavigator.adjacentLocation(
                     to: location,
@@ -499,7 +576,7 @@ private struct YouVersionBookChapterPicker: View {
                                     )
                                     dismiss()
                                 }
-                                .buttonStyle(.bordered)
+                                .buttonStyle(EditorialSecondaryButtonStyle())
                                 .accessibilityLabel("\(book.title), chapter \(chapter)")
                                 .accessibilityAddTraits(
                                     currentLocation.providerBookID == book.providerID

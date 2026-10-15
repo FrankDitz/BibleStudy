@@ -91,7 +91,7 @@ struct YouVersionBibleSearchView: View {
             Button("Search", systemImage: "magnifyingglass") {
                 runSearch(reset: true)
             }
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(EmeraldActionButtonStyle())
             .disabled(
                 query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                     || isSearching
@@ -134,7 +134,7 @@ struct YouVersionBibleSearchView: View {
                             navigation.open(reference)
                             dismiss()
                         }
-                        .buttonStyle(.borderedProminent)
+                        .buttonStyle(EmeraldActionButtonStyle())
                         .frame(maxWidth: .infinity, alignment: .trailing)
                     }
                     .padding(.vertical, AppSpacing.compact)

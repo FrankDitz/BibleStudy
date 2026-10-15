@@ -40,6 +40,7 @@ struct CustomPlanComposerView: View {
             Form {
                 Section("Identity") {
                     TextField("Plan name", text: $title)
+                        .textFieldStyle(EditorialTextFieldStyle())
                         .accessibilityIdentifier("custom-plan-title")
                     Picker("Reading scope", selection: $scopeChoice) {
                         ForEach(ScopeChoice.allCases) { choice in
@@ -133,8 +134,7 @@ struct CustomPlanComposerView: View {
                         Label("Start This Plan", systemImage: "play.fill")
                             .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(.borderedProminent)
-                    .tint(AppTheme.accent)
+                    .buttonStyle(EmeraldActionButtonStyle())
                     .disabled(!previewResult.isSuccess)
                     .accessibilityIdentifier("activate-custom-plan")
                 }
@@ -347,7 +347,7 @@ struct WeekdaySelector: View {
                         .foregroundStyle(selection.contains(weekday) ? Color.white : Color.primary)
                         .background(
                             selection.contains(weekday) ? AppTheme.accent : Color.secondary.opacity(0.14),
-                            in: Capsule()
+                            in: RoundedRectangle(cornerRadius: AppCornerRadius.control)
                         )
                 }
                 .buttonStyle(.plain)

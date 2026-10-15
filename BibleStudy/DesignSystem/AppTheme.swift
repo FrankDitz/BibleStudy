@@ -51,9 +51,9 @@ enum AppSpacing {
 }
 
 enum AppCornerRadius {
-    static let control: CGFloat = 10
-    static let card: CGFloat = 16
-    static let hero: CGFloat = 22
+    static let control: CGFloat = 3
+    static let card: CGFloat = 4
+    static let hero: CGFloat = 6
 }
 
 enum AppTypography {
@@ -129,7 +129,6 @@ struct FeatureCard<Content: View>: View {
                 RoundedRectangle(cornerRadius: AppCornerRadius.card, style: .continuous)
                     .stroke(AppTheme.hairline, lineWidth: 1)
             }
-            .shadow(color: .black.opacity(0.045), radius: 12, y: 5)
     }
 }
 
@@ -148,6 +147,55 @@ struct EmeraldActionButtonStyle: ButtonStyle {
                 in: RoundedRectangle(cornerRadius: AppCornerRadius.control, style: .continuous)
             )
             .scaleEffect(configuration.isPressed ? 0.985 : 1)
+    }
+}
+
+struct EditorialSecondaryButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(isEnabled ? AppTheme.ink : AppTheme.supportingText)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 11)
+            .background(configuration.isPressed ? AppTheme.elevatedSurface : AppTheme.surface)
+            .overlay {
+                Rectangle()
+                    .stroke(AppTheme.hairline, lineWidth: 1)
+            }
+            .contentShape(Rectangle())
+    }
+}
+
+struct EditorialTextFieldStyle: TextFieldStyle {
+    func _body(configuration: TextField<Self._Label>) -> some View {
+        configuration
+            .padding(.horizontal, 12)
+            .padding(.vertical, 11)
+            .background(AppTheme.elevatedSurface)
+            .overlay(alignment: .bottom) {
+                Rectangle()
+                    .fill(AppTheme.accent)
+                    .frame(height: 2)
+            }
+    }
+}
+
+struct EditorialMetric: View {
+    let eyebrow: String
+    let value: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(value)
+                .font(.system(.title3, design: .serif, weight: .bold))
+                .foregroundStyle(AppTheme.ink)
+            Text(eyebrow.uppercased())
+                .font(.caption2.weight(.bold))
+                .tracking(1.5)
+                .foregroundStyle(AppTheme.supportingText)
+        }
     }
 }
 

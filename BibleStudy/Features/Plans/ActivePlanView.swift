@@ -124,8 +124,8 @@ struct ActivePlanView: View {
                 .disabled(selectedDay?.assignments.isEmpty != false)
                 .accessibilityIdentifier("start-plan-reading")
             }
-            .padding()
-            .frame(maxWidth: 900)
+            .padding(AppSpacing.screen)
+            .frame(maxWidth: 1040)
             .frame(maxWidth: .infinity)
         }
         .background(AppScreenBackground())
@@ -327,7 +327,10 @@ struct PlanCoverView: View {
             .padding(28)
         }
         .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.hero, style: .continuous))
-        .shadow(color: AppTheme.accent.opacity(0.18), radius: 18, y: 8)
+        .overlay {
+            RoundedRectangle(cornerRadius: AppCornerRadius.hero, style: .continuous)
+                .stroke(AppTheme.hairline, lineWidth: 1)
+        }
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("active-plan-cover")
     }
@@ -364,10 +367,10 @@ private struct DayRail: View {
                             .background(
                                 selectedDayIndex == day.logicalDayIndex
                                     ? AppTheme.accent.opacity(0.18) : Color.secondary.opacity(0.09),
-                                in: RoundedRectangle(cornerRadius: 14)
+                                in: RoundedRectangle(cornerRadius: AppCornerRadius.control)
                             )
                             .overlay {
-                                RoundedRectangle(cornerRadius: 14)
+                                RoundedRectangle(cornerRadius: AppCornerRadius.control)
                                     .stroke(
                                         selectedDayIndex == day.logicalDayIndex
                                             ? AppTheme.accent : .clear,
@@ -450,7 +453,10 @@ private struct PaceBadge: View {
             .foregroundStyle(color)
             .padding(.horizontal, 12)
             .padding(.vertical, 6)
-            .background(color.opacity(0.12), in: Capsule())
+            .background(color.opacity(0.12), in: Rectangle())
+            .overlay {
+                Rectangle().stroke(color.opacity(0.34), lineWidth: 1)
+            }
     }
 
     private var title: String {

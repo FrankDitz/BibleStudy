@@ -29,9 +29,11 @@ struct ProfileView: View {
             EditorialEyebrow("Private formation")
             Text("Your journey.")
                 .font(AppTypography.screenTitle)
-            Text("Preferences and progress belong to you. Nothing here ranks faith or turns formation into a competition.")
-                .font(AppTypography.screenIntroduction)
-                .foregroundStyle(AppTheme.supportingText)
+            Text(
+                "Preferences and progress belong to you. Nothing here ranks faith or turns formation into a competition."
+            )
+            .font(AppTypography.screenIntroduction)
+            .foregroundStyle(AppTheme.supportingText)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -44,12 +46,22 @@ struct ProfileView: View {
                     eyebrow: "Emerald",
                     detail: "Follow the device or keep either approved appearance active."
                 )
-                Picker("Appearance", selection: $appearance) {
+                HStack(spacing: 0) {
                     ForEach(AppAppearance.allCases) { option in
-                        Text(option.title).tag(option)
+                        Button {
+                            appearance = option
+                        } label: {
+                            Text(option.title)
+                                .font(.caption.bold())
+                                .foregroundStyle(appearance == option ? AppTheme.onAccent : AppTheme.ink)
+                                .frame(maxWidth: .infinity, minHeight: 44)
+                                .background(appearance == option ? AppTheme.accent : AppTheme.elevatedSurface)
+                                .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityAddTraits(appearance == option ? .isSelected : [])
                     }
                 }
-                .pickerStyle(.segmented)
                 .accessibilityIdentifier("appearance-picker")
             }
         }
@@ -109,9 +121,11 @@ struct ProfileView: View {
                     systemImage: "lock.shield"
                 )
                 .foregroundStyle(AppTheme.supportingText)
-                Text("This build is scoped for one-person use. Public distribution requires a new content-license, privacy, attribution, and distribution review.")
-                    .font(.footnote)
-                    .foregroundStyle(AppTheme.supportingText)
+                Text(
+                    "This build is scoped for one-person use. Public distribution requires a new content-license, privacy, attribution, and distribution review."
+                )
+                .font(.footnote)
+                .foregroundStyle(AppTheme.supportingText)
             }
         }
     }
