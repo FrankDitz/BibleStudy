@@ -1,8 +1,8 @@
 # Virtue Curriculum Review Packet
 
-**Curriculum status:** implemented in-app; qualified Catholic review pending  
+**Curriculum status:** complete technical manuscript; qualified Catholic review pending
 **Content baseline:** 2026-10-14
-**Scope:** one orientation course, seven capital-sin counter-virtue courses, and four cardinal-virtue courses; 120 lessons total
+**Current reviewable scope:** the full twelve-course, 121-lesson curriculum: the eleven-lesson foundation course, four ten-lesson cardinal courses, and seven ten-lesson capital-sin counter-virtue courses.
 
 ## Purpose
 
@@ -18,9 +18,11 @@ The Virtues tab is a guided library for learning what virtue is, seeing it in Sc
 
 ## Course inventory
 
-- **Orientation:** *Becoming the Person God Calls You to Be* — 10 lessons.
-- **Counter-virtue track:** Humility against Pride; Charity and Generosity against Avarice; Kindness and Goodwill against Envy; Patience and Meekness against Wrath; Chastity against Lust; Temperance against Gluttony; Diligence and Perseverance against Sloth and Acedia — 10 lessons each.
-- **Cardinal track:** Prudence, Justice, Fortitude, and Temperance — 10 lessons each.
+- **Foundations:** *Becoming the Person God Calls You to Be* — 11 full lecture drafts available for owner inspection and qualified review.
+- **Counter-virtue track:** Humility against Pride; Charity and Generosity against Avarice; Kindness and Goodwill against Envy; Patience and Meekness against Wrath; Chastity against Lust; Temperance against Gluttony; Diligence and Perseverance against Sloth and Acedia — 10 full lecture drafts each, available for owner inspection and qualified review.
+- **Cardinal track:** Prudence, Justice, Fortitude, and Temperance — 10 full lecture drafts each, available for owner inspection and qualified review.
+
+The shared technical gate requires at least 800 words of instruction and 1,000 authored words overall in every available lesson, three Scripture passages totaling at least 24 verses, eight distinct sections, five review prompts, full formation supports, and a time estimate derived from the real material. Passing that gate establishes depth and structure; it does not constitute theological approval.
 
 Temperance is one virtue encountered through two pedagogical lenses, not two different virtues. The gluttony course focuses on appetite and consumption; the cardinal course studies ordered pleasure and use of created goods more broadly.
 
@@ -55,4 +57,15 @@ The app omits dated rhetoric, stereotypes, culture-bound examples, and claims th
 
 | Reviewer | Qualification/role | Scope reviewed | Date | Result | Notes |
 | --- | --- | --- | --- | --- | --- |
-| Pending | Pending | Full curriculum | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Foundation course | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Prudence course | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Justice course | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Fortitude course | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Cardinal Temperance course | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Humility against Pride course | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Charity and Generosity against Avarice course | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Kindness and Goodwill against Envy course | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Patience and Meekness against Wrath course | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Chastity against Lust course | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Temperance against Gluttony course | Pending | Pending | No content is labeled reviewed until this row is completed. |
+| Pending | Pending | Diligence and Perseverance against Sloth and Acedia course | Pending | Pending | No content is labeled reviewed until this row is completed. |

@@ -98,6 +98,7 @@ final class BibleStudyUITests: XCTestCase {
                 .waitForExistence(timeout: 3)
         )
         XCTAssertTrue(app.descendants(matching: .any)["virtue-course-review-status"].exists)
+        XCTAssertTrue(app.descendants(matching: .any)["virtue-course-progress"].exists)
         XCTAssertTrue(app.descendants(matching: .any)["virtue-course-overview"].exists)
         XCTAssertTrue(app.descendants(matching: .any)["virtue-course-outline"].exists)
         XCTAssertTrue(app.descendants(matching: .any)["virtue-course-sources"].exists)

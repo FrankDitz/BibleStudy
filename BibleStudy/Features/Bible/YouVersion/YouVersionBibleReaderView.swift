@@ -13,10 +13,11 @@ struct YouVersionBibleReaderView: View {
     @State private var isControlsPresented = false
     @State private var selectedVerse: SelectedVerse?
     @State private var footnotes: [BibleFootnote] = []
-    @AppStorage("reader-theme") private var readerTheme = ReaderTheme.light
+    @AppStorage("reader-theme") private var readerTheme = ReaderTheme.automatic
     @AppStorage("reader-text-scale") private var readerTextScale = 1.0
     @ScaledMetric(relativeTo: .body) private var baseTextSize = 18.0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.modelContext) private var modelContext
 
     var body: some View {
@@ -127,8 +128,8 @@ struct YouVersionBibleReaderView: View {
             Divider()
             readerFooter(location: location, edition: edition)
         }
-        .background(readerTheme.backgroundColor)
-        .foregroundStyle(readerTheme.textColor)
+        .background(activeReaderTheme.backgroundColor)
+        .foregroundStyle(activeReaderTheme.textColor)
         .preferredColorScheme(readerTheme.preferredColorScheme)
     }
 
@@ -136,13 +137,24 @@ struct YouVersionBibleReaderView: View {
         location: YouVersionReaderLocation,
         edition: YouVersionReaderEdition
     ) -> some View {
-        HStack(spacing: AppSpacing.compact) {
+        HStack(spacing: AppSpacing.standard) {
             Button {
                 isBookPickerPresented = true
             } label: {
-                Label(locationTitle(location, in: edition), systemImage: "book")
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("SCRIPTURE")
+                        .font(.caption2.bold())
+                        .tracking(2.5)
+                        .foregroundStyle(AppTheme.accent)
+                    HStack(spacing: 8) {
+                        Text(locationTitle(location, in: edition))
+                            .font(.system(.title2, design: .serif, weight: .bold))
+                        Image(systemName: "chevron.down")
+                            .font(.caption.bold())
+                    }
+                }
             }
-            .buttonStyle(.bordered)
+            .buttonStyle(.plain)
             .accessibilityHint("Choose a book and chapter")
 
             if editions.count > 1 {
@@ -155,8 +167,9 @@ struct YouVersionBibleReaderView: View {
                 }
                 .accessibilityLabel("Bible edition, \(edition.title)")
             } else {
-                Text(edition.abbreviation)
-                    .font(.subheadline.weight(.semibold))
+                Text(edition.abbreviation.uppercased())
+                    .font(.caption.bold())
+                    .tracking(1.5)
                     .accessibilityLabel("Bible edition, \(edition.title)")
             }
 
@@ -168,8 +181,9 @@ struct YouVersionBibleReaderView: View {
             .labelStyle(.iconOnly)
             .accessibilityHint("Change text size and reader theme")
         }
-        .padding(.horizontal, AppSpacing.compact)
-        .padding(.vertical, 8)
+        .padding(.horizontal, AppSpacing.screen)
+        .padding(.vertical, 14)
+        .background(activeReaderTheme.backgroundColor)
     }
 
     private func readerFooter(
@@ -214,7 +228,11 @@ struct YouVersionBibleReaderView: View {
         }
         .padding(.horizontal, AppSpacing.standard)
         .padding(.vertical, 8)
-        .background(.bar)
+        .background(activeReaderTheme.backgroundColor)
+    }
+
+    private var activeReaderTheme: ReaderTheme {
+        readerTheme.resolved(for: colorScheme)
     }
 
     private var textOptions: BibleTextOptions {
@@ -223,9 +241,9 @@ struct YouVersionBibleReaderView: View {
             fontSize: baseTextSize * readerTextScale,
             lineSpacing: 0.4,
             paragraphSpacing: 4,
-            textColor: readerTheme.textColor,
-            verseNumberColor: readerTheme.textColor.opacity(0.65),
-            wordsOfChristColor: readerTheme == .dark
+            textColor: activeReaderTheme.textColor,
+            verseNumberColor: activeReaderTheme.textColor.opacity(0.65),
+            wordsOfChristColor: activeReaderTheme == .dark
                 ? Color(red: 1, green: 0.42, blue: 0.46) : Color(red: 0.78, green: 0.12, blue: 0.18),
             footnoteMode: .image,
             verseSelectionStyle: .solid
@@ -335,7 +353,8 @@ struct YouVersionBibleReaderView: View {
             versionID: edition.id,
             bookID: current.canonicalBookID,
             chapter: current.chapter,
-            verseStart: current.verse
+            verseStart: current.verse,
+            verseEnd: current.verseEnd
         )
         if let reference, let matched = edition.location(matching: reference) {
             move(to: matched)

@@ -6,7 +6,7 @@ enum CounterVirtueCurriculum {
 
     static let courses: [VirtueStudyCourse] = profiles.map(makeCourse)
 
-    private struct Profile {
+    struct Profile {
         let virtueID: VirtueIdentifier
         let virtue: String
         let vice: String
@@ -21,7 +21,7 @@ enum CounterVirtueCurriculum {
         let scripture: [ScriptureSeed]
     }
 
-    private struct ScriptureSeed {
+    struct ScriptureSeed {
         let id: String
         let title: String
         let context: String
@@ -54,75 +54,17 @@ enum CounterVirtueCurriculum {
             overview: profile.overview,
             whyItMatters: profile.whyItMatters,
             systemImage: profile.icon,
+            contentVersion: 3,
             lessons: suffixes.indices.map { makeLesson(profile, index: $0) },
             sources: unique(commonSources + profile.sources)
         )
     }
 
     private static func makeLesson(_ profile: Profile, index: Int) -> VirtueStudyLesson {
-        let scripture = profile.scripture[index % profile.scripture.count]
-        let stageSummaries = [
-            "Learn the virtue's Catholic meaning before trying to measure it in yourself.",
-            "See how the opposing capital vice disorders a real desire and spreads into other choices.",
-            "Protect formation from counterfeits, shame, passivity, and self-serving definitions.",
-            "Let the whole movement of a biblical passage reshape the imagination.",
-            "Bring thoughts, desires, emotions, and motives into truthful prayer.",
-            "Practice the virtue where another person's dignity and good are at stake.",
-            "Use small repeated acts to make the good more available in ordinary life.",
-            "Meet temptation, failure, and discouragement without surrender or self-contempt.",
-            "Receive growth as cooperation with grace rather than a private feat of willpower.",
-            "Build a sustainable rule of life and continue after the course ends.",
-        ]
-        let distinctions = [
-            "A virtue is a stable readiness for the good, not a mood, label, or single impressive act. Study its object and purpose before judging appearances.",
-            "A capital vice is called capital because other sins can grow from it. It does not mean every temptation carries equal guilt, and the app cannot judge personal culpability.",
-            "The true virtue preserves truth, freedom, dignity, and charity together. Any version that excuses harm, erases responsibility, or performs goodness for admiration is a counterfeit.",
-            "Scripture should be read in context and within the Church's living faith. A verse illuminates formation; it is not a slogan used to silence complexity or another person.",
-            "Feelings are morally important material but not automatic verdicts. Name them honestly, test the judgments attached to them, and offer the whole movement to God.",
-            "Private intention matters, but virtue becomes visible in what is actually given, repaired, restrained, protected, or endured for another person's good.",
-            "Practice is formative rather than performative. Small acts should be concrete enough to repeat and humble enough that they do not become a new source of pride.",
-            "A fall does not prove that growth was false. Name the act without euphemism, seek forgiveness and repair, learn the occasion, and begin again with a wiser plan.",
-            "Human effort matters, but grace comes first and accompanies every genuine response. Prayer, sacrament, community, and qualified care belong inside formation.",
-            "Completion records lessons studied, not holiness achieved. The virtue remains a lifelong school whose tests arrive in changing circumstances.",
-        ]
-        let witness = [
-            "The Catechism places acquired human virtues within the larger Christian life of faith, hope, charity, grace, and the gifts of the Holy Spirit.",
-            "The Church's teaching on the capital sins offers a diagnostic map: it names recurring roots so repentance can reach deeper than isolated symptoms.",
-            "Catholic moral teaching resists both rigorism and permissiveness. Truth and mercy meet in conversion that names harm while protecting the dignity of the person.",
-            "The saints receive Scripture as a word to be obeyed in concrete love. Their lives differ widely, showing that holiness forms personality rather than erasing it.",
-            "The tradition of examination of conscience turns attention inward without making the self its final object; honest self-knowledge returns the person to God and neighbor.",
-            "Catholic social and moral teaching keeps virtue relational. Love of God becomes inseparable from truthful responsibility for the neighbor who can be helped or harmed.",
-            "Ascetical practices train freedom when they are prudent, hidden, and ordered to love. Severity detached from charity is not maturity.",
-            "Reconciliation is a school of hope: contrition names sin, confession rejects secrecy, absolution is received, and satisfaction begins repair.",
-            "The universal call to holiness means ordinary people in ordinary duties are truly called, while no one grows alone or apart from Christ.",
-            "Perseverance after a course is less dramatic than a beginning. The Church offers a durable rhythm of Sunday Eucharist, daily prayer, examination, service, and repeated return.",
-        ]
-        return Build.lesson(
-            id: "\(profile.virtueID.rawValue)-\(suffixes[index])",
-            title: profile.lessonTitles[index],
-            summary: stageSummaries[index],
-            teaching: profile.teachings[index],
-            distinction: distinctions[index],
-            witness: witness[index],
-            caseStudy:
-                "Picture this lesson in family life, work, parish life, and a private digital moment. Where would \(profile.vice.lowercased()) distort perception or choice? What would \(profile.virtue.lowercased()) notice, desire, and do differently without turning the other person into a project?",
-            practice: profile.practices[index],
-            prayer:
-                "Jesus, heal in me the roots of \(profile.vice.lowercased()) and form the freedom of \(profile.virtue.lowercased()). Give me truth without harshness, mercy without evasion, and one faithful next step today.",
-            scripture: [
-                Build.encounter(
-                    "\(profile.virtueID.rawValue)-\(scripture.id)-\(index)", scripture.title,
-                    scripture.context, scripture.book, scripture.chapter, scripture.start, scripture.end)
-            ],
-            remember: [
-                "How does Catholic teaching define \(profile.virtue.lowercased()) here?",
-                "Which movement of \(profile.vice.lowercased()) does this lesson expose?",
-                "What concrete response would join truth, freedom, and love?",
-            ],
-            sourceIDs: unique(
-                [Sources.catechismHumanVirtues.id, Sources.catechismCapitalSins.id]
-                    + profile.sources.map(\.id)
-            )
+        CounterVirtueLectureFactory.lesson(
+            profile: profile,
+            index: index,
+            suffix: suffixes[index]
         )
     }
 

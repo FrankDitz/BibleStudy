@@ -55,8 +55,7 @@ struct TemplatePlanActivationView: View {
                         Label("Start This Plan", systemImage: "play.fill")
                             .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(.borderedProminent)
-                    .tint(AppTheme.accent)
+                    .buttonStyle(EmeraldActionButtonStyle())
                     .disabled(snapshot == nil)
                     .accessibilityIdentifier("activate-template-plan")
                 }

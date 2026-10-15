@@ -28,6 +28,7 @@ The personal-use release is a local-first formation app that uses the YouVersion
 | 3. Plans | Reading goals become actionable and accountable | Premade plans, custom plan builder, schedule engine, day checklist, reminders, catch-up choices, progress | Plan math passes edge cases and a plan works end-to-end |
 | 4. Daily formation | The app feels like a coherent Catholic companion | Home dashboard, Learning MVP, Echo reflection handoff, source/reviewer metadata | A complete daily loop works without dead ends |
 | 4A. Virtue study and formation | Catholic teaching and Scripture become an intelligible path toward virtuous life | First-class Virtues destination, orientation course, seven capital-sin counter-virtue courses, four cardinal-virtue courses, optional practice tools, private study record | Every virtue has a coherent source-backed course and Scripture path; study progress never claims moral mastery |
+| 4B. Emerald UI system | The whole product has one distinctive, adaptive visual identity | Approved references, Emerald Light/After Dark tokens, editorial components, redesigned Home/Bible/Plans/Virtues/Learning/You, accessibility verification | Every core journey matches the approved design language in both appearances without losing readability or behavior |
 | 5. Personalization and hub | The experience persists across devices and belongs in the hub | You, private analytics, milestones, iCloud sync, deep links, import/export, hub events | iPhone/Mac state converges and hub journeys work |
 | 6. Narrated Bible | Listening is first-class where rights allow it | Licensed audio provider, background player, lock-screen controls, chapter queue, optional verse timecodes | Playback survives interruptions and text/audio stay aligned |
 | 7. Hardening and personal release | A trustworthy owner-only v1.0 is ready | Accessibility, performance, content/legal QA, direct-device testing, migration and recovery tests, release checklist | No personal-release blocker remains |
@@ -375,7 +376,7 @@ Teach the owner the four cardinal virtues—prudence, justice, fortitude, and te
 
 The tab is organized as a small virtue academy with the least possible navigation depth:
 
-1. **Start Here: Becoming the Person God Calls You to Be** — ten lessons on beatitude, stable dispositions, freedom, passions, habit, the cardinal and theological virtues, grace, the Church, and imitation of Christ.
+1. **Start Here: Becoming the Person God Calls You to Be** — eleven lessons on beatitude, stable dispositions, freedom, conscience and moral acts, passions, habit, the cardinal and theological virtues, grace, the Church, and imitation of Christ.
 2. **Seven Virtues against the Capital Sins** — seven ten-lesson courses that teach both the vice and the healing virtue through doctrine, Scripture, case studies, practice, prayer, and pastoral boundaries.
 3. **The Four Cardinal Virtues** — four ten-lesson courses grounded in CCC 1803–1811, Joseph Rickaby’s *Four-Square* as a historical secondary guide, and contemporary universal-Church catechesis.
 4. **Course preview** — every course shows its purpose, honest overview, complete lesson breakdown, estimated time, source trail, and review status before the owner begins.
@@ -428,7 +429,7 @@ These descriptions are product-planning summaries, not independently authoritati
 
 1. **Curriculum foundation and source synthesis** — stable course/lesson/source/review models; complete reading of Rickaby; current Catechism and Church-source reconciliation; explicit historical-source guardrails.
 2. **Course library experience** — Start Here hero, seven counter-virtue cards, four cardinal cards, honest previews, complete outlines, estimated time, sources, and recent-course resume.
-3. **Orientation and cardinal curriculum** — ten orientation lessons plus ten lessons each for prudence, justice, fortitude, and cardinal temperance.
+3. **Orientation and cardinal curriculum** — eleven orientation lessons plus ten lessons each for prudence, justice, fortitude, and cardinal temperance.
 4. **Seven counter-virtue curricula** — ten lessons per course covering Catholic meaning, the capital vice, counterfeits and pastoral boundaries, Scripture in context, interior and relational formation, habits, failure, grace, and a continuing rule of life.
 5. **Study progress and Scripture integration** — local lesson completion, reversible state, recent-course restoration, Bible-reader routes, backward-compatible decoding, and no virtue score.
 6. **Practice companion** — preserve Focus Cycles, daily check-ins, weekly review, practice library, thematic journeys, Rule of Life, Formation Record, and Echo handoff as optional application tools.
@@ -860,13 +861,67 @@ Do not generate text-to-speech from a copyrighted translation unless its license
 12. **BS-0462 — Seven counter-virtue courses:** ten lessons each for humility against pride, charity and generosity against avarice, kindness and goodwill against envy, patience and meekness against wrath, chastity against lust, temperance against gluttony, and diligence and perseverance against sloth or acedia.
 13. **BS-0463 — Practice bridge and acceptance:** keep existing formation tools secondary to study; verify backward-compatible progress, accessibility, iPhone/Mac presentation, privacy, and content review state.
 
+### Phase 4A.1 — Deep-formation learning loop
+
+14. **BS-0464 — Formed conscience and moral action:** add a full foundation lesson on forming conscience; evaluating the object, intention, and circumstances of an act; the rule that a good end cannot justify evil means; diminished responsibility; mercy; and appropriate pastoral help.
+15. **BS-0465 — Guided reasoning and Scripture synthesis:** give each foundation lesson a worked case with an explainable Catholic analysis, followed by an explicit synthesis that connects all assigned passages and asks one transfer question.
+16. **BS-0466 — Private self-examination and Then/Now:** add a repeatable examination framework and optional local-only beginning and ending reflections that can be compared without scoring, diagnosis, or automated moral judgment.
+17. **BS-0467 — Cumulative recall with correction:** place ungraded checkpoints at meaningful intervals; explain both correct and incorrect choices; permit unlimited retry; and never turn results into a holiness score or punitive gate.
+18. **BS-0468 — Lived witnesses:** connect the doctrine to Christ, biblical figures, saints, and ordinary Catholic life with source-traceable examples that do not flatten a life into a motivational anecdote.
+19. **BS-0469 — Course-to-practice transfer:** end each virtue course with small, ordinary, and demanding practices from the existing reviewed library and a direct route into an optional Focus Cycle rather than a second tracker.
+20. **BS-0470 — Qualitative curriculum gate:** require worked reasoning, Scripture synthesis, self-examination, lived witness, source traceability, and checkpoint coverage in addition to minimum word and reading counts.
+21. **BS-0471 — Review packet and release acceptance:** provide a repeatable qualified-Catholic-review checklist covering doctrine, Scripture context, pastoral safety, permissions, accessibility, and freshness; the app must continue to display review-pending status until an external reviewer signs and dates the content.
+
 ### Exit criteria
 
 - Every virtue card opens an honest preview and a complete teach → Scripture → consider → apply lesson sequence.
+- The foundation course teaches conscience explicitly, requires the learner to reason through cases, synthesizes its Scripture readings, and checks cumulative understanding with explanatory feedback.
+- Optional private beginning and ending reflections remain on device and can be compared by the owner without being analyzed or scored.
 - Study leads into optional Focus Cycles, an owner-selected Rule of Life, and a factual long-term Formation Record.
 - A qualified Catholic review route approves all published formation content and sensitive pastoral language.
 - The owner can remove the complete virtue history without deleting Scripture annotations or Echo entries.
 - No private check-in or reflection text enters provider requests, logs, analytics, or hub events.
+
+## Phase 4B — Emerald Light and Emerald After Dark UI
+
+**Goal:** give every existing journey one memorable, modern Christian visual system while preserving its behavior, Catholic content, privacy, and Scripture-provider boundaries.
+
+### Deliverable 4B.1 — Lock the visual contract
+
+- Preserve the approved Emerald Light and Emerald After Dark boards in the repository.
+- Record semantic palette, typography, geometry, photography, accessibility, and anti-pattern rules.
+- Produce original project-owned hero artwork rather than extracting images from a concept board.
+
+### Deliverable 4B.2 — Adaptive foundation and appearance controls
+
+- Implement semantic light/dark colors and editorial UI primitives.
+- Add System, Emerald Light, and Emerald After Dark choices in You.
+- Apply adaptive app backgrounds, surfaces, hairlines, buttons, progress, typography, and imagery on iPhone and Mac.
+
+### Deliverable 4B.3 — Navigation and Home
+
+- Restyle tabs, sidebar, toolbars, profile entry, and selected states.
+- Build the fashion-led Home hero with one dominant Continue Reading action.
+- Recompose plan, virtue, learning, and activity modules using the approved hierarchy.
+
+### Deliverable 4B.4 — Bible and Plans
+
+- Restyle reader header/footer and settings while keeping Scripture quiet and highly readable.
+- Restyle plan browsing, honest previews, activation, active-day wheel, chapter checklist, and progress states.
+
+### Deliverable 4B.5 — Virtues, Learning, and You
+
+- Apply the emerald editorial system to course browsing, course progress, lessons, and optional formation tools.
+- Present Catholic Learning as clear editorial collections with visible scope.
+- Finish the profile/settings appearance and integration surfaces.
+
+### Deliverable 4B.6 — Cross-platform quality gate
+
+- Verify Dynamic Type, VoiceOver semantics, non-color state cues, Reduce Motion, keyboard focus, iPhone layouts, and Mac resizing.
+- Build all supported targets and run the existing automated checks.
+- Compare the implemented core screens against both approved boards before merge.
+
+See `docs/design/EMERALD_DESIGN_SYSTEM.md` for the binding visual specification and source references.
 
 ## Phase 5 — You, iCloud, and hub integration
 

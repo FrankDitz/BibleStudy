@@ -3,7 +3,7 @@
 **Artifact type:** curriculum and content plan only - no application implementation
 **Audience:** an adult learner who may have no prior knowledge of Catholic moral theology
 **Editorial status:** research-backed draft requiring qualified Catholic review before publication
-**Proposed scope:** one orientation course, seven counter-virtue courses, and four cardinal-virtue courses, 120 lessons total
+**Proposed scope:** one foundation course, seven counter-virtue courses, and four cardinal-virtue courses, 121 lessons total
 
 ## Executive decision
 
@@ -11,7 +11,7 @@ The Virtues section should feel like a guided Catholic formation library, not a 
 
 The approved organization is:
 
-1. **Start Here: Becoming the Person God Calls You to Be** - a ten-lesson orientation. It explains the Catholic map but is not counted as a virtue.
+1. **Start Here: Becoming the Person God Calls You to Be** - an eleven-lesson foundation course. It explains the Catholic map but is not counted as a virtue.
 2. **Seven Virtues against the Seven Capital Sins** - seven extended courses organized around conversion from a capital vice to a contrary way of life.
 3. **The Four Cardinal Virtues** - Prudence, Justice, Fortitude, and Temperance, taught as the four pivotal moral virtues around which the other moral virtues are grouped.
 
@@ -1049,7 +1049,7 @@ Each course should have a primary biblical spine rather than a collage of proof 
 
 The existing short foundation lessons and four-lesson virtue paths contain useful beginnings: definitions, Scripture links, reflection prompts, and small practices. They should be treated as source notes and early prototypes, not discarded. The extended curriculum changes their role:
 
-- the current foundation becomes the research base for the ten-lesson orientation;
+- the current foundation becomes the research base for the eleven-lesson foundation course;
 - the current cardinal introductions expand into full five-week courses;
 - the current daily virtue lessons become seeds for selected lessons and post-course practices;
 - Temperance is taught in two coordinated courses: a focused remedy to gluttony and the complete cardinal framework, without pretending there are two different virtues;

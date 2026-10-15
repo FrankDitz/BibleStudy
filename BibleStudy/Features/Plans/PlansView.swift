@@ -23,10 +23,22 @@ struct PlansView: View {
         NavigationStack {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 18) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        EditorialEyebrow("Scripture formation")
+                        Text("Read with purpose.")
+                            .font(AppTypography.screenTitle)
+                        Text("Choose a clear path, keep an honest pace, and return without shame when life interrupts the schedule.")
+                            .font(AppTypography.screenIntroduction)
+                            .foregroundStyle(AppTheme.supportingText)
+                    }
+
                     activePlanSection
 
-                    Text("Premade plans")
-                        .font(.title2.bold())
+                    EditorialSectionHeader(
+                        "Premade plans",
+                        eyebrow: "Choose your rhythm",
+                        detail: "Preview every reading and commitment before you begin."
+                    )
                         .padding(.top, 4)
 
                     ForEach(ReadingPlanTemplate.featured) { plan in
@@ -37,10 +49,11 @@ struct PlansView: View {
                         )
                     }
                 }
-                .padding()
+                .padding(AppSpacing.screen)
                 .frame(maxWidth: 900)
                 .frame(maxWidth: .infinity)
             }
+            .background(AppScreenBackground())
             .navigationTitle("Plans")
             .toolbar {
                 Button {
@@ -121,8 +134,7 @@ struct PlansView: View {
                             Text(activePlanSummary(state))
                                 .font(.subheadline)
                                 .foregroundStyle(AppTheme.supportingText)
-                            ProgressView(value: state.completionFraction)
-                                .tint(AppTheme.accent)
+                            EmeraldProgressBar(value: state.completionFraction)
                         }
                         Spacer(minLength: 4)
                         Image(systemName: "chevron.right")
@@ -206,24 +218,64 @@ private struct PremadePlanCard: View {
 
     var body: some View {
         FeatureCard {
-            VStack(alignment: .leading, spacing: 10) {
-                Text(plan.title)
-                    .font(.headline)
-                Text(
-                    "\(plan.durationDays) days · ~\(plan.estimatedDailyMinutes.lowerBound)–\(plan.estimatedDailyMinutes.upperBound) min/day"
-                )
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(AppTheme.accent)
-                Text(plan.summary)
-                    .foregroundStyle(AppTheme.supportingText)
-                HStack {
-                    Button("Preview Plan", action: previewPlan)
-                        .buttonStyle(.bordered)
-                    Button("Start Plan", action: startPlan)
-                        .buttonStyle(.borderedProminent)
-                        .tint(AppTheme.accent)
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .top, spacing: AppSpacing.standard) {
+                    cover
+                    details
+                }
+                VStack(alignment: .leading, spacing: AppSpacing.standard) {
+                    cover.frame(height: 150)
+                    details
                 }
             }
         }
+    }
+
+    private var cover: some View {
+        ZStack(alignment: .bottomLeading) {
+            Rectangle()
+                .fill(
+                    LinearGradient(
+                        colors: [AppTheme.accent, .black],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+            Text("\(plan.durationDays)")
+                .font(.system(size: 72, weight: .black, design: .serif))
+                .foregroundStyle(.white.opacity(0.20))
+                .offset(x: 36, y: -18)
+            VStack(alignment: .leading, spacing: 5) {
+                EditorialEyebrow("Reading plan", inverse: true)
+                Text(plan.title)
+                    .font(.system(.headline, design: .serif, weight: .bold))
+                    .foregroundStyle(.white)
+                    .lineLimit(3)
+            }
+            .padding(14)
+        }
+        .frame(width: 150)
+        .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.control, style: .continuous))
+        .accessibilityHidden(true)
+    }
+
+    private var details: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(plan.title)
+                .font(AppTypography.cardTitle)
+            Text("\(plan.durationDays) days · ~\(plan.estimatedDailyMinutes.lowerBound)–\(plan.estimatedDailyMinutes.upperBound) min/day")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(AppTheme.accent)
+            Text(plan.summary)
+                .foregroundStyle(AppTheme.supportingText)
+            HStack {
+                Button("Preview", action: previewPlan)
+                    .buttonStyle(.bordered)
+                Button("Start Plan", action: startPlan)
+                    .buttonStyle(.borderedProminent)
+                    .tint(AppTheme.accent)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }

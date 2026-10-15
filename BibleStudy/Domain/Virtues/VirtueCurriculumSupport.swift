@@ -29,6 +29,15 @@ enum VirtueCurriculumSources {
         sourceClass: .catechism
     )
 
+    static let catechismHope = source(
+        id: "ccc-hope-study",
+        title: "Catechism of the Catholic Church - Hope",
+        url:
+            "https://www.vatican.va/content/catechism/en/part_three/section_one/chapter_one/article_7/ii_the_theological_virtues.index.html",
+        locator: "CCC 1817-1821",
+        sourceClass: .catechism
+    )
+
     static let catechismGiftsAndFruits = source(
         id: "ccc-gifts-fruits-study",
         title: "Catechism of the Catholic Church - Gifts and Fruits of the Holy Spirit",
@@ -62,6 +71,24 @@ enum VirtueCurriculumSources {
         url:
             "https://www.vatican.va/content/catechism/en/part_three/section_one/chapter_one/article_3/i_freedom_and_responsibility.html",
         locator: "CCC 1730-1748",
+        sourceClass: .catechism
+    )
+
+    static let catechismMoralActs = source(
+        id: "ccc-moral-acts-study",
+        title: "Catechism of the Catholic Church - The Morality of Human Acts",
+        url:
+            "https://www.vatican.va/content/catechism/en/part_three/section_one/chapter_one/article_4/i_the_sources_of_morality.index.html",
+        locator: "CCC 1749-1761",
+        sourceClass: .catechism
+    )
+
+    static let catechismConscience = source(
+        id: "ccc-conscience-study",
+        title: "Catechism of the Catholic Church - Moral Conscience",
+        url:
+            "https://www.vatican.va/content/catechism/en/part_three/section_one/chapter_one/article_6/ii_the_formation_of_conscience.html",
+        locator: "CCC 1776-1802, especially 1783-1785",
         sourceClass: .catechism
     )
 
@@ -119,6 +146,42 @@ enum VirtueCurriculumSources {
         sourceClass: .catechism
     )
 
+    static let catechismSocialJustice = source(
+        id: "ccc-social-justice-study",
+        title: "Catechism of the Catholic Church - Social Justice and Solidarity",
+        url:
+            "https://www.vatican.va/content/catechism/en/part_three/section_one/chapter_two/article_3/social_justice.html",
+        locator: "CCC 1928-1948",
+        sourceClass: .catechism
+    )
+
+    static let catechismCommonGood = source(
+        id: "ccc-common-good-study",
+        title: "Catechism of the Catholic Church - The Common Good",
+        url:
+            "https://www.vatican.va/content/catechism/en/part_three/section_one/chapter_two/article_2/ii_the_common_good.html",
+        locator: "CCC 1905-1917",
+        sourceClass: .catechism
+    )
+
+    static let catechismReligion = source(
+        id: "ccc-religion-study",
+        title: "Catechism of the Catholic Church - The Virtue of Religion",
+        url:
+            "https://www.vatican.va/content/catechism/en/part_three/section_two/chapter_one/article_1/ii_him_only_shall_you_serve.index.html",
+        locator: "CCC 2095-2109",
+        sourceClass: .catechism
+    )
+
+    static let catechismTruth = source(
+        id: "ccc-truth-study",
+        title: "Catechism of the Catholic Church - Truth and Reputation",
+        url:
+            "https://www.vatican.va/content/catechism/en/part_three/section_two/chapter_two/article_8/iii_offenses_against_truth.index.html",
+        locator: "CCC 2475-2487; see also 2492",
+        sourceClass: .catechism
+    )
+
     static let catechismMercy = source(
         id: "ccc-mercy-study",
         title: "Catechism of the Catholic Church - Love for the Poor",
@@ -164,12 +227,30 @@ enum VirtueCurriculumSources {
         sourceClass: .catechism
     )
 
+    static let catechismHumanLife = source(
+        id: "ccc-human-life-study",
+        title: "Catechism of the Catholic Church - Respect for Human Life",
+        url:
+            "https://www.vatican.va/content/catechism/en/part_three/section_two/chapter_two/article_5/i_respect_for_human_life.html",
+        locator: "CCC 2258-2330, especially 2263-2265",
+        sourceClass: .catechism
+    )
+
     static let catechismPrayerHumility = source(
         id: "ccc-prayer-humility-study",
         title: "Catechism of the Catholic Church - Prayer as God's Gift",
         url:
             "https://www.vatican.va/content/catechism/en/part_four/section_one/chapter_one/article_1/i_prayer_as_gods_gift.html",
         locator: "CCC 2559-2561",
+        sourceClass: .catechism
+    )
+
+    static let catechismPenance = source(
+        id: "ccc-penance-study",
+        title: "Catechism of the Catholic Church - The Many Forms of Penance",
+        url:
+            "https://www.vatican.va/content/catechism/en/part_two/section_two/chapter_two/article_4/v_the_many_forms_of_penance_in_christian_life.html",
+        locator: "CCC 1434-1439; see also 2043",
         sourceClass: .catechism
     )
 
@@ -197,6 +278,51 @@ enum VirtueCurriculumSources {
         url:
             "https://www.vatican.va/content/benedict-xvi/en/encyclicals/documents/hf_ben-xvi_enc_20051225_deus-caritas-est.html",
         locator: "Sections 1-18 and 25-39",
+        sourceClass: .universalChurch
+    )
+
+    static let veritatisSplendor = source(
+        id: "saint-john-paul-veritatis-splendor",
+        title: "Saint John Paul II - Veritatis Splendor",
+        url:
+            "https://www.vatican.va/content/john-paul-ii/en/encyclicals/documents/hf_jp-ii_enc_06081993_veritatis-splendor.html",
+        locator: "Sections 89-94 on witness and martyrdom",
+        sourceClass: .universalChurch
+    )
+
+    static let saintAugustine = source(
+        id: "vatican-saint-augustine-restless-heart",
+        title: "Pope Benedict XVI - Saint Augustine of Hippo",
+        url:
+            "https://www.vatican.va/content/benedict-xvi/en/audiences/2008/documents/hf_ben-xvi_aud_20080130.html",
+        locator: "General Audience, 30 January 2008",
+        sourceClass: .universalChurch
+    )
+
+    static let saintThomasMore = source(
+        id: "vatican-saint-thomas-more-conscience",
+        title: "Saint John Paul II - Saint Thomas More, Patron of Statesmen",
+        url:
+            "https://www.vatican.va/content/john-paul-ii/en/motu_proprio/documents/hf_jp-ii_motu-proprio_20001031_thomas-more.html",
+        locator: "Apostolic Letter, 31 October 2000, sections 1-4",
+        sourceClass: .universalChurch
+    )
+
+    static let saintTherese = source(
+        id: "vatican-saint-therese-little-way",
+        title: "Pope Francis - C'est la confiance on Saint Thérèse of Lisieux",
+        url:
+            "https://www.vatican.va/content/francesco/en/apost_exhortations/documents/20231015-santateresa-delbambinogesu.html",
+        locator: "Apostolic Exhortation, 15 October 2023, especially 1-29",
+        sourceClass: .universalChurch
+    )
+
+    static let saintBakhita = source(
+        id: "vatican-saint-bakhita-forgiveness",
+        title: "Pope Francis - Saint Josephine Bakhita and Christ's Forgiveness",
+        url:
+            "https://www.vatican.va/content/francesco/en/audiences/2023/documents/20231011-udienza-generale.html",
+        locator: "General Audience, 11 October 2023",
         sourceClass: .universalChurch
     )
 
@@ -356,6 +482,7 @@ enum VirtueCurriculumBuilder {
         overview: String,
         whyItMatters: String,
         systemImage: String,
+        contentVersion: Int = 2,
         lessons: [VirtueStudyLesson],
         sources: [VirtueContentSource]
     ) -> VirtueStudyCourse {
@@ -368,7 +495,7 @@ enum VirtueCurriculumBuilder {
             overview: overview,
             whyItMatters: whyItMatters,
             systemImage: systemImage,
-            contentVersion: 2,
+            contentVersion: contentVersion,
             lessons: lessons,
             sources: sources,
             review: draftReview
@@ -413,6 +540,34 @@ enum VirtueCurriculumBuilder {
             scriptureEncounters: scripture,
             reflectionPrompts: remember,
             sourceIDs: sourceIDs
+        )
+    }
+
+    static func lectureLesson(
+        id: String,
+        title: String,
+        summary: String,
+        sections: [VirtueLessonSection],
+        scripture: [VirtueScriptureEncounter],
+        remember: [String],
+        sourceIDs: [String],
+        formationSupport: VirtueLessonFormationSupport? = nil
+    ) -> VirtueStudyLesson {
+        VirtueStudyLesson(
+            id: id,
+            title: title,
+            summary: summary,
+            estimatedMinutes: VirtueLectureStandard.estimatedMinutes(
+                sections: sections,
+                scripture: scripture,
+                reviewPrompts: remember,
+                formationSupport: formationSupport
+            ),
+            sections: sections,
+            scriptureEncounters: scripture,
+            reflectionPrompts: remember,
+            sourceIDs: sourceIDs,
+            formationSupport: formationSupport
         )
     }
 

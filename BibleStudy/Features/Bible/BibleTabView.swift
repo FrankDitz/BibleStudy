@@ -4,8 +4,24 @@ struct BibleTabView: View {
     let configuration: AppConfiguration
     let navigation: ScriptureNavigationController
     let catalogApproval: YouVersionCatalogApproval
+    let returnTitle: String?
+    let onReturn: (() -> Void)?
 
     @State private var isSearchPresented = false
+
+    init(
+        configuration: AppConfiguration,
+        navigation: ScriptureNavigationController,
+        catalogApproval: YouVersionCatalogApproval,
+        returnTitle: String? = nil,
+        onReturn: (() -> Void)? = nil
+    ) {
+        self.configuration = configuration
+        self.navigation = navigation
+        self.catalogApproval = catalogApproval
+        self.returnTitle = returnTitle
+        self.onReturn = onReturn
+    }
 
     var body: some View {
         NavigationStack {
@@ -24,8 +40,14 @@ struct BibleTabView: View {
                     configuredContent
                 }
             }
-            .navigationTitle("Bible")
+            .navigationTitle("Scripture")
             .toolbar {
+                if let returnTitle, let onReturn {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button(returnTitle, systemImage: "chevron.backward", action: onReturn)
+                            .accessibilityIdentifier("bible-return-to-virtues")
+                    }
+                }
                 if approvedVersionID != nil {
                     ToolbarItem(placement: .primaryAction) {
                         Button("Search", systemImage: "magnifyingglass") {
@@ -39,6 +61,7 @@ struct BibleTabView: View {
         .task {
             await catalogApproval.audit(using: configuration)
         }
+        .background(AppScreenBackground())
         .sheet(isPresented: $isSearchPresented) {
             if let appKey = configuration.youVersionAppKey,
                 let versionID = approvedVersionID
@@ -83,7 +106,7 @@ struct BibleTabView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.horizontal, AppSpacing.compact)
                         .padding(.vertical, 6)
-                        .background(.bar)
+                        .background(AppTheme.surface)
                         .accessibilityLabel("Bible edition notice. \(notice)")
                 }
             }

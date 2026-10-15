@@ -38,11 +38,11 @@ struct VirtuesView: View {
                     doctrinalMap
                     practiceCompanion
                 }
-                .padding()
+                .padding(AppSpacing.screen)
                 .frame(maxWidth: 980)
                 .frame(maxWidth: .infinity)
             }
-            .background(AppTheme.warmSurface.opacity(0.35))
+            .background(AppScreenBackground())
             .navigationTitle("Virtues")
         }
         .accessibilityIdentifier("virtues-root")
@@ -54,7 +54,9 @@ struct VirtuesView: View {
     }
 
     private var latestProgress: VirtueCourseProgress? {
-        state.courseProgress.max { $0.updatedAt < $1.updatedAt }
+        state.courseProgress
+            .filter { VirtueStudyCatalog.lectureReadyCourseIDs.contains($0.courseID) }
+            .max { $0.updatedAt < $1.updatedAt }
     }
 
     private var currentCycle: VirtueFocusCycle? {
@@ -62,15 +64,34 @@ struct VirtuesView: View {
     }
 
     private var introduction: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Learn the good. Practice it with grace.")
-                .font(.system(.largeTitle, design: .serif, weight: .bold))
-            Text(
-                "A guided Catholic school of character: learn the seven capital sins and their healing virtues, then study the four cardinal virtues in depth through Scripture, doctrine, reflection, and practice."
-            )
-            .font(AppTypography.screenIntroduction)
-            .foregroundStyle(AppTheme.supportingText)
+        ZStack(alignment: .bottomLeading) {
+            AppHeroArtwork()
+                .frame(height: 390)
+                .frame(maxWidth: .infinity)
+                .clipped()
+                .overlay {
+                    LinearGradient(
+                        colors: [AppTheme.accent.opacity(0.10), AppTheme.accent.opacity(0.86)],
+                        startPoint: .topTrailing,
+                        endPoint: .bottomLeading
+                    )
+                }
+
+            VStack(alignment: .leading, spacing: 10) {
+                EditorialEyebrow("Virtue formation", inverse: true)
+                Text("BECOME\nMORE LIKE\nJESUS.")
+                    .font(.system(size: 42, weight: .black, design: .serif))
+                    .minimumScaleFactor(0.72)
+                Text("Learn the good. Practice it with grace. Return to Christ when growth is difficult.")
+                    .font(.title3)
+                    .foregroundStyle(.white.opacity(0.86))
+                    .frame(maxWidth: 520, alignment: .leading)
+            }
+            .foregroundStyle(.white)
+            .padding(AppSpacing.spacious)
         }
+        .frame(minHeight: 390)
+        .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.hero, style: .continuous))
         .accessibilityElement(children: .combine)
     }
 
@@ -84,7 +105,7 @@ struct VirtuesView: View {
             } label: {
                 FeatureCard {
                     HStack(spacing: 16) {
-                        Image(systemName: "bookmark.fill")
+                    Image(systemName: "bookmark.fill")
                             .font(.title2)
                             .foregroundStyle(.white)
                             .frame(width: 50, height: 50)
@@ -123,13 +144,13 @@ struct VirtuesView: View {
                 RoundedRectangle(cornerRadius: AppCornerRadius.card)
                     .fill(
                         LinearGradient(
-                            colors: [AppTheme.accent, AppTheme.accent.opacity(0.72)],
+                            colors: [AppTheme.accent, .black],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
                     )
                 VStack(alignment: .leading, spacing: 10) {
-                    Label("START HERE", systemImage: "building.columns")
+                    Label("START HERE · FULL LECTURE COURSE", systemImage: "building.columns")
                         .font(.caption.bold())
                     Text(VirtueStudyCatalog.foundationCourse.title)
                         .font(.system(.title, design: .serif, weight: .bold))
@@ -205,30 +226,34 @@ struct VirtuesView: View {
         identifier: String
     ) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(title)
-                .font(AppTypography.sectionTitle)
-            Text(detail)
-                .foregroundStyle(AppTheme.supportingText)
+            EditorialSectionHeader(title, eyebrow: "Course library", detail: detail)
 
             LazyVGrid(
                 columns: [GridItem(.adaptive(minimum: 260), spacing: AppSpacing.standard)],
                 spacing: AppSpacing.standard
             ) {
                 ForEach(courses) { course in
-                    NavigationLink {
-                        VirtueCourseView(course: course, openReading: openReading)
-                    } label: {
-                        courseCard(course)
+                    if VirtueStudyCatalog.isLectureReady(course) {
+                        NavigationLink {
+                            VirtueCourseView(course: course, openReading: openReading)
+                        } label: {
+                            courseCard(course, isReady: true)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityIdentifier(courseIdentifier(course))
+                    } else {
+                        courseCard(course, isReady: false)
+                            .accessibilityElement(children: .combine)
+                            .accessibilityLabel("\(course.title). Full lecture course in development.")
+                            .accessibilityIdentifier("\(courseIdentifier(course))-in-development")
                     }
-                    .buttonStyle(.plain)
-                    .accessibilityIdentifier(courseIdentifier(course))
                 }
             }
         }
         .accessibilityIdentifier(identifier)
     }
 
-    private func courseCard(_ course: VirtueStudyCourse) -> some View {
+    private func courseCard(_ course: VirtueStudyCourse, isReady: Bool) -> some View {
         FeatureCard {
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
@@ -236,7 +261,7 @@ struct VirtuesView: View {
                         .font(.title2)
                         .foregroundStyle(AppTheme.accent)
                         .frame(width: 46, height: 46)
-                        .background(AppTheme.accent.opacity(0.12), in: Circle())
+                    .background(AppTheme.elevatedSurface, in: RoundedRectangle(cornerRadius: 10))
                     Spacer()
                     courseStatus(course)
                     Image(systemName: "chevron.right")
@@ -248,11 +273,17 @@ struct VirtuesView: View {
                 Text(course.subtitle)
                     .foregroundStyle(AppTheme.supportingText)
                     .multilineTextAlignment(.leading)
-                Label("\(course.lessons.count) lessons", systemImage: "book.closed")
-                    .font(.caption.bold())
-                    .foregroundStyle(AppTheme.accent)
+                Label(
+                    isReady
+                        ? "\(course.lessons.count) full lessons"
+                        : "Full lecture course in development",
+                    systemImage: isReady ? "book.closed" : "hammer"
+                )
+                .font(.caption.bold())
+                .foregroundStyle(isReady ? AppTheme.accent : AppTheme.warning)
             }
         }
+        .opacity(isReady ? 1 : 0.76)
     }
 
     @ViewBuilder
@@ -348,7 +379,7 @@ struct VirtuesView: View {
                 formationLink(
                     title: "My Rule of Life",
                     detail: "Keep and revise practices you deliberately choose.",
-                    systemImage: "leaf"
+                        systemImage: "text.book.closed"
                 )
             }
             NavigationLink {

@@ -81,7 +81,8 @@ struct YouVersionReaderEdition: Equatable, Identifiable, Sendable {
             providerBookID: book.providerID,
             canonicalBookID: book.canonicalID,
             chapter: reference.chapter,
-            verse: reference.verseStart
+            verse: reference.verseStart,
+            verseEnd: reference.verseEnd
         )
     }
 
@@ -130,9 +131,32 @@ struct YouVersionReaderLocation: Equatable, Identifiable, Sendable {
     let canonicalBookID: String
     let chapter: Int
     let verse: Int?
+    let verseEnd: Int?
+
+    init(
+        versionID: Int,
+        providerBookID: String,
+        canonicalBookID: String,
+        chapter: Int,
+        verse: Int?,
+        verseEnd: Int? = nil
+    ) {
+        self.versionID = versionID
+        self.providerBookID = providerBookID
+        self.canonicalBookID = canonicalBookID
+        self.chapter = chapter
+        self.verse = verse
+        self.verseEnd = verseEnd ?? verse
+    }
 
     var id: String {
-        "\(versionID):\(providerBookID).\(chapter).\(verse.map(String.init) ?? "all")"
+        let passage: String
+        if let verse, let verseEnd, verseEnd != verse {
+            passage = "\(verse)-\(verseEnd)"
+        } else {
+            passage = verse.map(String.init) ?? "all"
+        }
+        return "\(versionID):\(providerBookID).\(chapter).\(passage)"
     }
 
     var canonicalReference: ScriptureReference? {
@@ -140,12 +164,23 @@ struct YouVersionReaderLocation: Equatable, Identifiable, Sendable {
             versionID: versionID,
             bookID: canonicalBookID,
             chapter: chapter,
-            verseStart: verse
+            verseStart: verse,
+            verseEnd: verseEnd
         )
     }
 
     var providerReference: BibleReference {
-        BibleReference(
+        if let verse, let verseEnd, verseEnd != verse {
+            return BibleReference(
+                versionId: versionID,
+                bookId: providerBookID,
+                chapter: chapter,
+                verseStart: verse,
+                verseEnd: verseEnd
+            )
+        }
+
+        return BibleReference(
             versionId: versionID,
             bookId: providerBookID,
             chapter: chapter,

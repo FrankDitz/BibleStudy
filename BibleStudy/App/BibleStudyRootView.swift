@@ -9,6 +9,8 @@ struct BibleStudyRootView: View {
     @State private var didApplyLaunchRoute = false
     @State private var activePlanNavigationRequest = 0
     @State private var isPresentingProfile = false
+    @State private var presentedVirtueReading: ScriptureReference?
+    @AppStorage(AppAppearance.storageKey) private var appearance = AppAppearance.system
 
     var body: some View {
         Group {
@@ -19,7 +21,7 @@ struct BibleStudyRootView: View {
                             .tag(destination)
                             .accessibilityIdentifier("navigation-\(destination.rawValue)")
                     }
-                    .navigationTitle("Bible Study")
+                    .navigationTitle("Kingdom")
                     .navigationSplitViewColumnWidth(min: 190, ideal: 220)
                 } detail: {
                     destinationView(selection)
@@ -35,8 +37,14 @@ struct BibleStudyRootView: View {
                             .tag(destination)
                     }
                 }
+                .toolbarBackground(AppTheme.surface, for: .tabBar)
+                .toolbarBackground(.visible, for: .tabBar)
             #endif
         }
+        .preferredColorScheme(appearance.preferredColorScheme)
+        .tint(AppTheme.accent)
+        .foregroundStyle(AppTheme.ink)
+        .background(AppTheme.background)
         #if !os(macOS)
             .sheet(isPresented: $isPresentingProfile) {
                 ProfileView(
@@ -44,6 +52,19 @@ struct BibleStudyRootView: View {
                 )
             }
         #endif
+        .sheet(item: $presentedVirtueReading) { _ in
+            BibleTabView(
+                configuration: dependencies.configuration,
+                navigation: scriptureNavigation,
+                catalogApproval: catalogApproval,
+                returnTitle: "Back to Virtues"
+            ) {
+                presentedVirtueReading = nil
+            }
+            #if os(macOS)
+                .frame(minWidth: 720, minHeight: 620)
+            #endif
+        }
         .task {
             guard !didApplyLaunchRoute else { return }
             didApplyLaunchRoute = true
@@ -108,7 +129,8 @@ struct BibleStudyRootView: View {
                 verseEnd: reference.verseEnd
             )
         else { return }
-        openScripture(scriptureReference)
+        scriptureNavigation.open(scriptureReference)
+        presentedVirtueReading = scriptureReference
     }
 
     private func openActivePlan() {

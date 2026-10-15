@@ -20,6 +20,36 @@ struct VirtueLessonSection: Identifiable, Codable, Equatable, Sendable {
     let body: String
 }
 
+struct VirtueKnowledgeCheck: Identifiable, Codable, Equatable, Sendable {
+    let id: String
+    let prompt: String
+    let options: [String]
+    let correctOptionIndex: Int
+    let explanation: String
+}
+
+struct VirtueSelfExaminationStep: Identifiable, Codable, Equatable, Sendable {
+    let id: String
+    let title: String
+    let question: String
+    let guidance: String
+}
+
+/// Qualitative learning supports that turn a lecture into a repeatable formation loop.
+/// They remain authored content: the app never infers a learner's conscience or moral state.
+struct VirtueLessonFormationSupport: Codable, Equatable, Sendable {
+    let workedCaseAnalysis: String
+    let scriptureSynthesis: String
+    let scriptureTransferQuestion: String
+    let witnessTitle: String
+    let witnessBody: String
+    let supportingSourceIDs: [String]
+    let selfExaminationIntroduction: String
+    let selfExaminationExample: String
+    let selfExaminationSteps: [VirtueSelfExaminationStep]
+    let knowledgeChecks: [VirtueKnowledgeCheck]
+}
+
 struct VirtueStudyLesson: Identifiable, Codable, Equatable, Sendable {
     let id: String
     let title: String
@@ -29,6 +59,29 @@ struct VirtueStudyLesson: Identifiable, Codable, Equatable, Sendable {
     let scriptureEncounters: [VirtueScriptureEncounter]
     let reflectionPrompts: [String]
     let sourceIDs: [String]
+    let formationSupport: VirtueLessonFormationSupport?
+
+    init(
+        id: String,
+        title: String,
+        summary: String,
+        estimatedMinutes: Int,
+        sections: [VirtueLessonSection],
+        scriptureEncounters: [VirtueScriptureEncounter],
+        reflectionPrompts: [String],
+        sourceIDs: [String],
+        formationSupport: VirtueLessonFormationSupport? = nil
+    ) {
+        self.id = id
+        self.title = title
+        self.summary = summary
+        self.estimatedMinutes = estimatedMinutes
+        self.sections = sections
+        self.scriptureEncounters = scriptureEncounters
+        self.reflectionPrompts = reflectionPrompts
+        self.sourceIDs = sourceIDs
+        self.formationSupport = formationSupport
+    }
 }
 
 struct VirtueStudyCourse: Identifiable, Codable, Equatable, Sendable {
@@ -61,6 +114,8 @@ struct VirtueCourseProgress: Identifiable, Codable, Equatable, Sendable {
     let startedAt: Date
     var completedLessonIDs: Set<String>
     var lastOpenedLessonID: String?
+    var beginningReflection: String?
+    var endingReflection: String?
     var updatedAt: Date
 
     init(
@@ -68,12 +123,16 @@ struct VirtueCourseProgress: Identifiable, Codable, Equatable, Sendable {
         startedAt: Date,
         completedLessonIDs: Set<String> = [],
         lastOpenedLessonID: String? = nil,
+        beginningReflection: String? = nil,
+        endingReflection: String? = nil,
         updatedAt: Date
     ) {
         self.courseID = courseID
         self.startedAt = startedAt
         self.completedLessonIDs = completedLessonIDs
         self.lastOpenedLessonID = lastOpenedLessonID
+        self.beginningReflection = beginningReflection
+        self.endingReflection = endingReflection
         self.updatedAt = updatedAt
     }
 
@@ -84,6 +143,20 @@ struct VirtueCourseProgress: Identifiable, Codable, Equatable, Sendable {
     func isComplete(_ course: VirtueStudyCourse) -> Bool {
         !course.lessons.isEmpty && completedLessonCount(in: course) == course.lessons.count
     }
+}
+
+struct VirtueLessonReflection: Identifiable, Codable, Equatable, Sendable {
+    var id: String { "\(courseID).\(lessonID)" }
+
+    let courseID: String
+    let lessonID: String
+    var response: String
+    var updatedAt: Date
+}
+
+enum VirtueCourseReflectionStage: Sendable {
+    case beginning
+    case ending
 }
 
 enum VirtueStudyError: Error, Equatable {
@@ -145,5 +218,49 @@ enum VirtueStudyEngine {
             state.courseProgress[index].completedLessonIDs.remove(lessonID)
         }
         state.courseProgress[index].updatedAt = date
+    }
+
+    static func saveCourseReflection(
+        courseID: String,
+        stage: VirtueCourseReflectionStage,
+        text: String,
+        in state: inout VirtueFormationState,
+        at date: Date = .now
+    ) throws {
+        try begin(courseID: courseID, in: &state, at: date)
+        guard let index = state.courseProgress.firstIndex(where: { $0.courseID == courseID }) else {
+            throw VirtueStudyError.courseNotFound
+        }
+        let cleaned = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        switch stage {
+        case .beginning:
+            state.courseProgress[index].beginningReflection = cleaned.isEmpty ? nil : cleaned
+        case .ending:
+            state.courseProgress[index].endingReflection = cleaned.isEmpty ? nil : cleaned
+        }
+        state.courseProgress[index].updatedAt = date
+    }
+
+    static func saveLessonReflection(
+        courseID: String,
+        lessonID: String,
+        text: String,
+        in state: inout VirtueFormationState,
+        at date: Date = .now
+    ) throws {
+        try openLesson(courseID: courseID, lessonID: lessonID, in: &state, at: date)
+        let cleaned = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        state.lessonReflections.removeAll {
+            $0.courseID == courseID && $0.lessonID == lessonID
+        }
+        guard !cleaned.isEmpty else { return }
+        state.lessonReflections.append(
+            VirtueLessonReflection(
+                courseID: courseID,
+                lessonID: lessonID,
+                response: cleaned,
+                updatedAt: date
+            )
+        )
     }
 }

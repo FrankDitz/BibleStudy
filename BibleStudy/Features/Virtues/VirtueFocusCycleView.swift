@@ -246,7 +246,7 @@ struct VirtueActiveCycleView: View {
                 ContentUnavailableView("Cycle unavailable", systemImage: "scope")
             }
         }
-        .background(AppTheme.warmSurface.opacity(0.35))
+        .background(AppScreenBackground())
         .navigationTitle("Focus Cycle")
         .onAppear { privateObservation = todayCheckIn?.privateObservation ?? "" }
         .accessibilityIdentifier("virtue-active-cycle")
