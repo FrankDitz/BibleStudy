@@ -4,7 +4,7 @@ struct LearningView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: AppSpacing.section) {
+                LazyVStack(alignment: .leading, spacing: 40) {
                     header
                     learningMap
                     scopeNote
@@ -31,7 +31,7 @@ struct LearningView: View {
                     )
                 }
                 .padding(AppSpacing.screen)
-                .frame(maxWidth: 1120)
+                .frame(maxWidth: 1180)
                 .frame(maxWidth: .infinity)
             }
             .background(AppScreenBackground())
@@ -40,40 +40,69 @@ struct LearningView: View {
     }
 
     private var header: some View {
-        ZStack(alignment: .bottomLeading) {
-            EditorialHeroArtwork(assetName: "LearningHero")
-                .frame(height: EditorialImageMetrics.primaryHeroHeight)
-                .frame(maxWidth: .infinity)
-                .clipped()
-                .overlay {
-                    LinearGradient(
-                        colors: [.black.opacity(0.02), .black.opacity(0.18), .black.opacity(0.90)],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
+        Group {
+            #if os(macOS)
+                HStack(spacing: 0) {
+                    learningHeroMessage
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+                    EditorialMediaSlot(assetName: "LearningHero", slot: .feature)
+                        .frame(maxWidth: .infinity)
                 }
-
-            VStack(alignment: .leading, spacing: 9) {
-                EditorialEyebrow("Formation beyond the page", inverse: true)
-                Text("KNOW THE\nFAITH.")
-                    .font(.system(size: 48, weight: .black, design: .serif))
-                    .minimumScaleFactor(0.68)
-                Rectangle()
-                    .fill(AppTheme.accent)
-                    .frame(width: 48, height: 3)
-                Text(
-                    "Understand what the Church believes, celebrates, and lives—then participate with confidence and reverence."
-                )
-                .font(.headline)
-                .foregroundStyle(.white.opacity(0.86))
-                .frame(maxWidth: 520, alignment: .leading)
-            }
-            .foregroundStyle(.white)
-            .padding(AppSpacing.spacious)
+            #else
+                VStack(spacing: 0) {
+                    EditorialMediaSlot(assetName: "LearningHero", slot: .feature)
+                    learningHeroMessage
+                }
+            #endif
         }
-        .frame(minHeight: EditorialImageMetrics.primaryHeroHeight)
-        .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.hero, style: .continuous))
+        .background(.black)
+        .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
         .accessibilityElement(children: .combine)
+    }
+
+    private var learningHeroMessage: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            EditorialEyebrow("Formation beyond the page", inverse: true)
+            Text("KNOW THE\nFAITH.")
+                .font(.system(size: learningHeroTitleSize, weight: .black, design: .serif))
+                .minimumScaleFactor(0.72)
+            Rectangle()
+                .fill(AppTheme.accent)
+                .frame(width: 48, height: 3)
+            Text(
+                "Understand what the Church believes, celebrates, and lives—then participate with confidence."
+            )
+            .font(learningHeroBodyFont)
+            .foregroundStyle(.white.opacity(0.78))
+            .frame(maxWidth: 480, alignment: .leading)
+        }
+        .foregroundStyle(.white)
+        .padding(learningHeroPadding)
+        .background(.black)
+    }
+
+    private var learningHeroTitleSize: CGFloat {
+        #if os(macOS)
+            46
+        #else
+            34
+        #endif
+    }
+
+    private var learningHeroBodyFont: Font {
+        #if os(macOS)
+            .headline
+        #else
+            .subheadline
+        #endif
+    }
+
+    private var learningHeroPadding: CGFloat {
+        #if os(macOS)
+            AppSpacing.spacious
+        #else
+            AppSpacing.standard
+        #endif
     }
 
     private var learningMap: some View {
@@ -82,43 +111,45 @@ struct LearningView: View {
                 "A map for Catholic life",
                 eyebrow: "Learn in context",
                 detail:
-                    "Move from the Church's public worship, through sacramental life, into the prayer practices you carry home."
+                    "Follow this order for a guided introduction, or open the subject that answers the question you have today."
             )
 
-            ViewThatFits(in: .horizontal) {
+            #if os(macOS)
                 HStack(spacing: 0) {
-                    mapStep("01", title: "Worship", detail: "Mass & seasons")
+                    mapStep("01", title: "Worship", detail: "Mass & sacred time")
                     mapStep("02", title: "Belong", detail: "Sacraments & initiation")
                     mapStep("03", title: "Pray", detail: "Devotions & daily life")
                 }
+            #else
                 VStack(spacing: 0) {
-                    mapStep("01", title: "Worship", detail: "Mass & seasons")
-                    mapStep("02", title: "Belong", detail: "Sacraments & initiation")
-                    mapStep("03", title: "Pray", detail: "Devotions & daily life")
+                    mapStep("01", title: "Worship", detail: "Begin with the Mass and the Church year")
+                    mapStep("02", title: "Belong", detail: "Understand initiation and sacramental life")
+                    mapStep("03", title: "Pray", detail: "Carry Catholic prayer into the week")
                 }
-            }
-            .background(AppTheme.surface)
-            .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
+            #endif
         }
     }
 
     private func mapStep(_ number: String, title: String, detail: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
+        HStack(alignment: .firstTextBaseline, spacing: 14) {
             Text(number)
                 .font(.system(.title2, design: .serif, weight: .black))
                 .foregroundStyle(AppTheme.accent)
-            Text(title)
-                .font(.headline)
-                .foregroundStyle(AppTheme.ink)
-            Text(detail)
-                .font(.caption)
-                .foregroundStyle(AppTheme.supportingText)
+                .frame(width: 34, alignment: .leading)
+            VStack(alignment: .leading, spacing: 3) {
+                Text(title)
+                    .font(.headline)
+                    .foregroundStyle(AppTheme.ink)
+                Text(detail)
+                    .font(.caption)
+                    .foregroundStyle(AppTheme.supportingText)
+            }
+            Spacer(minLength: 0)
         }
         .padding(AppSpacing.standard)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .overlay(alignment: .trailing) {
-            Rectangle().fill(AppTheme.hairline).frame(width: 1)
-        }
+        .frame(maxWidth: .infinity, minHeight: 72, alignment: .leading)
+        .background(AppTheme.surface)
+        .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
         .accessibilityElement(children: .combine)
     }
 
@@ -149,51 +180,93 @@ struct LearningView: View {
                 EditorialSectionHeader(title, eyebrow: "Catholic life", detail: detail)
             }
 
-            LazyVGrid(
-                columns: [GridItem(.adaptive(minimum: 280), spacing: AppSpacing.standard)],
-                spacing: AppSpacing.standard
-            ) {
-                ForEach(Array(topics.enumerated()), id: \.element.id) { index, topic in
-                    topicCard(topic, index: index + 1)
+            #if os(macOS)
+                LazyVGrid(
+                    columns: [GridItem(.adaptive(minimum: 340), spacing: AppSpacing.standard)],
+                    spacing: AppSpacing.standard
+                ) {
+                    ForEach(Array(topics.enumerated()), id: \.element.id) { index, topic in
+                        topicCard(topic, index: index + 1)
+                    }
                 }
-            }
+            #else
+                LazyVStack(spacing: 12) {
+                    ForEach(Array(topics.enumerated()), id: \.element.id) { index, topic in
+                        topicCard(topic, index: index + 1)
+                    }
+                }
+            #endif
         }
     }
 
     private func topicCard(_ topic: LearningTopic, index: Int) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack {
+            HStack(alignment: .top, spacing: 14) {
                 Text(String(format: "%02d", index))
                     .font(.system(.title, design: .serif, weight: .black))
                     .foregroundStyle(AppTheme.accent)
-                Spacer()
                 Image(systemName: topic.icon)
-                    .font(.title2)
+                    .font(.headline)
                     .foregroundStyle(AppTheme.accent)
+                    .frame(width: 26)
+                VStack(alignment: .leading, spacing: 7) {
+                    Text(topic.title)
+                        .font(.system(.title2, design: .serif, weight: .bold))
+                    Text(topic.subtitle)
+                        .foregroundStyle(AppTheme.supportingText)
+                }
+                Spacer(minLength: 0)
+                EditorialStatusBadge(text: "Planned", systemImage: "book.closed")
+            }
+            .padding(AppSpacing.standard)
+
+            EditorialDivider()
+
+            VStack(alignment: .leading, spacing: 9) {
+                EditorialEyebrow("Curriculum outline")
+                ForEach(curriculumOutline(for: topic), id: \.self) { lesson in
+                    HStack(alignment: .firstTextBaseline, spacing: 9) {
+                        Rectangle()
+                            .fill(AppTheme.accent)
+                            .frame(width: 14, height: 2)
+                        Text(lesson)
+                            .font(.subheadline)
+                            .foregroundStyle(AppTheme.ink)
+                    }
+                }
             }
             .padding(AppSpacing.standard)
             .background(AppTheme.elevatedSurface)
-
-            VStack(alignment: .leading, spacing: 10) {
-                Text(topic.title)
-                    .font(.system(.title2, design: .serif, weight: .bold))
-                Text(topic.subtitle)
-                    .foregroundStyle(AppTheme.supportingText)
-                Spacer(minLength: 8)
-                HStack {
-                    Text("COMING IN LEARNING MVP")
-                        .font(AppTypography.eyebrow)
-                        .tracking(1.5)
-                    Spacer()
-                    Image(systemName: "arrow.right")
-                }
-                .foregroundStyle(AppTheme.accent)
-            }
-            .padding(AppSpacing.standard)
-            .frame(maxWidth: .infinity, minHeight: 150, alignment: .topLeading)
-            .background(AppTheme.surface)
         }
+        .background(AppTheme.surface)
         .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
         .accessibilityElement(children: .combine)
+    }
+
+    private func curriculumOutline(for topic: LearningTopic) -> [String] {
+        switch topic.id {
+        case "mass":
+            [
+                "Before Mass: preparation, space, and posture", "The Liturgy of the Word",
+                "The Liturgy of the Eucharist and being sent",
+            ]
+        case "liturgical-year":
+            [
+                "The seasons and their purpose", "Solemnities, feasts, and memorials",
+                "Holy days and the rhythm of a Catholic year",
+            ]
+        case "sacraments":
+            [
+                "The seven sacraments as signs of grace", "Baptism, Confirmation, and Eucharist",
+                "Adult formation, sponsors, and parish preparation",
+            ]
+        case "rosary":
+            ["The prayers and the beads", "The four sets of mysteries", "How to pray slowly and with attention"]
+        default:
+            [
+                "Foundational Catholic prayers", "Creeds, chaplets, and devotions",
+                "Building a sustainable daily prayer rule",
+            ]
+        }
     }
 }

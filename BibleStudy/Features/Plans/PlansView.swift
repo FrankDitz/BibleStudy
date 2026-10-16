@@ -22,7 +22,7 @@ struct PlansView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: AppSpacing.section) {
+                LazyVStack(alignment: .leading, spacing: 40) {
                     planHero
                     activePlanSection
                     planCollection(
@@ -50,7 +50,7 @@ struct PlansView: View {
                     )
                 }
                 .padding(AppSpacing.screen)
-                .frame(maxWidth: 1120)
+                .frame(maxWidth: 1180)
                 .frame(maxWidth: .infinity)
             }
             .background(AppScreenBackground())
@@ -104,72 +104,90 @@ struct PlansView: View {
 
     private var planHero: some View {
         VStack(spacing: 0) {
-            ZStack(alignment: .bottomLeading) {
-                EditorialHeroArtwork(assetName: "PlansHero")
-                    .frame(height: EditorialImageMetrics.primaryHeroHeight)
-                    .frame(maxWidth: .infinity)
-                    .clipped()
-                    .overlay {
-                        LinearGradient(
-                            colors: [.black.opacity(0.04), .black.opacity(0.28), .black.opacity(0.92)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    }
-
-                VStack(alignment: .leading, spacing: 9) {
-                    EditorialEyebrow("Scripture formation", inverse: true)
-                    Text("STAY IN\nTHE WORD.")
-                        .font(.system(size: 48, weight: .black, design: .serif))
-                        .minimumScaleFactor(0.68)
-                    Rectangle()
-                        .fill(AppTheme.accent)
-                        .frame(width: 48, height: 3)
-                    Text("A reading rhythm gives intention to every return to Scripture.")
-                        .font(.headline)
-                        .foregroundStyle(.white.opacity(0.86))
-                        .frame(maxWidth: 480, alignment: .leading)
-                }
-                .foregroundStyle(.white)
-                .padding(AppSpacing.spacious)
-            }
-
-            ViewThatFits(in: .horizontal) {
+            #if os(macOS)
                 HStack(spacing: 0) {
-                    planStep("01", title: "Choose", detail: "Find your scope")
-                    planStep("02", title: "Preview", detail: "See every reading")
-                    planStep("03", title: "Begin", detail: "Keep an honest pace")
+                    planHeroMessage
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+                    EditorialMediaSlot(assetName: "PlansHero", slot: .feature)
+                        .frame(maxWidth: .infinity)
                 }
-                VStack(spacing: 0) {
-                    planStep("01", title: "Choose", detail: "Find your scope")
-                    planStep("02", title: "Preview", detail: "See every reading")
-                    planStep("03", title: "Begin", detail: "Keep an honest pace")
-                }
+                .background(.black)
+            #else
+                EditorialMediaSlot(assetName: "PlansHero", slot: .feature)
+                planHeroMessage
+            #endif
+
+            HStack(spacing: 0) {
+                planStep("01", title: "Choose", detail: "Find your pace")
+                planStep("02", title: "Preview", detail: "See every day")
+                planStep("03", title: "Begin", detail: "Start reading")
             }
             .background(AppTheme.surface)
-            .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
         }
-        .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.hero, style: .continuous))
+        .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
         .accessibilityElement(children: .contain)
     }
 
-    private func planStep(_ number: String, title: String, detail: String) -> some View {
-        HStack(spacing: 10) {
-            Text(number)
-                .font(.system(.title3, design: .serif, weight: .black))
-                .foregroundStyle(AppTheme.accent)
-            VStack(alignment: .leading, spacing: 1) {
-                Text(title)
-                    .font(.subheadline.bold())
-                    .foregroundStyle(AppTheme.ink)
-                Text(detail)
-                    .font(.caption)
-                    .foregroundStyle(AppTheme.supportingText)
-            }
-            Spacer(minLength: 8)
+    private var planHeroMessage: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            EditorialEyebrow("Scripture formation", inverse: true)
+            Text("STAY IN\nTHE WORD.")
+                .font(.system(size: planHeroTitleSize, weight: .black, design: .serif))
+                .minimumScaleFactor(0.72)
+            Rectangle()
+                .fill(AppTheme.accent)
+                .frame(width: 48, height: 3)
+            Text(
+                "Choose a complete route, preview the commitment, and return each day with purpose."
+            )
+            .font(planHeroBodyFont)
+            .foregroundStyle(.white.opacity(0.78))
+            .frame(maxWidth: 460, alignment: .leading)
         }
-        .padding(.horizontal, AppSpacing.standard)
-        .padding(.vertical, 14)
+        .foregroundStyle(.white)
+        .padding(planHeroPadding)
+        .background(.black)
+    }
+
+    private var planHeroTitleSize: CGFloat {
+        #if os(macOS)
+            46
+        #else
+            34
+        #endif
+    }
+
+    private var planHeroBodyFont: Font {
+        #if os(macOS)
+            .headline
+        #else
+            .subheadline
+        #endif
+    }
+
+    private var planHeroPadding: CGFloat {
+        #if os(macOS)
+            AppSpacing.spacious
+        #else
+            AppSpacing.standard
+        #endif
+    }
+
+    private func planStep(_ number: String, title: String, detail: String) -> some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(number)
+                .font(.system(.headline, design: .serif, weight: .black))
+                .foregroundStyle(AppTheme.accent)
+            Text(title)
+                .font(.caption.bold())
+                .foregroundStyle(AppTheme.ink)
+            Text(detail)
+                .font(.caption2)
+                .foregroundStyle(AppTheme.supportingText)
+                .lineLimit(2)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 11)
         .frame(maxWidth: .infinity, alignment: .leading)
         .overlay(alignment: .trailing) {
             Rectangle().fill(AppTheme.hairline).frame(width: 1)
@@ -186,8 +204,9 @@ struct PlansView: View {
                 VStack(spacing: 0) {
                     Rectangle().fill(AppTheme.accent).frame(height: 4)
                     HStack(spacing: AppSpacing.standard) {
-                        EditorialArtwork(
-                            assetName: ReadingPlanArtwork.assetName(for: state.snapshot.sourceID)
+                        EditorialMediaSlot(
+                            assetName: ReadingPlanArtwork.assetName(for: state.snapshot.sourceID),
+                            slot: .thumbnail
                         )
                         .frame(
                             width: EditorialImageMetrics.activePlanThumbnailSize.width,
@@ -248,30 +267,45 @@ struct PlansView: View {
 
         return VStack(alignment: .leading, spacing: AppSpacing.standard) {
             HStack(alignment: .top, spacing: AppSpacing.standard) {
-                Rectangle()
-                    .fill(AppTheme.accent)
-                    .frame(width: 4, height: 58)
-                EditorialSectionHeader(title, eyebrow: eyebrow, detail: detail)
-                Spacer(minLength: 8)
-                Text("\(plans.count) PLANS")
-                    .font(AppTypography.eyebrow)
-                    .tracking(1.4)
-                    .foregroundStyle(AppTheme.supportingText)
-                    .padding(.top, 2)
+                Text(String(eyebrow.prefix(2)))
+                    .font(.system(size: 40, weight: .black, design: .serif))
+                    .foregroundStyle(AppTheme.accent)
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: 7) {
+                    EditorialEyebrow(String(eyebrow.dropFirst(5)))
+                    Text(title)
+                        .font(AppTypography.sectionTitle)
+                    Text(detail)
+                        .font(.subheadline)
+                        .foregroundStyle(AppTheme.supportingText)
+                }
+                Spacer(minLength: 4)
             }
 
-            LazyVGrid(
-                columns: [GridItem(.adaptive(minimum: 300), spacing: AppSpacing.standard)],
-                spacing: AppSpacing.standard
-            ) {
-                ForEach(plans) { plan in
-                    PremadePlanCard(
-                        plan: plan,
-                        previewPlan: { previewedTemplate = plan },
-                        startPlan: { selectedTemplate = plan }
-                    )
+            #if os(macOS)
+                LazyVGrid(
+                    columns: [GridItem(.adaptive(minimum: 320), spacing: AppSpacing.standard)],
+                    spacing: AppSpacing.standard
+                ) {
+                    ForEach(plans) { plan in
+                        PremadePlanCard(
+                            plan: plan,
+                            previewPlan: { previewedTemplate = plan },
+                            startPlan: { selectedTemplate = plan }
+                        )
+                    }
                 }
-            }
+            #else
+                LazyVStack(spacing: 12) {
+                    ForEach(plans) { plan in
+                        PremadePlanCard(
+                            plan: plan,
+                            previewPlan: { previewedTemplate = plan },
+                            startPlan: { selectedTemplate = plan }
+                        )
+                    }
+                }
+            #endif
         }
     }
 
@@ -329,33 +363,29 @@ private struct PremadePlanCard: View {
     let startPlan: () -> Void
 
     var body: some View {
+        #if os(macOS)
+            desktopCard
+        #else
+            compactCard
+        #endif
+    }
+
+    private var desktopCard: some View {
         VStack(spacing: 0) {
-            planCover
+            cover
             details
                 .padding(AppSpacing.standard)
                 .background(AppTheme.surface)
         }
         .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
-        .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.card, style: .continuous))
-    }
-
-    @ViewBuilder
-    private var planCover: some View {
-        #if os(macOS)
-            cover
-                .frame(maxWidth: .infinity)
-                .aspectRatio(3 / 2, contentMode: .fit)
-        #else
-            cover
-                .frame(height: 220)
-        #endif
     }
 
     private var cover: some View {
         ZStack(alignment: .bottomLeading) {
-            EditorialArtwork(assetName: ReadingPlanArtwork.assetName(for: plan.id))
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .clipped()
+            EditorialMediaSlot(
+                assetName: ReadingPlanArtwork.assetName(for: plan.id),
+                slot: .planCover
+            )
             LinearGradient(
                 colors: [.clear, .black.opacity(0.18), .black.opacity(0.88)],
                 startPoint: .top,
@@ -378,6 +408,64 @@ private struct PremadePlanCard: View {
             .padding(AppSpacing.standard)
         }
         .accessibilityHidden(true)
+    }
+
+    private var compactCard: some View {
+        VStack(spacing: 0) {
+            Button(action: previewPlan) {
+                HStack(alignment: .top, spacing: 14) {
+                    EditorialMediaSlot(
+                        assetName: ReadingPlanArtwork.assetName(for: plan.id),
+                        slot: .planCover
+                    )
+                    .frame(width: 116)
+
+                    VStack(alignment: .leading, spacing: 7) {
+                        EditorialEyebrow("\(plan.durationDays) days")
+                        Text(plan.title)
+                            .font(.system(.headline, design: .serif, weight: .bold))
+                            .foregroundStyle(AppTheme.ink)
+                            .multilineTextAlignment(.leading)
+                        Text(plan.summary)
+                            .font(.caption)
+                            .foregroundStyle(AppTheme.supportingText)
+                            .lineLimit(2)
+                            .multilineTextAlignment(.leading)
+                        Label(
+                            "\(plan.estimatedDailyMinutes.lowerBound)–\(plan.estimatedDailyMinutes.upperBound) min/day",
+                            systemImage: "clock"
+                        )
+                        .font(.caption2.bold())
+                        .foregroundStyle(AppTheme.supportingText)
+                    }
+
+                    Spacer(minLength: 0)
+                    Image(systemName: "chevron.right")
+                        .font(.caption.bold())
+                        .foregroundStyle(AppTheme.accent)
+                        .padding(.top, 2)
+                }
+                .padding(12)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Preview \(plan.title)")
+
+            HStack(spacing: 0) {
+                Button("View full preview", action: previewPlan)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(AppTheme.ink)
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                Rectangle().fill(AppTheme.hairline).frame(width: 1, height: 44)
+                Button("Start plan", action: startPlan)
+                    .font(.subheadline.weight(.bold))
+                    .foregroundStyle(AppTheme.accent)
+                    .frame(maxWidth: .infinity, minHeight: 44)
+            }
+            .overlay(alignment: .top) { EditorialDivider() }
+        }
+        .background(AppTheme.surface)
+        .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
     }
 
     private var details: some View {

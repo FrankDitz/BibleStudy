@@ -17,6 +17,12 @@ final class DesignSystemTests: XCTestCase {
         XCTAssertEqual(ReaderTheme.automatic.resolved(for: .dark), .dark)
     }
 
+    func testEditorialArtworkSlotsKeepStableProductionRatios() {
+        XCTAssertEqual(EditorialArtworkSlot.feature.aspectRatio, 16.0 / 9.0, accuracy: 0.0001)
+        XCTAssertEqual(EditorialArtworkSlot.planCover.aspectRatio, 3.0 / 2.0, accuracy: 0.0001)
+        XCTAssertEqual(EditorialArtworkSlot.thumbnail.aspectRatio, 1, accuracy: 0.0001)
+    }
+
     func testEveryStateKindHasAVisibleDefaultIcon() {
         XCTAssertEqual(AppStateKind.allCases.count, 6)
         XCTAssertTrue(AppStateKind.allCases.allSatisfy { !$0.defaultIcon.isEmpty })

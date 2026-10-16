@@ -52,3 +52,11 @@ The owner approved closing the reader phase and deferring the physical iPhone/Ma
 - Generic iOS Simulator compilation passed after the automatic reader-theme refinement.
 - The combined macOS scheme test reached and passed the unit suites, but the UI-test runner exited before establishing its automation connection. This is a host-runner failure, not a passing UI-test result.
 - Still required before release: hands-on compact/large iPhone review, largest Dynamic Type, VoiceOver, keyboard-only Mac navigation, Reduce Motion, and the physical-device checks already deferred to Phase 7.
+
+### 2026-10-16 content-hierarchy and artwork-slot verification
+
+- iPhone 17 Pro simulator: Plans, Virtues, and Learning were launched directly and visually inspected. Each first viewport now provides orientation plus the next meaningful action instead of presenting an oversized poster or an undifferentiated card stack.
+- Native Mac, wide window: the same destinations were visually inspected as bounded split-feature layouts with adaptive multi-column libraries rather than stretched phone compositions.
+- Plans now separates the active/next step from three intention-based collections; Virtues connects current-course progress to its next lesson before the two doctrinal course libraries; Learning introduces a Worship / Belong / Pray map before its three curriculum tracks.
+- Artwork slots are fixed at 16:9 for section features, 3:2 for plan covers, and 1:1 for compact continuation thumbnails. Current photography remains temporary and will be replaced only after layout sign-off with assets composed for those exact ratios.
+- The complete macOS `BibleStudyTests` bundle and iPhone `BibleStudyUITests` bundle passed. iPhone and macOS builds succeeded.

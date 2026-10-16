@@ -17,11 +17,10 @@ struct VirtuesView: View {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: AppSpacing.spacious) {
                     featuredFormation
+                    formationJourney
                     if featuredCourse.id != VirtueStudyCatalog.foundationCourse.id {
                         foundationCourse
                     }
-                    formationJourney
-                    privacyNote
                     courseCollection(
                         title: "Seven virtues against the capital sins",
                         trackNumber: "01",
@@ -38,12 +37,13 @@ struct VirtuesView: View {
                         courses: VirtueStudyCatalog.cardinalCourses,
                         identifier: "virtues-cardinal-courses"
                     )
-                    doctrinalMap
                     practiceCompanion
+                    doctrinalMap
+                    privacyNote
                 }
                 .padding(.horizontal, AppSpacing.screen)
                 .padding(.bottom, AppSpacing.section)
-                .frame(maxWidth: 1120)
+                .frame(maxWidth: 1180)
                 .frame(maxWidth: .infinity)
             }
             .background(AppScreenBackground())
@@ -96,96 +96,25 @@ struct VirtuesView: View {
         NavigationLink {
             VirtueCourseView(course: featuredCourse, openReading: openReading)
         } label: {
-            VStack(spacing: 0) {
-                ZStack(alignment: .bottomLeading) {
-                    EditorialHeroArtwork(assetName: "VirtuesHero")
-                        .frame(height: EditorialImageMetrics.virtueHeroHeight)
-                        .frame(maxWidth: .infinity)
-                        .clipped()
-                        .overlay {
-                            LinearGradient(
-                                colors: [.black.opacity(0.05), .black.opacity(0.20), .black.opacity(0.90)],
-                                startPoint: .top,
-                                endPoint: .bottom
-                            )
-                        }
-                        .overlay(alignment: .topTrailing) {
-                            Label("Private progress", systemImage: "lock.fill")
-                                .font(.caption2.weight(.bold))
-                                .textCase(.uppercase)
-                                .tracking(1.2)
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 9)
-                                .background(.black.opacity(0.72))
-                                .padding(AppSpacing.standard)
-                                .accessibilityIdentifier("virtues-privacy-note")
-                        }
-
-                    VStack(alignment: .leading, spacing: 9) {
-                        EditorialEyebrow("Virtue formation", inverse: true)
-                        Text(featuredCourse.title)
-                            .font(.system(size: 46, weight: .black, design: .serif))
-                            .minimumScaleFactor(0.62)
-                            .lineLimit(2)
-                        Text(featuredCourse.subtitle.uppercased())
-                            .font(.caption.weight(.bold))
-                            .tracking(2.2)
-                            .foregroundStyle(.white.opacity(0.82))
-                            .lineLimit(3)
+            Group {
+                #if os(macOS)
+                    HStack(spacing: 0) {
+                        virtueFeatureArtwork
+                            .frame(maxWidth: .infinity)
+                        featuredCourseDetails
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                     }
-                    .foregroundStyle(.white)
-                    .padding(AppSpacing.spacious)
-                }
-
-                VStack(alignment: .leading, spacing: AppSpacing.standard) {
-                    HStack(spacing: 7) {
-                        ForEach(featuredCourse.lessons.indices, id: \.self) { index in
-                            Rectangle()
-                                .fill(
-                                    featuredProgress?.completedLessonIDs.contains(
-                                        featuredCourse.lessons[index].id
-                                    ) == true
-                                        ? AppTheme.accent : AppTheme.elevatedSurface
-                                )
-                                .frame(height: 9)
-                        }
-                        Text(
-                            "\(featuredProgress?.completedLessonCount(in: featuredCourse) ?? 0) / \(featuredCourse.lessons.count)"
-                        )
-                        .font(.caption.bold())
-                        .foregroundStyle(AppTheme.supportingText)
-                        .fixedSize()
+                #else
+                    VStack(spacing: 0) {
+                        virtueFeatureArtwork
+                        featuredCourseDetails
                     }
-
-                    if let featuredLesson {
-                        EditorialEyebrow(featuredProgress == nil ? "Begin here" : "Continue learning")
-                        Text(featuredLesson.title)
-                            .font(.system(.title, design: .serif, weight: .bold))
-                            .foregroundStyle(AppTheme.ink)
-                        Text(featuredLesson.summary)
-                            .foregroundStyle(AppTheme.supportingText)
-                            .multilineTextAlignment(.leading)
-
-                        HStack {
-                            Label(
-                                "Lesson \((featuredCourse.lessons.firstIndex(where: { $0.id == featuredLesson.id }) ?? 0) + 1)",
-                                systemImage: "book.closed"
-                            )
-                            Spacer()
-                            Label("Open course", systemImage: "arrow.right")
-                        }
-                        .font(.subheadline.bold())
-                        .foregroundStyle(AppTheme.accent)
-                    }
-                }
-                .padding(AppSpacing.spacious)
-                .background(AppTheme.surface)
-                .overlay {
-                    Rectangle().stroke(AppTheme.hairline, lineWidth: 1)
-                }
+                #endif
             }
-            .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.hero, style: .continuous))
+            .background(AppTheme.surface)
+            .overlay {
+                Rectangle().stroke(AppTheme.hairline, lineWidth: 1)
+            }
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier(
@@ -194,74 +123,110 @@ struct VirtuesView: View {
         )
     }
 
-    private var introduction: some View {
+    private var virtueFeatureArtwork: some View {
         ZStack(alignment: .bottomLeading) {
-            AppHeroArtwork()
-                .frame(height: 390)
-                .frame(maxWidth: .infinity)
-                .clipped()
-                .overlay {
-                    LinearGradient(
-                        colors: [AppTheme.accent.opacity(0.10), AppTheme.accent.opacity(0.86)],
-                        startPoint: .topTrailing,
-                        endPoint: .bottomLeading
-                    )
-                }
-
-            VStack(alignment: .leading, spacing: 10) {
+            EditorialMediaSlot(assetName: "VirtuesHero", slot: .feature)
+            LinearGradient(
+                colors: [.clear, .black.opacity(0.80)],
+                startPoint: .center,
+                endPoint: .bottom
+            )
+            VStack(alignment: .leading, spacing: 7) {
                 EditorialEyebrow("Virtue formation", inverse: true)
-                Text("BECOME\nMORE LIKE\nJESUS.")
-                    .font(.system(size: 42, weight: .black, design: .serif))
-                    .minimumScaleFactor(0.72)
-                Text("Learn the good. Practice it with grace. Return to Christ when growth is difficult.")
-                    .font(.title3)
-                    .foregroundStyle(.white.opacity(0.86))
-                    .frame(maxWidth: 520, alignment: .leading)
+                Text("BECOME\nMORE LIKE\nCHRIST.")
+                    .font(.system(size: virtueHeroTitleSize, weight: .black, design: .serif))
+                    .minimumScaleFactor(0.68)
+                    .lineLimit(3)
             }
             .foregroundStyle(.white)
-            .padding(AppSpacing.spacious)
+            .padding(featuredCoursePadding)
         }
-        .frame(minHeight: 390)
-        .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.hero, style: .continuous))
-        .accessibilityElement(children: .combine)
     }
 
-    @ViewBuilder
-    private var continueLearning: some View {
-        if let latestProgress,
-            let course = VirtueStudyCatalog.course(id: latestProgress.courseID)
-        {
-            NavigationLink {
-                VirtueCourseView(course: course, openReading: openReading)
-            } label: {
-                FeatureCard {
-                    HStack(spacing: 16) {
-                        Image(systemName: "bookmark.fill")
-                            .font(.title2)
-                            .foregroundStyle(.white)
-                            .frame(width: 50, height: 50)
-                            .background(AppTheme.accent, in: RoundedRectangle(cornerRadius: AppCornerRadius.control))
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text(latestProgress.isComplete(course) ? "Review your course" : "Continue learning")
-                                .font(.caption.bold())
-                                .foregroundStyle(AppTheme.accent)
-                            Text(course.title)
-                                .font(.title2.bold())
-                            Text(
-                                "\(latestProgress.completedLessonCount(in: course)) of \(course.lessons.count) lessons complete"
-                            )
-                            .foregroundStyle(AppTheme.supportingText)
-                        }
-                        Spacer(minLength: 8)
-                        Image(systemName: "arrow.right")
-                            .foregroundStyle(.secondary)
-                            .accessibilityHidden(true)
-                    }
+    private var virtueHeroTitleSize: CGFloat {
+        #if os(macOS)
+            36
+        #else
+            30
+        #endif
+    }
+
+    private var featuredCourseDetails: some View {
+        VStack(alignment: .leading, spacing: AppSpacing.standard) {
+            HStack(spacing: 7) {
+                ForEach(featuredCourse.lessons.indices, id: \.self) { index in
+                    Rectangle()
+                        .fill(
+                            featuredProgress?.completedLessonIDs.contains(
+                                featuredCourse.lessons[index].id
+                            ) == true
+                                ? AppTheme.accent : AppTheme.elevatedSurface
+                        )
+                        .frame(height: 9)
                 }
+                Text(
+                    "\(featuredProgress?.completedLessonCount(in: featuredCourse) ?? 0) / \(featuredCourse.lessons.count)"
+                )
+                .font(.caption.bold())
+                .foregroundStyle(AppTheme.supportingText)
+                .fixedSize()
             }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("virtue-continue-course")
+
+            if let featuredLesson {
+                HStack {
+                    EditorialEyebrow(featuredProgress == nil ? "Begin here" : "Continue learning")
+                    Spacer()
+                    EditorialStatusBadge(text: "Private", systemImage: "lock.fill")
+                        .accessibilityIdentifier("virtues-privacy-note")
+                }
+                Text(featuredLesson.title)
+                    .font(featuredLessonTitleFont)
+                    .foregroundStyle(AppTheme.ink)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text(featuredLesson.summary)
+                    .foregroundStyle(AppTheme.supportingText)
+                    .multilineTextAlignment(.leading)
+                    .lineLimit(featuredSummaryLineLimit)
+
+                EditorialDivider()
+                HStack {
+                    Label(
+                        "Lesson \((featuredCourse.lessons.firstIndex(where: { $0.id == featuredLesson.id }) ?? 0) + 1)",
+                        systemImage: "book.closed"
+                    )
+                    Spacer()
+                    Label("Open course", systemImage: "arrow.right")
+                }
+                .font(.subheadline.bold())
+                .foregroundStyle(AppTheme.accent)
+            }
         }
+        .padding(featuredCoursePadding)
+    }
+
+    private var featuredCoursePadding: CGFloat {
+        #if os(macOS)
+            AppSpacing.spacious
+        #else
+            AppSpacing.standard
+        #endif
+    }
+
+    private var featuredLessonTitleFont: Font {
+        #if os(macOS)
+            .system(.title, design: .serif, weight: .bold)
+        #else
+            .system(.title2, design: .serif, weight: .bold)
+        #endif
+    }
+
+    private var featuredSummaryLineLimit: Int {
+        #if os(macOS)
+            4
+        #else
+            3
+        #endif
     }
 
     private var foundationCourse: some View {
@@ -303,13 +268,13 @@ struct VirtuesView: View {
     }
 
     private var formationJourney: some View {
-        VStack(alignment: .leading, spacing: AppSpacing.spacious) {
-            VStack(alignment: .leading, spacing: 7) {
-                EditorialEyebrow("Your formation path", inverse: true)
-                Text("LEARN IT.\nPRACTICE IT.\nLIVE IT.")
-                    .font(.system(size: 36, weight: .black, design: .serif))
-                    .foregroundStyle(.white)
-            }
+        VStack(alignment: .leading, spacing: AppSpacing.standard) {
+            EditorialSectionHeader(
+                "Learn it. Practice it. Live it.",
+                eyebrow: "Your formation path",
+                detail:
+                    "Move from Catholic teaching to a concrete practice without turning spiritual growth into a score."
+            )
 
             ViewThatFits(in: .horizontal) {
                 HStack(alignment: .top, spacing: AppSpacing.spacious) {
@@ -348,16 +313,17 @@ struct VirtuesView: View {
                 }
             }
 
-            Rectangle().fill(.white.opacity(0.22)).frame(height: 1)
+            EditorialDivider()
             Label(
                 "The Catechism and current universal-Church teaching govern every course. Joseph Rickaby is used only as a historical guide to the cardinal virtues.",
                 systemImage: "checkmark.shield"
             )
             .font(.footnote)
-            .foregroundStyle(.white.opacity(0.72))
+            .foregroundStyle(AppTheme.supportingText)
         }
         .padding(AppSpacing.spacious)
-        .background(.black)
+        .background(AppTheme.surface)
+        .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
         .overlay(alignment: .leading) {
             Rectangle().fill(AppTheme.accent).frame(width: 5)
         }
@@ -394,29 +360,93 @@ struct VirtuesView: View {
                 EditorialSectionHeader(title, eyebrow: "Course library", detail: detail)
             }
 
-            LazyVGrid(
-                columns: [GridItem(.adaptive(minimum: 260), spacing: AppSpacing.standard)],
-                spacing: AppSpacing.standard
-            ) {
-                ForEach(Array(courses.enumerated()), id: \.element.id) { index, course in
-                    if VirtueStudyCatalog.isLectureReady(course) {
-                        NavigationLink {
-                            VirtueCourseView(course: course, openReading: openReading)
-                        } label: {
-                            courseCard(course, number: index + 1, isReady: true)
+            #if os(macOS)
+                LazyVGrid(
+                    columns: [GridItem(.adaptive(minimum: 300), spacing: AppSpacing.standard)],
+                    spacing: AppSpacing.standard
+                ) {
+                    ForEach(Array(courses.enumerated()), id: \.element.id) { index, course in
+                        if VirtueStudyCatalog.isLectureReady(course) {
+                            NavigationLink {
+                                VirtueCourseView(course: course, openReading: openReading)
+                            } label: {
+                                courseCard(course, number: index + 1, isReady: true)
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityIdentifier(courseIdentifier(course))
+                        } else {
+                            courseCard(course, number: index + 1, isReady: false)
+                                .accessibilityElement(children: .combine)
+                                .accessibilityLabel("\(course.title). Full lecture course in development.")
+                                .accessibilityIdentifier("\(courseIdentifier(course))-in-development")
                         }
-                        .buttonStyle(.plain)
-                        .accessibilityIdentifier(courseIdentifier(course))
-                    } else {
-                        courseCard(course, number: index + 1, isReady: false)
-                            .accessibilityElement(children: .combine)
-                            .accessibilityLabel("\(course.title). Full lecture course in development.")
-                            .accessibilityIdentifier("\(courseIdentifier(course))-in-development")
                     }
                 }
-            }
+            #else
+                LazyVStack(spacing: 0) {
+                    ForEach(Array(courses.enumerated()), id: \.element.id) { index, course in
+                        if VirtueStudyCatalog.isLectureReady(course) {
+                            NavigationLink {
+                                VirtueCourseView(course: course, openReading: openReading)
+                            } label: {
+                                compactCourseRow(course, number: index + 1, isReady: true)
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityIdentifier(courseIdentifier(course))
+                        } else {
+                            compactCourseRow(course, number: index + 1, isReady: false)
+                                .accessibilityElement(children: .combine)
+                                .accessibilityLabel("\(course.title). Full lecture course in development.")
+                                .accessibilityIdentifier("\(courseIdentifier(course))-in-development")
+                        }
+                    }
+                }
+                .background(AppTheme.surface)
+                .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
+            #endif
         }
         .accessibilityIdentifier(identifier)
+    }
+
+    private func compactCourseRow(
+        _ course: VirtueStudyCourse,
+        number: Int,
+        isReady: Bool
+    ) -> some View {
+        HStack(alignment: .top, spacing: 14) {
+            Text(String(format: "%02d", number))
+                .font(.system(.title2, design: .serif, weight: .black))
+                .foregroundStyle(AppTheme.accent)
+                .frame(width: 36, alignment: .leading)
+
+            VStack(alignment: .leading, spacing: 5) {
+                Text(course.title)
+                    .font(.system(.headline, design: .serif, weight: .bold))
+                    .foregroundStyle(AppTheme.ink)
+                    .multilineTextAlignment(.leading)
+                Text(course.subtitle)
+                    .font(.subheadline)
+                    .foregroundStyle(AppTheme.supportingText)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+                HStack(spacing: 8) {
+                    EditorialStatusBadge(
+                        text: isReady ? "\(course.lessons.count) lessons" : "In development",
+                        systemImage: isReady ? "book.closed" : "hammer"
+                    )
+                    courseStatus(course)
+                }
+            }
+
+            Spacer(minLength: 0)
+            Image(systemName: isReady ? "chevron.right" : course.systemImage)
+                .font(.caption.bold())
+                .foregroundStyle(isReady ? AppTheme.accent : AppTheme.supportingText)
+                .padding(.top, 4)
+        }
+        .padding(AppSpacing.standard)
+        .overlay(alignment: .bottom) { EditorialDivider() }
+        .opacity(isReady ? 1 : 0.72)
     }
 
     private func courseCard(_ course: VirtueStudyCourse, number: Int, isReady: Bool) -> some View {
@@ -617,13 +647,13 @@ struct VirtuesView: View {
                 .font(.system(.title2, design: .serif, weight: .black))
                 .foregroundStyle(AppTheme.accent)
                 .accessibilityHidden(true)
-            Rectangle().fill(.white.opacity(0.35)).frame(width: 36, height: 1)
+            Rectangle().fill(AppTheme.hairline).frame(width: 36, height: 1)
             Text(title)
                 .font(.headline)
-                .foregroundStyle(.white)
+                .foregroundStyle(AppTheme.ink)
             Text(detail)
                 .font(.subheadline)
-                .foregroundStyle(.white.opacity(0.68))
+                .foregroundStyle(AppTheme.supportingText)
         }
         .frame(maxWidth: .infinity, alignment: .topLeading)
         .accessibilityElement(children: .combine)
