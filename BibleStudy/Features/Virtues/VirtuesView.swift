@@ -38,8 +38,11 @@ struct VirtuesView: View {
                         identifier: "virtues-cardinal-courses"
                     )
                     practiceCompanion
-                    doctrinalMap
                     privacyNote
+                    EditorialEndCap(
+                        title: "Learn it · live it",
+                        identifier: "virtues-content-end"
+                    )
                 }
                 .padding(.horizontal, AppSpacing.screen)
                 .padding(.bottom, AppSpacing.section)
@@ -330,20 +333,6 @@ struct VirtuesView: View {
         .accessibilityIdentifier("virtues-formation-journey")
     }
 
-    private var doctrinalMap: some View {
-        FeatureCard {
-            VStack(alignment: .leading, spacing: 10) {
-                Label("One virtue, two ways of studying it", systemImage: "arrow.triangle.branch")
-                    .font(.headline)
-                Text(
-                    "Temperance appears in both tracks because it is the same cardinal virtue viewed at two levels. “Temperance against Gluttony” applies it closely to appetite and consumption; the cardinal course studies its wider work across created goods and pleasure. It is not counted as a twelfth virtue."
-                )
-                .foregroundStyle(AppTheme.supportingText)
-            }
-        }
-        .accessibilityIdentifier("virtues-doctrinal-map")
-    }
-
     private func courseCollection(
         title: String,
         trackNumber: String,
@@ -414,10 +403,8 @@ struct VirtuesView: View {
         isReady: Bool
     ) -> some View {
         HStack(alignment: .top, spacing: 14) {
-            Text(String(format: "%02d", number))
-                .font(.system(.title2, design: .serif, weight: .black))
-                .foregroundStyle(AppTheme.accent)
-                .frame(width: 36, alignment: .leading)
+            courseVisual(course, number: number)
+                .frame(width: 72, height: 92)
 
             VStack(alignment: .leading, spacing: 5) {
                 Text(course.title)
@@ -451,18 +438,12 @@ struct VirtuesView: View {
 
     private func courseCard(_ course: VirtueStudyCourse, number: Int, isReady: Bool) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack(alignment: .top) {
-                Text(String(format: "%02d", number))
-                    .font(.system(size: 38, weight: .black, design: .serif))
-                    .foregroundStyle(AppTheme.accent)
-                Spacer()
+            ZStack(alignment: .topTrailing) {
+                courseVisual(course, number: number)
+                    .frame(height: 112)
                 courseStatus(course)
-                Image(systemName: "arrow.up.right")
-                    .foregroundStyle(AppTheme.accent)
-                    .accessibilityHidden(true)
+                    .padding(12)
             }
-            .padding(AppSpacing.standard)
-            .background(AppTheme.elevatedSurface)
 
             VStack(alignment: .leading, spacing: 10) {
                 EditorialEyebrow(isReady ? "Full lecture course" : "In development")
@@ -491,6 +472,26 @@ struct VirtuesView: View {
         }
         .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
         .opacity(isReady ? 1 : 0.76)
+    }
+
+    private func courseVisual(_ course: VirtueStudyCourse, number: Int) -> some View {
+        ZStack {
+            Color.black
+            Rectangle()
+                .fill(AppTheme.accent)
+                .frame(width: 5)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Text(String(format: "%02d", number))
+                .font(.system(size: 72, weight: .black, design: .serif))
+                .foregroundStyle(.white.opacity(0.10))
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                .offset(x: 4, y: 13)
+            Image(systemName: course.systemImage)
+                .font(.system(size: 26, weight: .medium))
+                .foregroundStyle(AppTheme.accent)
+        }
+        .clipped()
+        .accessibilityHidden(true)
     }
 
     @ViewBuilder
@@ -609,7 +610,8 @@ struct VirtuesView: View {
                 Image(systemName: systemImage)
                     .font(.title2)
                     .foregroundStyle(AppTheme.accent)
-                    .frame(width: 36)
+                    .frame(width: 48, height: 48)
+                    .background(.black)
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
                         .font(.headline)

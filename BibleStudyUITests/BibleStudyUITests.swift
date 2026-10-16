@@ -109,6 +109,37 @@ final class BibleStudyUITests: XCTestCase {
         XCTAssertTrue(sources.exists)
     }
 
+    #if !os(macOS)
+        @MainActor
+        func testLongFormationDestinationsScrollFullyAboveTheTabBar() {
+            let app = launchApplication()
+            let destinations = [
+                ("Plans", "plans-content-end"),
+                ("Virtues", "virtues-content-end"),
+                ("Learning", "learning-content-end"),
+            ]
+
+            for (destination, endIdentifier) in destinations {
+                navigationElement(destination, in: app).tap()
+                let endMarker = app.descendants(matching: .any)[endIdentifier]
+                let tab = navigationElement(destination, in: app)
+                scrollAboveTabBar(endMarker, tab: tab, in: app, attempts: 24)
+                XCTAssertTrue(endMarker.isHittable, "\(destination) end cap is not visible")
+                XCTAssertLessThanOrEqual(
+                    endMarker.frame.maxY,
+                    tab.frame.minY,
+                    "\(destination) content did not clear the tab bar"
+                )
+                XCTAssertTrue(tab.isHittable)
+
+                let screenshot = XCTAttachment(screenshot: app.screenshot())
+                screenshot.name = "\(destination)-content-end"
+                screenshot.lifetime = .keepAlways
+                add(screenshot)
+            }
+        }
+    #endif
+
     @MainActor
     private func launchApplication(additionalArguments: [String] = []) -> XCUIApplication {
         let app = XCUIApplication()
@@ -129,6 +160,21 @@ final class BibleStudyUITests: XCTestCase {
         attempts: Int = 6
     ) {
         for _ in 0..<attempts where !element.exists {
+            app.swipeUp()
+        }
+    }
+
+    @MainActor
+    private func scrollAboveTabBar(
+        _ element: XCUIElement,
+        tab: XCUIElement,
+        in app: XCUIApplication,
+        attempts: Int
+    ) {
+        for _ in 0..<attempts {
+            if element.isHittable, element.frame.maxY <= tab.frame.minY {
+                return
+            }
             app.swipeUp()
         }
     }

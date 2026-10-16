@@ -60,3 +60,10 @@ The owner approved closing the reader phase and deferring the physical iPhone/Ma
 - Plans now separates the active/next step from three intention-based collections; Virtues connects current-course progress to its next lesson before the two doctrinal course libraries; Learning introduces a Worship / Belong / Pray map before its three curriculum tracks.
 - Artwork slots are fixed at 16:9 for section features, 3:2 for plan covers, and 1:1 for compact continuation thumbnails. Current photography remains temporary and will be replaced only after layout sign-off with assets composed for those exact ratios.
 - The complete macOS `BibleStudyTests` bundle and iPhone `BibleStudyUITests` bundle passed. iPhone and macOS builds succeeded.
+
+### 2026-10-16 content-polish verification
+
+- iPhone 17 Pro simulator: every premade plan now presents a full-width 3:2 cover; the custom-plan action is compact; Learning topics keep their status separate from full-width titles and descriptions; and the redundant Virtues study-mode panel is removed.
+- Plans, Virtues, and Learning now end with a visible editorial closing panel. A dedicated UI test scrolls each destination to its end and verifies the complete panel clears the attached tab bar while the selected tab remains usable.
+- Native Mac, wide window: Plans, Virtues, and Learning were navigated and visually inspected after the polish pass. Their split features, bounded content widths, adaptive libraries, and revised visual modules render without phone-layout stretching.
+- Existing photography is still provisional. This pass approves content placement and artwork-slot geometry; final photography remains a separate asset-generation and crop-validation deliverable.

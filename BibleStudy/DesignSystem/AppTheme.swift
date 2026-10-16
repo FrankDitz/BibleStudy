@@ -338,6 +338,33 @@ struct EditorialDivider: View {
     }
 }
 
+struct EditorialEndCap: View {
+    let title: String
+    let identifier: String
+
+    var body: some View {
+        HStack(spacing: 14) {
+            Rectangle()
+                .fill(AppTheme.accent)
+                .frame(width: 34, height: 3)
+            Text(title.uppercased())
+                .font(.caption.weight(.black))
+                .tracking(2.4)
+            Spacer()
+            Image(systemName: "cross.fill")
+                .font(.headline)
+                .foregroundStyle(AppTheme.accent)
+        }
+        .foregroundStyle(.white)
+        .padding(AppSpacing.standard)
+        .frame(maxWidth: .infinity, minHeight: 64)
+        .background(.black)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(title). End of content")
+        .accessibilityIdentifier(identifier)
+    }
+}
+
 enum EditorialImageMetrics {
     static var activePlanThumbnailSize: CGSize {
         #if os(macOS)

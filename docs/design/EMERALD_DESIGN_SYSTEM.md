@@ -55,7 +55,7 @@ Layout is approved before final photography is generated. The interface defines 
 1. Orient the reader with a 16:9 Scripture-formation feature and a short three-step Choose / Preview / Begin guide.
 2. Put the active plan—or the create/choose next step—immediately after the orientation.
 3. Organize the library by intention: begin with Jesus, build a monthly rhythm, then take a complete journey.
-4. On iPhone, plans are compact 3:2-thumbnail rows with the commitment and both Preview and Start actions visible. On Mac, the same plans become full 3:2 cover cards in a bounded adaptive grid.
+4. On iPhone, plans use full-width 3:2 covers so the photography, commitment, and identity read as one editorial unit; Preview and Start remain immediately below each cover. On Mac, the same plans become full 3:2 cover cards in a bounded adaptive grid.
 
 ### Virtues hierarchy
 
@@ -123,6 +123,14 @@ Layout is approved before final photography is generated. The interface defines 
 - Add the appearance selector to You.
 - Verify Dynamic Type, VoiceOver labels/order, contrast, Reduce Motion, keyboard focus, iPhone layouts, and Mac resizing.
 - Build both platforms and run the existing unit/UI checks before merge.
+
+### UI-9 — Content polish and long-page finish
+
+- Replace the oversized custom-plan panel with a compact inline creation action while preserving the toolbar action.
+- Give every iPhone plan a full-width 3:2 cover and keep its description, Preview, and Start actions in one clearly bounded unit.
+- Give Learning topics dedicated editorial visual bands, then place status, title, description, and curriculum outline in a predictable reading order.
+- Remove the redundant Virtues explanation panel and strengthen course and practice navigation with numbered marks and black/emerald visual anchors.
+- Finish long Plans, Virtues, and Learning pages with an editorial closing panel and enough scroll clearance for the complete final element to sit above the attached tab bar.
 
 ## Acceptance gate
 
