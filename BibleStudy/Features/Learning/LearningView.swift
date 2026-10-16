@@ -29,6 +29,10 @@ struct LearningView: View {
                             "Build confidence with the Rosary, foundational prayers, devotions, and Catholic prayer beyond Sunday Mass.",
                         identifiers: ["rosary", "prayer-devotions"]
                     )
+                    EditorialEndCap(
+                        title: "Know · celebrate · live",
+                        identifier: "learning-content-end"
+                    )
                 }
                 .padding(AppSpacing.screen)
                 .frame(maxWidth: 1180)
@@ -201,22 +205,21 @@ struct LearningView: View {
 
     private func topicCard(_ topic: LearningTopic, index: Int) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack(alignment: .top, spacing: 14) {
-                Text(String(format: "%02d", index))
-                    .font(.system(.title, design: .serif, weight: .black))
-                    .foregroundStyle(AppTheme.accent)
-                Image(systemName: topic.icon)
-                    .font(.headline)
-                    .foregroundStyle(AppTheme.accent)
-                    .frame(width: 26)
-                VStack(alignment: .leading, spacing: 7) {
-                    Text(topic.title)
-                        .font(.system(.title2, design: .serif, weight: .bold))
-                    Text(topic.subtitle)
-                        .foregroundStyle(AppTheme.supportingText)
+            topicVisual(topic, index: index)
+
+            VStack(alignment: .leading, spacing: 9) {
+                HStack {
+                    EditorialEyebrow("Topic \(String(format: "%02d", index))")
+                    Spacer(minLength: 12)
+                    EditorialStatusBadge(text: "Planned")
                 }
-                Spacer(minLength: 0)
-                EditorialStatusBadge(text: "Planned", systemImage: "book.closed")
+                Text(topic.title)
+                    .font(.system(.title2, design: .serif, weight: .bold))
+                    .foregroundStyle(AppTheme.ink)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text(topic.subtitle)
+                    .foregroundStyle(AppTheme.supportingText)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .padding(AppSpacing.standard)
 
@@ -241,6 +244,51 @@ struct LearningView: View {
         .background(AppTheme.surface)
         .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
         .accessibilityElement(children: .combine)
+    }
+
+    private func topicVisual(_ topic: LearningTopic, index: Int) -> some View {
+        ZStack {
+            LinearGradient(
+                colors: [.black, AppTheme.accent.opacity(0.72)],
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+
+            Text(String(format: "%02d", index))
+                .font(.system(size: 92, weight: .black, design: .serif))
+                .foregroundStyle(.white.opacity(0.10))
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .offset(x: 8, y: 13)
+
+            HStack(spacing: 16) {
+                Image(systemName: topic.icon)
+                    .font(.system(size: 34, weight: .medium))
+                    .foregroundStyle(AppTheme.accent)
+                    .frame(width: 58, height: 58)
+                    .background(.white)
+                VStack(alignment: .leading, spacing: 5) {
+                    EditorialEyebrow("Catholic life", inverse: true)
+                    Text(topicVisualTitle(topic))
+                        .font(.system(.title2, design: .serif, weight: .black))
+                        .foregroundStyle(.white)
+                }
+                Spacer()
+            }
+            .padding(AppSpacing.standard)
+        }
+        .frame(height: 104)
+        .clipped()
+        .accessibilityHidden(true)
+    }
+
+    private func topicVisualTitle(_ topic: LearningTopic) -> String {
+        switch topic.id {
+        case "mass": "THE MASS"
+        case "liturgical-year": "SACRED TIME"
+        case "sacraments": "SIGNS OF GRACE"
+        case "rosary": "PRAY WITH MARY"
+        default: "DAILY PRAYER"
+        }
     }
 
     private func curriculumOutline(for topic: LearningTopic) -> [String] {

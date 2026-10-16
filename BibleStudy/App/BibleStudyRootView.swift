@@ -70,6 +70,11 @@ struct BibleStudyRootView: View {
                 }
             #else
                 destinationView(selection)
+                    .contentMargins(
+                        .bottom,
+                        AppSpacing.section + AppSpacing.standard,
+                        for: .scrollContent
+                    )
                     .safeAreaInset(edge: .bottom, spacing: 0) {
                         KingdomTabBar(selection: $selection)
                     }

@@ -48,6 +48,10 @@ struct PlansView: View {
                             "new-testament-90", "catholic-old-testament-90", "catholic-bible-365",
                         ]
                     )
+                    EditorialEndCap(
+                        title: "Read · return · grow",
+                        identifier: "plans-content-end"
+                    )
                 }
                 .padding(AppSpacing.screen)
                 .frame(maxWidth: 1180)
@@ -237,21 +241,40 @@ struct PlansView: View {
             .buttonStyle(.plain)
             .accessibilityIdentifier("open-active-plan")
         } else {
-            VStack(alignment: .leading, spacing: 12) {
-                Rectangle().fill(AppTheme.accent).frame(height: 4)
-                EditorialEyebrow("Your next step")
-                Text("Choose a plan or build your own.")
-                    .font(.system(.title2, design: .serif, weight: .bold))
-                Text(
-                    "Preview a complete schedule below, or create a plan around the books and pace you already have in mind."
-                )
-                .foregroundStyle(AppTheme.supportingText)
-                Button("Create a Custom Plan") { isPresentingComposer = true }
-                    .buttonStyle(EmeraldActionButtonStyle())
+            HStack(spacing: AppSpacing.standard) {
+                Image(systemName: "calendar.badge.plus")
+                    .font(.title2)
+                    .foregroundStyle(AppTheme.onAccent)
+                    .frame(width: 52, height: 52)
+                    .background(.black)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    EditorialEyebrow("Make it your own")
+                    Text("Build your own plan")
+                        .font(.system(.headline, design: .serif, weight: .bold))
+                        .foregroundStyle(AppTheme.ink)
+                    Text("Choose the books, days, and pace.")
+                        .font(.caption)
+                        .foregroundStyle(AppTheme.supportingText)
+                        .lineLimit(1)
+                }
+
+                Spacer(minLength: 4)
+
+                Button {
+                    isPresentingComposer = true
+                } label: {
+                    Label("Create", systemImage: "plus")
+                }
+                .buttonStyle(EditorialSecondaryButtonStyle())
+                .accessibilityIdentifier("create-custom-plan-inline")
             }
-            .padding(AppSpacing.spacious)
+            .padding(AppSpacing.standard)
             .background(AppTheme.surface)
             .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
+            .overlay(alignment: .leading) {
+                Rectangle().fill(AppTheme.accent).frame(width: 4)
+            }
         }
     }
 
@@ -366,7 +389,7 @@ private struct PremadePlanCard: View {
         #if os(macOS)
             desktopCard
         #else
-            compactCard
+            mobileCard
         #endif
     }
 
@@ -410,46 +433,18 @@ private struct PremadePlanCard: View {
         .accessibilityHidden(true)
     }
 
-    private var compactCard: some View {
+    private var mobileCard: some View {
         VStack(spacing: 0) {
-            Button(action: previewPlan) {
-                HStack(alignment: .top, spacing: 14) {
-                    EditorialMediaSlot(
-                        assetName: ReadingPlanArtwork.assetName(for: plan.id),
-                        slot: .planCover
-                    )
-                    .frame(width: 116)
+            Button(action: previewPlan) { cover }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Preview \(plan.title)")
 
-                    VStack(alignment: .leading, spacing: 7) {
-                        EditorialEyebrow("\(plan.durationDays) days")
-                        Text(plan.title)
-                            .font(.system(.headline, design: .serif, weight: .bold))
-                            .foregroundStyle(AppTheme.ink)
-                            .multilineTextAlignment(.leading)
-                        Text(plan.summary)
-                            .font(.caption)
-                            .foregroundStyle(AppTheme.supportingText)
-                            .lineLimit(2)
-                            .multilineTextAlignment(.leading)
-                        Label(
-                            "\(plan.estimatedDailyMinutes.lowerBound)–\(plan.estimatedDailyMinutes.upperBound) min/day",
-                            systemImage: "clock"
-                        )
-                        .font(.caption2.bold())
-                        .foregroundStyle(AppTheme.supportingText)
-                    }
-
-                    Spacer(minLength: 0)
-                    Image(systemName: "chevron.right")
-                        .font(.caption.bold())
-                        .foregroundStyle(AppTheme.accent)
-                        .padding(.top, 2)
-                }
-                .padding(12)
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Preview \(plan.title)")
+            Text(plan.summary)
+                .font(.subheadline)
+                .foregroundStyle(AppTheme.supportingText)
+                .lineLimit(3)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(AppSpacing.standard)
 
             HStack(spacing: 0) {
                 Button("View full preview", action: previewPlan)
