@@ -40,6 +40,9 @@ enum AppTheme {
     static let warning = Color(red: 0.84, green: 0.50, blue: 0.10)
     static let danger = Color(red: 0.78, green: 0.16, blue: 0.16)
     static let onAccent = Color.white
+    static let night = Color(red: 0.008, green: 0.012, blue: 0.009)
+    static let graphite = Color(red: 0.035, green: 0.047, blue: 0.039)
+    static let onDark = Color(red: 0.975, green: 0.980, blue: 0.976)
 }
 
 enum AppSpacing {

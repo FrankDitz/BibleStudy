@@ -66,6 +66,7 @@ struct HomeView: View {
                     .frame(minWidth: 340, idealWidth: 400, maxWidth: 440)
                 }
 
+                formationInterlude
                 activitySection(today)
             }
             .padding(AppSpacing.spacious)
@@ -80,6 +81,8 @@ struct HomeView: View {
                 hero(reading: today.reading, height: 690, includesQuickActions: true)
 
                 VStack(alignment: .leading, spacing: AppSpacing.spacious) {
+                    formationInterlude
+
                     EditorialSectionHeader(
                         "Today",
                         eyebrow: now.formatted(.dateTime.weekday(.wide).month(.wide).day()),
@@ -132,6 +135,27 @@ struct HomeView: View {
             recentActivity: [],
             planActivityStreak: 0
         )
+    }
+
+    private var formationInterlude: some View {
+        EditorialMediaStory(assetName: "HomeFormation", alignment: .center) {
+            VStack(alignment: .leading, spacing: 10) {
+                EditorialEyebrow("Formation prompt", inverse: true)
+                Text("WALK BY FAITH.")
+                    .font(.system(.title, design: .serif, weight: .black))
+                Rectangle()
+                    .fill(AppTheme.accent)
+                    .frame(width: 34, height: 3)
+                Text("Receive the Word, choose one faithful next step, and carry it into the life in front of you.")
+                    .font(.subheadline)
+                    .foregroundStyle(AppTheme.onDark.opacity(0.76))
+                Text("2 CORINTHIANS 5:7")
+                    .font(.caption2.bold())
+                    .tracking(2)
+                    .foregroundStyle(AppTheme.accent)
+            }
+        }
+        .accessibilityIdentifier("home-formation-interlude")
     }
 
     private func hero(
@@ -283,7 +307,7 @@ struct HomeView: View {
     }
 
     private func planCard(_ plan: HomePlanToday) -> some View {
-        FeatureCard {
+        EditorialPanel(leadingRule: true) {
             VStack(alignment: .leading, spacing: 14) {
                 HStack(alignment: .firstTextBaseline) {
                     EditorialEyebrow("Formation plan")
@@ -327,7 +351,7 @@ struct HomeView: View {
     }
 
     private var noPlanCard: some View {
-        FeatureCard {
+        EditorialPanel(leadingRule: true) {
             VStack(alignment: .leading, spacing: 12) {
                 EditorialEyebrow("Formation plan")
                 Text("Choose a reading path.")
@@ -342,7 +366,7 @@ struct HomeView: View {
 
     private func learningCard(_ suggestion: HomeLearningSuggestion) -> some View {
         Button(action: openLearning) {
-            FeatureCard {
+            EditorialPanel(tone: .elevated) {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack {
                         EditorialEyebrow(suggestion.eyebrow)
@@ -363,7 +387,7 @@ struct HomeView: View {
     }
 
     private func virtueCard(_ virtue: HomeVirtueFocus) -> some View {
-        FeatureCard {
+        EditorialPanel(leadingRule: true) {
             VStack(alignment: .leading, spacing: 11) {
                 HStack {
                     EditorialEyebrow("Virtue focus")
@@ -429,7 +453,7 @@ struct HomeView: View {
                 }
             }
 
-            FeatureCard {
+            EditorialPanel(tone: .elevated) {
                 if today.recentActivity.isEmpty {
                     Text("Your reading and plan activity will appear here as you use the app.")
                         .foregroundStyle(AppTheme.supportingText)

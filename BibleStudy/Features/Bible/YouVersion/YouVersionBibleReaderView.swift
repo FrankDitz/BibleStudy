@@ -2,6 +2,23 @@ import SwiftData
 import SwiftUI
 import YouVersionPlatform
 
+private struct ReaderMastheadTexture: View {
+    let color: Color
+
+    var body: some View {
+        ZStack {
+            ForEach(0 ..< 6, id: \.self) { index in
+                Rectangle()
+                    .stroke(color, lineWidth: 1)
+                    .frame(width: CGFloat(70 + index * 28), height: CGFloat(70 + index * 28))
+                    .rotationEffect(.degrees(index.isMultiple(of: 2) ? 12 : -8))
+                    .offset(x: CGFloat(index * 7), y: CGFloat(index * -4))
+            }
+        }
+        .clipped()
+    }
+}
+
 struct YouVersionBibleReaderView: View {
     let navigation: ScriptureNavigationController
     let approvedVersionIDs: Set<Int>
@@ -183,6 +200,13 @@ struct YouVersionBibleReaderView: View {
         .frame(maxWidth: 900, minHeight: 270, alignment: .leading)
         .frame(maxWidth: .infinity)
         .background(activeReaderTheme.backgroundColor)
+        .overlay(alignment: .topTrailing) {
+            ReaderMastheadTexture(color: activeReaderTheme.textColor)
+                .frame(width: 260, height: 220)
+                .opacity(0.07)
+                .accessibilityHidden(true)
+                .allowsHitTesting(false)
+        }
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(locationTitle(location, in: edition)), \(chapterEyebrow(for: location))")
     }
@@ -319,7 +343,7 @@ struct YouVersionBibleReaderView: View {
             lineSpacing: 0.4,
             paragraphSpacing: 4,
             textColor: activeReaderTheme.textColor,
-            verseNumberColor: activeReaderTheme.textColor.opacity(0.65),
+            verseNumberColor: AppTheme.accent,
             wordsOfChristColor: activeReaderTheme == .dark
                 ? Color(red: 1, green: 0.42, blue: 0.46) : Color(red: 0.78, green: 0.12, blue: 0.18),
             footnoteMode: .image,

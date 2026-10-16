@@ -60,23 +60,11 @@ struct ActivePlanView: View {
 
         return ScrollView {
             LazyVStack(alignment: .leading, spacing: 22) {
-                PlanCoverView(
-                    title: state.snapshot.title,
-                    subtitle: state.snapshot.summary,
-                    style: state.snapshot.coverStyle
+                planOpening(
+                    state: state,
+                    selectedIndex: selectedIndex,
+                    pace: displayedPace(progress.pace, state: state)
                 )
-                .frame(height: 300)
-
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack(alignment: .firstTextBaseline) {
-                        Text("Day \(selectedIndex) of \(state.snapshot.days.count)")
-                            .font(.title2.bold())
-                        Spacer()
-                        PaceBadge(pace: displayedPace(progress.pace, state: state))
-                    }
-                    EmeraldProgressBar(value: state.completionFraction)
-                        .accessibilityLabel("Plan completion")
-                }
 
                 DayRail(
                     snapshot: state.snapshot,
@@ -130,6 +118,79 @@ struct ActivePlanView: View {
         }
         .background(AppScreenBackground())
         .accessibilityIdentifier("active-plan-detail")
+    }
+
+    @ViewBuilder
+    private func planOpening(
+        state: ActiveReadingPlanState,
+        selectedIndex: Int,
+        pace: PlanPaceStatus
+    ) -> some View {
+        #if os(macOS)
+            HStack(alignment: .top, spacing: 0) {
+                planArtwork(state)
+                    .frame(width: 500)
+                planOverview(state: state, selectedIndex: selectedIndex, pace: pace)
+                    .frame(maxWidth: .infinity, minHeight: 334, alignment: .topLeading)
+            }
+            .background(AppTheme.surface)
+            .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
+        #else
+            VStack(spacing: 0) {
+                planArtwork(state)
+                planOverview(state: state, selectedIndex: selectedIndex, pace: pace)
+            }
+            .background(AppTheme.surface)
+            .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
+        #endif
+    }
+
+    private func planArtwork(_ state: ActiveReadingPlanState) -> some View {
+        PlanCoverView(
+            title: state.snapshot.title,
+            subtitle: state.snapshot.summary,
+            style: state.snapshot.coverStyle,
+            assetName: ReadingPlanArtwork.assetName(for: state.snapshot.sourceID)
+        )
+        .aspectRatio(EditorialArtworkSlot.planCover.aspectRatio, contentMode: .fit)
+    }
+
+    private func planOverview(
+        state: ActiveReadingPlanState,
+        selectedIndex: Int,
+        pace: PlanPaceStatus
+    ) -> some View {
+        let total = max(state.snapshot.days.count, 1)
+        let completed = state.completedDayIndices.count
+        let phase = min(Int((Double(completed) / Double(total)) * 3), 2)
+
+        return VStack(alignment: .leading, spacing: AppSpacing.standard) {
+            HStack(alignment: .firstTextBaseline) {
+                VStack(alignment: .leading, spacing: 3) {
+                    EditorialEyebrow("Your journey")
+                    Text("Day \(selectedIndex) of \(total)")
+                        .font(.system(.title2, design: .serif, weight: .bold))
+                }
+                Spacer()
+                PaceBadge(pace: pace)
+            }
+
+            EmeraldProgressBar(value: state.completionFraction)
+                .accessibilityLabel("Plan completion")
+
+            EditorialRouteMap(
+                eyebrow: "Formation route",
+                steps: [
+                    EditorialRouteStep(id: "begin", number: "01", title: "Foundation", detail: "Days 1–\(max(total / 3, 1))"),
+                    EditorialRouteStep(id: "grow", number: "02", title: "Discipleship", detail: "Keep returning"),
+                    EditorialRouteStep(id: "finish", number: "03", title: "Mission", detail: "Complete the path"),
+                ],
+                currentIndex: phase,
+                completedIndices: Set(0 ..< phase),
+                progressLabel: "\(completed) days complete"
+            )
+        }
+        .padding(AppSpacing.standard)
     }
 
     @ToolbarContentBuilder
@@ -294,13 +355,25 @@ struct PlanCoverView: View {
     let title: String
     let subtitle: String
     let style: ActiveReadingPlanCoverStyle
+    var assetName: String? = nil
 
     var body: some View {
         ZStack(alignment: .bottomLeading) {
+            if let assetName {
+                Image(assetName)
+                    .resizable()
+                    .scaledToFill()
+            } else {
+                LinearGradient(
+                    colors: style.colors,
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            }
             LinearGradient(
-                colors: [AppTheme.accent, .black],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
+                colors: [.clear, .black.opacity(0.20), .black.opacity(0.92)],
+                startPoint: .top,
+                endPoint: .bottom
             )
             Text("WORD")
                 .font(.system(size: 96, weight: .black, design: .serif))
@@ -326,6 +399,7 @@ struct PlanCoverView: View {
             }
             .padding(28)
         }
+        .clipped()
         .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.hero, style: .continuous))
         .overlay {
             RoundedRectangle(cornerRadius: AppCornerRadius.hero, style: .continuous)

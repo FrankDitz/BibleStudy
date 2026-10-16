@@ -8,6 +8,7 @@ struct LearningView: View {
                     header
                     learningMap
                     scopeNote
+                    learningParticipation
                     topicCollection(
                         number: "01",
                         title: "Worship & sacred time",
@@ -118,19 +119,17 @@ struct LearningView: View {
                     "Follow this order for a guided introduction, or open the subject that answers the question you have today."
             )
 
-            #if os(macOS)
-                HStack(spacing: 0) {
-                    mapStep("01", title: "Worship", detail: "Mass & sacred time")
-                    mapStep("02", title: "Belong", detail: "Sacraments & initiation")
-                    mapStep("03", title: "Pray", detail: "Devotions & daily life")
-                }
-            #else
-                VStack(spacing: 0) {
-                    mapStep("01", title: "Worship", detail: "Begin with the Mass and the Church year")
-                    mapStep("02", title: "Belong", detail: "Understand initiation and sacramental life")
-                    mapStep("03", title: "Pray", detail: "Carry Catholic prayer into the week")
-                }
-            #endif
+            EditorialRouteMap(
+                eyebrow: "Formation route",
+                steps: [
+                    EditorialRouteStep(id: "worship", number: "01", title: "Worship", detail: "Mass & sacred time"),
+                    EditorialRouteStep(id: "belong", number: "02", title: "Belong", detail: "Sacraments & initiation"),
+                    EditorialRouteStep(id: "pray", number: "03", title: "Pray", detail: "Devotions & daily life"),
+                ],
+                currentIndex: 0,
+                completedIndices: [],
+                progressLabel: "Begin with worship"
+            )
         }
     }
 
@@ -165,6 +164,24 @@ struct LearningView: View {
         .font(.footnote)
         .foregroundStyle(AppTheme.supportingText)
         .padding(.horizontal, 2)
+    }
+
+    private var learningParticipation: some View {
+        EditorialMediaStory(assetName: "LearningParticipation", alignment: .center) {
+            VStack(alignment: .leading, spacing: 10) {
+                EditorialEyebrow("Knowledge into participation", inverse: true)
+                Text("KNOW WHAT\nYOU ARE ENTERING.")
+                    .font(.system(.title, design: .serif, weight: .black))
+                    .minimumScaleFactor(0.72)
+                Rectangle()
+                    .fill(AppTheme.accent)
+                    .frame(width: 34, height: 3)
+                Text("Catholic formation should help you recognize the Church's signs, words, seasons, and practices—and take part with confidence.")
+                    .font(.subheadline)
+                    .foregroundStyle(AppTheme.onDark.opacity(0.76))
+            }
+        }
+        .accessibilityIdentifier("learning-participation-story")
     }
 
     private func topicCollection(

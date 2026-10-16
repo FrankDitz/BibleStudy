@@ -18,6 +18,7 @@ struct VirtuesView: View {
                 LazyVStack(alignment: .leading, spacing: AppSpacing.spacious) {
                     featuredFormation
                     formationJourney
+                    cardinalIdentityRail
                     if featuredCourse.id != VirtueStudyCatalog.foundationCourse.id {
                         foundationCourse
                     }
@@ -37,6 +38,7 @@ struct VirtuesView: View {
                         courses: VirtueStudyCatalog.cardinalCourses,
                         identifier: "virtues-cardinal-courses"
                     )
+                    formationWitness
                     practiceCompanion
                     privacyNote
                     EditorialEndCap(
@@ -128,7 +130,7 @@ struct VirtuesView: View {
 
     private var virtueFeatureArtwork: some View {
         ZStack(alignment: .bottomLeading) {
-            EditorialMediaSlot(assetName: "VirtuesHero", slot: .feature)
+            EditorialMediaSlot(assetName: "VirtuesHero", slot: .feature, alignment: .top)
             LinearGradient(
                 colors: [.clear, .black.opacity(0.80)],
                 startPoint: .center,
@@ -331,6 +333,67 @@ struct VirtuesView: View {
             Rectangle().fill(AppTheme.accent).frame(width: 5)
         }
         .accessibilityIdentifier("virtues-formation-journey")
+    }
+
+    private var cardinalIdentityRail: some View {
+        VStack(alignment: .leading, spacing: AppSpacing.standard) {
+            EditorialSectionHeader(
+                "Four hinges of moral life",
+                eyebrow: "Cardinal identities",
+                detail: "Learn the distinctive work of each virtue, then see how all four cooperate in faithful action."
+            )
+            EditorialIdentityRail(
+                identities: [
+                    EditorialIdentity(
+                        id: VirtueIdentifier.prudence.rawValue,
+                        title: "Prudence",
+                        verb: "Discern the good",
+                        systemImage: "lightbulb"
+                    ),
+                    EditorialIdentity(
+                        id: VirtueIdentifier.justice.rawValue,
+                        title: "Justice",
+                        verb: "Give what is due",
+                        systemImage: "scale.3d"
+                    ),
+                    EditorialIdentity(
+                        id: VirtueIdentifier.fortitude.rawValue,
+                        title: "Fortitude",
+                        verb: "Stand with courage",
+                        systemImage: "shield"
+                    ),
+                    EditorialIdentity(
+                        id: VirtueIdentifier.cardinalTemperance.rawValue,
+                        title: "Temperance",
+                        verb: "Live in freedom",
+                        systemImage: "flame"
+                    ),
+                ],
+                activeID: featuredCourse.virtueID?.rawValue
+            )
+        }
+        .accessibilityIdentifier("virtues-cardinal-identity-rail")
+    }
+
+    private var formationWitness: some View {
+        EditorialMediaStory(assetName: "VirtueWitness", alignment: .center) {
+            VStack(alignment: .leading, spacing: 10) {
+                EditorialEyebrow("A witness", inverse: true)
+                Text("FORMED FOR MORE.")
+                    .font(.system(.title, design: .serif, weight: .black))
+                Rectangle()
+                    .fill(AppTheme.accent)
+                    .frame(width: 34, height: 3)
+                Text("Virtue is not an image to perform. It is grace received, truth practiced, and love made dependable in ordinary life.")
+                    .font(.subheadline)
+                    .foregroundStyle(AppTheme.onDark.opacity(0.76))
+                Text("LEARN · PRACTICE · LIVE")
+                    .font(.caption2.bold())
+                    .tracking(2)
+                    .foregroundStyle(AppTheme.accent)
+            }
+        }
+        .accessibilityIdentifier("virtues-formation-witness")
     }
 
     private func courseCollection(

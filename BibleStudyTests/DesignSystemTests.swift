@@ -23,6 +23,16 @@ final class DesignSystemTests: XCTestCase {
         XCTAssertEqual(EditorialArtworkSlot.thumbnail.aspectRatio, 1, accuracy: 0.0001)
     }
 
+    func testEditorialDepthContainersKeepApprovedMinimumDimensions() {
+        XCTAssertEqual(EditorialLayout.desktopMaxWidth, 1180)
+        XCTAssertEqual(EditorialLayout.phoneContentReferenceWidth, 350)
+        XCTAssertGreaterThanOrEqual(EditorialLayout.phoneRouteMapMinimumHeight, 122)
+        XCTAssertGreaterThanOrEqual(EditorialLayout.desktopRouteMapMinimumHeight, 144)
+        XCTAssertEqual(EditorialLayout.phoneIdentityTileSize.width, 112)
+        XCTAssertEqual(EditorialLayout.phoneIdentityTileSize.height, 128)
+        XCTAssertGreaterThanOrEqual(EditorialLayout.phoneMetricMinimumHeight, 108)
+    }
+
     func testEveryStateKindHasAVisibleDefaultIcon() {
         XCTAssertEqual(AppStateKind.allCases.count, 6)
         XCTAssertTrue(AppStateKind.allCases.allSatisfy { !$0.defaultIcon.isEmpty })

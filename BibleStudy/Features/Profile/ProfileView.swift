@@ -25,21 +25,25 @@ struct ProfileView: View {
     }
 
     private var profileHeader: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            EditorialEyebrow("Private formation")
-            Text("Your journey.")
-                .font(AppTypography.screenTitle)
-            Text(
-                "Preferences and progress belong to you. Nothing here ranks faith or turns formation into a competition."
-            )
-            .font(AppTypography.screenIntroduction)
-            .foregroundStyle(AppTheme.supportingText)
+        EditorialMediaStory(assetName: "ProfileJourney", alignment: .center) {
+            VStack(alignment: .leading, spacing: 10) {
+                EditorialEyebrow("Private formation", inverse: true)
+                Text("YOUR\nJOURNEY.")
+                    .font(.system(size: 38, weight: .black, design: .serif))
+                    .minimumScaleFactor(0.72)
+                Rectangle()
+                    .fill(AppTheme.accent)
+                    .frame(width: 36, height: 3)
+                Text("Preferences and progress belong to you. Formation is a path, never a competition.")
+                    .font(.subheadline)
+                    .foregroundStyle(AppTheme.onDark.opacity(0.76))
+            }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityIdentifier("you-editorial-header")
     }
 
     private var appearanceCard: some View {
-        FeatureCard {
+        EditorialPanel {
             VStack(alignment: .leading, spacing: 14) {
                 EditorialSectionHeader(
                     "Appearance",
@@ -68,26 +72,63 @@ struct ProfileView: View {
     }
 
     private var journeyCard: some View {
-        FeatureCard {
-            VStack(alignment: .leading, spacing: 16) {
-                EditorialSectionHeader("Journey", eyebrow: "This week")
-                metric("Reading days", value: "0")
-                Divider()
-                metric("Current rhythm", value: "0 days")
-                Divider()
-                metric("Plans completed", value: "0")
-                NavigationLink {
-                    VirtueFormationRecordView()
-                } label: {
-                    Label("Open Virtue Formation Record", systemImage: "arrow.right")
-                        .frame(maxWidth: .infinity, alignment: .leading)
+        VStack(alignment: .leading, spacing: AppSpacing.standard) {
+            EditorialSectionHeader(
+                "Your rhythm",
+                eyebrow: "This week",
+                detail: "A private record of returning—not a score of spiritual worth."
+            )
+            EditorialMetricMatrix(
+                metrics: [
+                    EditorialMetricItem(
+                        id: "reading-days",
+                        value: "0",
+                        label: "Reading days",
+                        detail: "Scripture opened this week",
+                        progress: 0
+                    ),
+                    EditorialMetricItem(
+                        id: "current-rhythm",
+                        value: "0",
+                        label: "Day rhythm",
+                        detail: "Current plan continuity",
+                        progress: 0
+                    ),
+                    EditorialMetricItem(
+                        id: "plans-completed",
+                        value: "0",
+                        label: "Plans complete",
+                        detail: "Finished reading journeys",
+                        progress: nil
+                    ),
+                    EditorialMetricItem(
+                        id: "formation-record",
+                        value: "PRIVATE",
+                        label: "Formation",
+                        detail: "Lessons and practices remain yours",
+                        progress: nil
+                    ),
+                ]
+            )
+            NavigationLink {
+                VirtueFormationRecordView()
+            } label: {
+                HStack {
+                    Label("Open Virtue Formation Record", systemImage: "lock.shield")
+                    Spacer()
+                    Image(systemName: "arrow.right")
                 }
+                .font(.subheadline.bold())
+                .foregroundStyle(AppTheme.onDark)
+                .padding(AppSpacing.standard)
+                .background(AppTheme.night)
             }
         }
+        .accessibilityIdentifier("you-journey-metrics")
     }
 
     private var integrationCard: some View {
-        FeatureCard {
+        EditorialPanel {
             VStack(alignment: .leading, spacing: 14) {
                 EditorialSectionHeader("Integrations", eyebrow: "Connected services")
                 HStack {
@@ -113,7 +154,7 @@ struct ProfileView: View {
     }
 
     private var privacyCard: some View {
-        FeatureCard {
+        EditorialPanel(leadingRule: true) {
             VStack(alignment: .leading, spacing: 12) {
                 EditorialSectionHeader("Private by design", eyebrow: "Privacy")
                 Label(

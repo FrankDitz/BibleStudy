@@ -25,6 +25,7 @@ struct PlansView: View {
                 LazyVStack(alignment: .leading, spacing: 40) {
                     planHero
                     activePlanSection
+                    plansInterlude
                     planCollection(
                         title: "Start with Jesus",
                         eyebrow: "01 · A clear beginning",
@@ -202,44 +203,48 @@ struct PlansView: View {
     @ViewBuilder
     private var activePlanSection: some View {
         if let state = activeState {
-            Button {
-                isShowingActivePlan = true
-            } label: {
-                VStack(spacing: 0) {
-                    Rectangle().fill(AppTheme.accent).frame(height: 4)
-                    HStack(spacing: AppSpacing.standard) {
-                        EditorialMediaSlot(
-                            assetName: ReadingPlanArtwork.assetName(for: state.snapshot.sourceID),
-                            slot: .thumbnail
-                        )
-                        .frame(
-                            width: EditorialImageMetrics.activePlanThumbnailSize.width,
-                            height: EditorialImageMetrics.activePlanThumbnailSize.height
-                        )
-                        .clipped()
+            VStack(spacing: 0) {
+                Button {
+                    isShowingActivePlan = true
+                } label: {
+                    VStack(spacing: 0) {
+                        Rectangle().fill(AppTheme.accent).frame(height: 4)
+                        HStack(spacing: AppSpacing.standard) {
+                            EditorialMediaSlot(
+                                assetName: ReadingPlanArtwork.assetName(for: state.snapshot.sourceID),
+                                slot: .thumbnail
+                            )
+                            .frame(
+                                width: EditorialImageMetrics.activePlanThumbnailSize.width,
+                                height: EditorialImageMetrics.activePlanThumbnailSize.height
+                            )
+                            .clipped()
 
-                        VStack(alignment: .leading, spacing: 7) {
-                            EditorialEyebrow("Continue your active plan")
-                            Text(state.snapshot.title)
-                                .font(.system(.title2, design: .serif, weight: .bold))
-                                .foregroundStyle(AppTheme.ink)
-                            Text(activePlanSummary(state))
-                                .font(.subheadline)
-                                .foregroundStyle(AppTheme.supportingText)
-                            EmeraldProgressBar(value: state.completionFraction)
+                            VStack(alignment: .leading, spacing: 7) {
+                                EditorialEyebrow("Continue your active plan")
+                                Text(state.snapshot.title)
+                                    .font(.system(.title2, design: .serif, weight: .bold))
+                                    .foregroundStyle(AppTheme.ink)
+                                Text(activePlanSummary(state))
+                                    .font(.subheadline)
+                                    .foregroundStyle(AppTheme.supportingText)
+                                EmeraldProgressBar(value: state.completionFraction)
+                            }
+                            Spacer(minLength: 4)
+                            Image(systemName: "arrow.right")
+                                .font(.headline)
+                                .foregroundStyle(AppTheme.accent)
                         }
-                        Spacer(minLength: 4)
-                        Image(systemName: "arrow.right")
-                            .font(.headline)
-                            .foregroundStyle(AppTheme.accent)
+                        .padding(AppSpacing.standard)
                     }
-                    .padding(AppSpacing.standard)
+                    .background(AppTheme.surface)
+                    .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
                 }
-                .background(AppTheme.surface)
-                .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("open-active-plan")
+
+                activePlanRoute(state)
             }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("open-active-plan")
         } else {
             HStack(spacing: AppSpacing.standard) {
                 Image(systemName: "calendar.badge.plus")
@@ -276,6 +281,37 @@ struct PlansView: View {
                 Rectangle().fill(AppTheme.accent).frame(width: 4)
             }
         }
+    }
+
+    private func activePlanRoute(_ state: ActiveReadingPlanState) -> some View {
+        let total = max(state.snapshot.days.count, 1)
+        let completed = state.completedDayIndices.count
+        let currentIndex = min(Int((Double(completed) / Double(total)) * 3), 2)
+        let completedPhases = Set(0 ..< currentIndex)
+
+        return EditorialRouteMap(
+            eyebrow: "Your journey",
+            steps: [
+                EditorialRouteStep(id: "foundation", number: "01", title: "Foundation", detail: "Begin the route"),
+                EditorialRouteStep(id: "discipleship", number: "02", title: "Discipleship", detail: "Build the rhythm"),
+                EditorialRouteStep(id: "mission", number: "03", title: "Mission", detail: "Finish faithfully"),
+            ],
+            currentIndex: currentIndex,
+            completedIndices: completedPhases,
+            progressLabel: "Day \(min(completed + 1, total)) of \(total)"
+        )
+        .accessibilityIdentifier("active-plan-route-map")
+    }
+
+    private var plansInterlude: some View {
+        EditorialInterlude(
+            eyebrow: "Scripture for the journey",
+            mark: "ROOTED",
+            statement: "Walk in Christ, rooted and built up in him, established in the faith.",
+            citation: "Colossians 2:6–7",
+            tone: .black
+        )
+        .accessibilityIdentifier("plans-scripture-interlude")
     }
 
     private func planCollection(
@@ -480,7 +516,7 @@ private struct PremadePlanCard: View {
     }
 }
 
-private enum ReadingPlanArtwork {
+enum ReadingPlanArtwork {
     static func assetName(for identifier: String?) -> String {
         switch identifier {
         case "new-testament-90": "PlanNewTestament90"
