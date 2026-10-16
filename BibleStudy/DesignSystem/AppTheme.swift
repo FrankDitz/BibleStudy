@@ -258,59 +258,94 @@ struct EditorialArtwork: View {
     }
 }
 
-struct EditorialHeroArtwork: View {
+enum EditorialArtworkSlot {
+    /// Primary section artwork. Future artwork should be composed at 16:9 with its subject
+    /// inside the center 60% so the same asset remains useful at compact widths.
+    case feature
+    /// Reading-plan cover artwork. Future artwork should be delivered at 3:2.
+    case planCover
+    /// Small supporting artwork used beside progress and continuation content.
+    case thumbnail
+
+    var aspectRatio: CGFloat {
+        switch self {
+        case .feature:
+            16 / 9
+        case .planCover:
+            3 / 2
+        case .thumbnail:
+            1
+        }
+    }
+}
+
+/// A predictable media frame used to design the interface before final artwork is made.
+/// Images intentionally fill the declared slot; the slot—not an existing image's shape—
+/// defines the composition required of replacement artwork.
+struct EditorialMediaSlot: View {
     let assetName: String
+    let slot: EditorialArtworkSlot
+    var alignment: Alignment = .center
 
     var body: some View {
-        #if os(macOS)
-            GeometryReader { geometry in
-                ZStack {
-                    Color.black
-                    Image(assetName)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(
-                            width: geometry.size.width,
-                            height: geometry.size.height,
-                            alignment: .trailing
-                        )
-                }
-            }
-            .accessibilityHidden(true)
-        #else
+        GeometryReader { geometry in
             Image(assetName)
                 .resizable()
                 .scaledToFill()
-                .accessibilityHidden(true)
-        #endif
+                .frame(
+                    width: geometry.size.width,
+                    height: geometry.size.height,
+                    alignment: alignment
+                )
+                .clipped()
+        }
+        .aspectRatio(slot.aspectRatio, contentMode: .fit)
+        .background(Color.black)
+        .accessibilityHidden(true)
+    }
+}
+
+struct EditorialStatusBadge: View {
+    let text: String
+    var systemImage: String?
+    var emphasized = false
+
+    var body: some View {
+        HStack(spacing: 5) {
+            if let systemImage {
+                Image(systemName: systemImage)
+            }
+            Text(text.uppercased())
+        }
+        .font(.caption2.weight(.bold))
+        .tracking(1.1)
+        .foregroundStyle(emphasized ? AppTheme.onAccent : AppTheme.supportingText)
+        .padding(.horizontal, 9)
+        .padding(.vertical, 6)
+        .background(emphasized ? AppTheme.accent : AppTheme.elevatedSurface)
+        .overlay {
+            Rectangle().stroke(emphasized ? AppTheme.accent : AppTheme.hairline, lineWidth: 1)
+        }
+        .accessibilityElement(children: .combine)
+    }
+}
+
+struct EditorialDivider: View {
+    var body: some View {
+        Rectangle()
+            .fill(AppTheme.hairline)
+            .frame(height: 1)
     }
 }
 
 enum EditorialImageMetrics {
-    static var primaryHeroHeight: CGFloat {
-        #if os(macOS)
-            520
-        #else
-            420
-        #endif
-    }
-
-    static var virtueHeroHeight: CGFloat {
-        #if os(macOS)
-            520
-        #else
-            380
-        #endif
-    }
-
     static var activePlanThumbnailSize: CGSize {
         #if os(macOS)
-            CGSize(width: 168, height: 112)
+            CGSize(width: 132, height: 132)
         #else
-            CGSize(width: 112, height: 126)
+            CGSize(width: 92, height: 92)
         #endif
     }
-
 }
 
 struct AppScreenBackground: View {

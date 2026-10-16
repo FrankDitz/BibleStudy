@@ -36,6 +36,43 @@ The in-app hero artwork is original project artwork and lives in `BibleStudy/Res
 - On Mac, navigation uses a fixed editorial sidebar. Core screens use bounded wide layouts, multi-column composition where useful, and purpose-sized heroes; phone-width stacks must not be stretched across the desktop window.
 - Cards, fields, day selectors, badges, and secondary actions use near-square geometry with hairline borders. Rounded bubbles, floating pills, and soft wellness-card shadows are not part of this system.
 
+## Content hierarchy and artwork contracts
+
+Layout is approved before final photography is generated. The interface defines the crop; photography must be composed for the interface rather than forcing an unrelated portrait into a card.
+
+### Fixed artwork slots
+
+| Slot | Ratio | Used for | Composition requirement |
+| --- | --- | --- | --- |
+| Feature | 16:9 | Plans, Virtues, and Learning introductions | Keep the subject and any garment message within the central 60% of the frame. Leave deliberate negative space for an optional app-owned overlay. Do not bake headings into the image. |
+| Plan cover | 3:2 | Every premade-plan cover | One clear subject or symbolic scene. The focal point and Christian apparel must remain readable at compact iPhone width and in a multi-column Mac grid. |
+| Progress thumbnail | 1:1 | Active-plan and other compact continuation rows | A simple crop with one unmistakable focal point. It must remain legible at 92 points on iPhone. |
+
+`EditorialMediaSlot` owns these ratios on both platforms. Existing photography is temporary until the content layout is signed off; visible cropping in the temporary assets is not a reason to change the slot.
+
+### Plans hierarchy
+
+1. Orient the reader with a 16:9 Scripture-formation feature and a short three-step Choose / Preview / Begin guide.
+2. Put the active plan—or the create/choose next step—immediately after the orientation.
+3. Organize the library by intention: begin with Jesus, build a monthly rhythm, then take a complete journey.
+4. On iPhone, plans are compact 3:2-thumbnail rows with the commitment and both Preview and Start actions visible. On Mac, the same plans become full 3:2 cover cards in a bounded adaptive grid.
+
+### Virtues hierarchy
+
+1. Open with one connected current-course module: 16:9 feature, segmented progress, current lesson, and one clear Open Course action.
+2. Explain the formation sequence—learn, practice, live—before presenting the library.
+3. Present the foundation course before two numbered libraries: the seven virtues opposed to the capital sins, then the four cardinal virtues.
+4. Keep optional practice cycles, journeys, rule of life, and formation record after study. Progress is private and never presented as a holiness score.
+5. On iPhone, course libraries are numbered scan-friendly rows. On Mac, they expand into bounded multi-column course cards.
+
+### Learning hierarchy
+
+1. Open with a 16:9 Catholic-formation feature and the promise to help the reader participate with confidence.
+2. Show the learning map before the catalog: Worship, Belong, Pray.
+3. Group lessons into numbered tracks: worship and sacred time, sacraments and belonging, then prayer and devotion.
+4. Every planned topic exposes a concrete three-part curriculum outline so the reader understands its purpose before content is published.
+5. On iPhone, tracks form one readable vertical path. On Mac, topic cards use a bounded adaptive grid without stretching phone layouts.
+
 ## UI redesign deliverables
 
 ### UI-1 — Visual specification and source assets
