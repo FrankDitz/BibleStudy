@@ -223,10 +223,27 @@ struct AppHeroArtwork: View {
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
-        Image(colorScheme == .dark ? "AppHeroDark" : "AppHeroLight")
-            .resizable()
-            .scaledToFill()
+        #if os(macOS)
+            GeometryReader { geometry in
+                ZStack(alignment: .trailing) {
+                    Color.black
+                    Image(colorScheme == .dark ? "AppHeroDark" : "AppHeroLight")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(
+                            width: geometry.size.width,
+                            height: geometry.size.height,
+                            alignment: .trailing
+                        )
+                }
+            }
             .accessibilityHidden(true)
+        #else
+            Image(colorScheme == .dark ? "AppHeroDark" : "AppHeroLight")
+                .resizable()
+                .scaledToFill()
+                .accessibilityHidden(true)
+        #endif
     }
 }
 
