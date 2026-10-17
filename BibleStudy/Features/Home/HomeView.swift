@@ -3,6 +3,7 @@ import SwiftUI
 
 struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.colorScheme) private var colorScheme
 
     @Query(sort: \BibleStudySchemaV1.ReadingPosition.modifiedAt, order: .reverse)
     private var readingPositions: [BibleStudySchemaV1.ReadingPosition]
@@ -170,7 +171,7 @@ struct HomeView: View {
                 .clipped()
                 .overlay {
                     LinearGradient(
-                        colors: [.black.opacity(0.18), .clear, .black.opacity(0.82)],
+                        colors: heroOverlayColors,
                         startPoint: .top,
                         endPoint: .bottom
                     )
@@ -178,8 +179,12 @@ struct HomeView: View {
 
             VStack(alignment: .leading, spacing: 0) {
                 HStack(alignment: .top) {
-                    EditorialEyebrow("Kingdom\natelier", inverse: true)
+                    Text("KINGDOM\nATELIER")
+                        .font(AppTypography.eyebrow)
+                        .tracking(3)
                         .lineSpacing(5)
+                        .foregroundStyle(heroPrimaryText.opacity(0.82))
+                        .accessibilityLabel("Kingdom atelier")
                     Spacer()
                     Button(action: openProfile) {
                         Image(systemName: "person.crop.circle")
@@ -203,9 +208,9 @@ struct HomeView: View {
                         .foregroundStyle(AppTheme.accent)
                 }
                 .font(AppTypography.hero)
-                .foregroundStyle(.white)
+                .foregroundStyle(heroPrimaryText)
                 .minimumScaleFactor(0.68)
-                .shadow(color: .black.opacity(0.34), radius: 12, y: 4)
+                .shadow(color: heroTextShadow, radius: 12, y: 4)
                 .accessibilityElement(children: .combine)
                 .padding(.horizontal, AppSpacing.standard)
                 .padding(.bottom, AppSpacing.standard)
@@ -271,6 +276,20 @@ struct HomeView: View {
         .frame(height: height)
         .clipShape(RoundedRectangle(cornerRadius: AppCornerRadius.hero, style: .continuous))
         .accessibilityElement(children: .contain)
+    }
+
+    private var heroOverlayColors: [Color] {
+        colorScheme == .dark
+            ? [.black.opacity(0.18), .clear, .black.opacity(0.82)]
+            : [.white.opacity(0.18), .clear, .white.opacity(0.5)]
+    }
+
+    private var heroPrimaryText: Color {
+        colorScheme == .dark ? .white : .black
+    }
+
+    private var heroTextShadow: Color {
+        colorScheme == .dark ? .black.opacity(0.34) : .white.opacity(0.5)
     }
 
     private func heroAction(
