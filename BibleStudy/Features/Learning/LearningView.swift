@@ -4,44 +4,78 @@ struct LearningView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: 40) {
-                    header
-                    learningMap
-                    scopeNote
-                    learningParticipation
-                    topicCollection(
-                        number: "01",
-                        title: "Worship & sacred time",
-                        detail:
-                            "Learn what happens at Mass and how the Church's seasons, solemnities, and holy days shape Catholic life.",
-                        identifiers: ["mass", "liturgical-year"]
-                    )
-                    topicCollection(
-                        number: "02",
-                        title: "Sacraments & belonging",
-                        detail:
-                            "Understand the signs of grace that mark Christian initiation, healing, vocation, and life in the Church.",
-                        identifiers: ["sacraments"]
-                    )
-                    topicCollection(
-                        number: "03",
-                        title: "Prayer & devotion",
-                        detail:
-                            "Build confidence with the Rosary, foundational prayers, devotions, and Catholic prayer beyond Sunday Mass.",
-                        identifiers: ["rosary", "prayer-devotions"]
-                    )
-                    EditorialEndCap(
-                        title: "Know · celebrate · live",
-                        identifier: "learning-content-end"
-                    )
-                }
-                .padding(AppSpacing.screen)
-                .frame(maxWidth: 1180)
-                .frame(maxWidth: .infinity)
+                #if os(macOS)
+                    desktopContent
+                #else
+                    mobileContent
+                #endif
             }
             .background(AppScreenBackground())
-            .navigationTitle("Learning")
+            #if os(macOS)
+                .navigationTitle("Learning")
+            #else
+                .toolbar(.hidden, for: .navigationBar)
+            #endif
         }
+    }
+
+    #if os(macOS)
+        private var desktopContent: some View {
+            LazyVStack(alignment: .leading, spacing: 40) {
+                header
+                learningSections
+            }
+            .padding(AppSpacing.screen)
+            .frame(maxWidth: 1180)
+            .frame(maxWidth: .infinity)
+        }
+    #endif
+
+    #if !os(macOS)
+        private var mobileContent: some View {
+            LazyVStack(alignment: .leading, spacing: 40) {
+                header
+
+                VStack(alignment: .leading, spacing: 40) {
+                    learningSections
+                }
+                .padding(.horizontal, AppSpacing.screen)
+            }
+            .padding(.bottom, AppSpacing.section)
+            .frame(maxWidth: .infinity)
+        }
+    #endif
+
+    @ViewBuilder
+    private var learningSections: some View {
+        learningMap
+        scopeNote
+        learningParticipation
+        topicCollection(
+            number: "01",
+            title: "Worship & sacred time",
+            detail:
+                "Learn what happens at Mass and how the Church's seasons, solemnities, and holy days shape Catholic life.",
+            identifiers: ["mass", "liturgical-year"]
+        )
+        topicCollection(
+            number: "02",
+            title: "Sacraments & belonging",
+            detail:
+                "Understand the signs of grace that mark Christian initiation, healing, vocation, and life in the Church.",
+            identifiers: ["sacraments"]
+        )
+        topicCollection(
+            number: "03",
+            title: "Prayer & devotion",
+            detail:
+                "Build confidence with the Rosary, foundational prayers, devotions, and Catholic prayer beyond Sunday Mass.",
+            identifiers: ["rosary", "prayer-devotions"]
+        )
+        EditorialEndCap(
+            title: "Know · celebrate · live",
+            identifier: "learning-content-end"
+        )
     }
 
     private var header: some View {
@@ -67,7 +101,7 @@ struct LearningView: View {
 
     private var learningHeroMessage: some View {
         VStack(alignment: .leading, spacing: 10) {
-            EditorialEyebrow("Formation beyond the page", inverse: true)
+            EditorialEyebrow("Learning · Formation beyond the page", inverse: true)
             Text("KNOW THE\nFAITH.")
                 .font(.system(size: learningHeroTitleSize, weight: .black, design: .serif))
                 .minimumScaleFactor(0.72)

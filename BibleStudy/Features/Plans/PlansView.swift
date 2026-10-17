@@ -22,52 +22,26 @@ struct PlansView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: 40) {
-                    planHero
-                    activePlanSection
-                    plansInterlude
-                    planCollection(
-                        title: "Start with Jesus",
-                        eyebrow: "01 · A clear beginning",
-                        detail:
-                            "Short, focused routes through the life of Christ—ideal for beginning again or building a first daily rhythm.",
-                        identifiers: ["start-with-jesus-21", "gospels-30"]
-                    )
-                    planCollection(
-                        title: "Build a monthly rhythm",
-                        eyebrow: "02 · Focused formation",
-                        detail:
-                            "Spend one month with prayer, wisdom, or the books unique to the Catholic canon.",
-                        identifiers: ["psalms-proverbs-31", "catholic-deuterocanon-30"]
-                    )
-                    planCollection(
-                        title: "Take the long road",
-                        eyebrow: "03 · Complete journeys",
-                        detail:
-                            "Choose a sustained route through the New Testament, Old Testament, or the full Catholic Bible.",
-                        identifiers: [
-                            "new-testament-90", "catholic-old-testament-90", "catholic-bible-365",
-                        ]
-                    )
-                    EditorialEndCap(
-                        title: "Read · return · grow",
-                        identifier: "plans-content-end"
-                    )
-                }
-                .padding(AppSpacing.screen)
-                .frame(maxWidth: 1180)
-                .frame(maxWidth: .infinity)
+                #if os(macOS)
+                    desktopContent
+                #else
+                    mobileContent
+                #endif
             }
             .background(AppScreenBackground())
-            .navigationTitle("Plans")
-            .toolbar {
-                Button {
-                    isPresentingComposer = true
-                } label: {
-                    Label("Create plan", systemImage: "plus")
+            #if os(macOS)
+                .navigationTitle("Plans")
+                .toolbar {
+                    Button {
+                        isPresentingComposer = true
+                    } label: {
+                        Label("Create plan", systemImage: "plus")
+                    }
+                    .accessibilityIdentifier("create-custom-plan")
                 }
-                .accessibilityIdentifier("create-custom-plan")
-            }
+            #else
+                .toolbar(.hidden, for: .navigationBar)
+            #endif
             .navigationDestination(isPresented: $isShowingActivePlan) {
                 ActivePlanView(openReading: openReading)
             }
@@ -107,6 +81,66 @@ struct PlansView: View {
         }
     }
 
+    #if os(macOS)
+        private var desktopContent: some View {
+            LazyVStack(alignment: .leading, spacing: 40) {
+                planHero
+                planSections
+            }
+            .padding(AppSpacing.screen)
+            .frame(maxWidth: 1180)
+            .frame(maxWidth: .infinity)
+        }
+    #endif
+
+    #if !os(macOS)
+        private var mobileContent: some View {
+            LazyVStack(alignment: .leading, spacing: 40) {
+                planHero
+
+                VStack(alignment: .leading, spacing: 40) {
+                    planSections
+                }
+                .padding(.horizontal, AppSpacing.screen)
+            }
+            .padding(.bottom, AppSpacing.section)
+            .frame(maxWidth: .infinity)
+        }
+    #endif
+
+    @ViewBuilder
+    private var planSections: some View {
+        activePlanSection
+        plansInterlude
+        planCollection(
+            title: "Start with Jesus",
+            eyebrow: "01 · A clear beginning",
+            detail:
+                "Short, focused routes through the life of Christ—ideal for beginning again or building a first daily rhythm.",
+            identifiers: ["start-with-jesus-21", "gospels-30"]
+        )
+        planCollection(
+            title: "Build a monthly rhythm",
+            eyebrow: "02 · Focused formation",
+            detail:
+                "Spend one month with prayer, wisdom, or the books unique to the Catholic canon.",
+            identifiers: ["psalms-proverbs-31", "catholic-deuterocanon-30"]
+        )
+        planCollection(
+            title: "Take the long road",
+            eyebrow: "03 · Complete journeys",
+            detail:
+                "Choose a sustained route through the New Testament, Old Testament, or the full Catholic Bible.",
+            identifiers: [
+                "new-testament-90", "catholic-old-testament-90", "catholic-bible-365",
+            ]
+        )
+        EditorialEndCap(
+            title: "Read · return · grow",
+            identifier: "plans-content-end"
+        )
+    }
+
     private var planHero: some View {
         VStack(spacing: 0) {
             #if os(macOS)
@@ -130,12 +164,30 @@ struct PlansView: View {
             .background(AppTheme.surface)
         }
         .overlay { Rectangle().stroke(AppTheme.hairline, lineWidth: 1) }
+        #if !os(macOS)
+            .overlay(alignment: .topTrailing) {
+                Button {
+                    isPresentingComposer = true
+                } label: {
+                    Image(systemName: "plus")
+                        .font(.title2.weight(.medium))
+                        .foregroundStyle(.white)
+                        .frame(width: 44, height: 44)
+                        .background(.black.opacity(0.62))
+                        .overlay { Rectangle().stroke(.white.opacity(0.24), lineWidth: 1) }
+                }
+                .buttonStyle(.plain)
+                .padding(AppSpacing.standard)
+                .accessibilityLabel("Create plan")
+                .accessibilityIdentifier("create-custom-plan")
+            }
+        #endif
         .accessibilityElement(children: .contain)
     }
 
     private var planHeroMessage: some View {
         VStack(alignment: .leading, spacing: 10) {
-            EditorialEyebrow("Scripture formation", inverse: true)
+            EditorialEyebrow("Plans · Scripture formation", inverse: true)
             Text("STAY IN\nTHE WORD.")
                 .font(.system(size: planHeroTitleSize, weight: .black, design: .serif))
                 .minimumScaleFactor(0.72)

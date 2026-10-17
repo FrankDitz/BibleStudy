@@ -15,46 +15,80 @@ struct VirtuesView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: AppSpacing.spacious) {
-                    featuredFormation
-                    formationJourney
-                    cardinalIdentityRail
-                    if featuredCourse.id != VirtueStudyCatalog.foundationCourse.id {
-                        foundationCourse
-                    }
-                    courseCollection(
-                        title: "Seven virtues against the capital sins",
-                        trackNumber: "01",
-                        detail:
-                            "Learn how pride, avarice, envy, wrath, lust, gluttony, and sloth distort good desires—and how Catholic virtue heals and redirects them.",
-                        courses: VirtueStudyCatalog.christianCourses,
-                        identifier: "virtues-christian-courses"
-                    )
-                    courseCollection(
-                        title: "The four cardinal virtues",
-                        trackNumber: "02",
-                        detail:
-                            "Study the four hinges of moral life: prudent judgment, justice in relationship, courageous steadfastness, and temperate freedom.",
-                        courses: VirtueStudyCatalog.cardinalCourses,
-                        identifier: "virtues-cardinal-courses"
-                    )
-                    formationWitness
-                    practiceCompanion
-                    privacyNote
-                    EditorialEndCap(
-                        title: "Learn it · live it",
-                        identifier: "virtues-content-end"
-                    )
-                }
-                .padding(.horizontal, AppSpacing.screen)
-                .padding(.bottom, AppSpacing.section)
-                .frame(maxWidth: 1180)
-                .frame(maxWidth: .infinity)
+                #if os(macOS)
+                    desktopContent
+                #else
+                    mobileContent
+                #endif
             }
             .background(AppScreenBackground())
-            .navigationTitle("Virtues")
+            #if os(macOS)
+                .navigationTitle("Virtues")
+            #else
+                .toolbar(.hidden, for: .navigationBar)
+            #endif
         }
         .accessibilityIdentifier("virtues-root")
+    }
+
+    #if os(macOS)
+        private var desktopContent: some View {
+            LazyVStack(alignment: .leading, spacing: AppSpacing.spacious) {
+                featuredFormation
+                virtueSections
+            }
+            .padding(.horizontal, AppSpacing.screen)
+            .padding(.bottom, AppSpacing.section)
+            .frame(maxWidth: 1180)
+            .frame(maxWidth: .infinity)
+        }
+    #endif
+
+    #if !os(macOS)
+        private var mobileContent: some View {
+            LazyVStack(alignment: .leading, spacing: AppSpacing.spacious) {
+                featuredFormation
+
+                VStack(alignment: .leading, spacing: AppSpacing.spacious) {
+                    virtueSections
+                }
+                .padding(.horizontal, AppSpacing.screen)
+            }
+            .padding(.bottom, AppSpacing.section)
+            .frame(maxWidth: .infinity)
+        }
+    #endif
+
+    @ViewBuilder
+    private var virtueSections: some View {
+        formationJourney
+        cardinalIdentityRail
+        if featuredCourse.id != VirtueStudyCatalog.foundationCourse.id {
+            foundationCourse
+        }
+        courseCollection(
+            title: "Seven virtues against the capital sins",
+            trackNumber: "01",
+            detail:
+                "Learn how pride, avarice, envy, wrath, lust, gluttony, and sloth distort good desires—and how Catholic virtue heals and redirects them.",
+            courses: VirtueStudyCatalog.christianCourses,
+            identifier: "virtues-christian-courses"
+        )
+        courseCollection(
+            title: "The four cardinal virtues",
+            trackNumber: "02",
+            detail:
+                "Study the four hinges of moral life: prudent judgment, justice in relationship, courageous steadfastness, and temperate freedom.",
+            courses: VirtueStudyCatalog.cardinalCourses,
+            identifier: "virtues-cardinal-courses"
+        )
+        formationWitness
+        practiceCompanion
+        privacyNote
+        EditorialEndCap(
+            title: "Learn it · live it",
+            identifier: "virtues-content-end"
+        )
     }
 
     private var state: VirtueFormationState {
@@ -137,7 +171,7 @@ struct VirtuesView: View {
                 endPoint: .bottom
             )
             VStack(alignment: .leading, spacing: 7) {
-                EditorialEyebrow("Virtue formation", inverse: true)
+                EditorialEyebrow("Virtues", inverse: true)
                 Text("BECOME\nMORE LIKE\nCHRIST.")
                     .font(.system(size: virtueHeroTitleSize, weight: .black, design: .serif))
                     .minimumScaleFactor(0.68)
